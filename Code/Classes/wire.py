@@ -11,6 +11,10 @@ class Network:
 
     def remove_wire_part(self, gateA, gateB):
         return self.network[f"{gateA}-{gateB}"].pop()
+    
+    def check_is_connected(self, gateA, gateB):
+        #TODO check if there is a completed wire between gateA and gateB and return true if there is
+        return True
 
 # create a wire, keeping track of length and the dd
 class Wire:
