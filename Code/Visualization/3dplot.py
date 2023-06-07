@@ -1,8 +1,11 @@
 import csv
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from Classes.gate import gate as Gate
-from Classes.location import location as Location
+
+import sys
+sys.path.append("../Classes")
+from gate import *
+from location import *
 
 def create_gate_points_from_csv(csv_file):
     gate_points = []
@@ -46,6 +49,6 @@ def main(csv_file):
 
 if __name__ == "__main__":
     chip_num = input("What chip do we want to create?")
-    csv_file = "../../Code/gates&netlists/chip_" + chip_num + "/print_" + chip_num + ".csv"
+    csv_file = "../../gates&netlists/chip_" + chip_num + "/print_" + chip_num + ".csv"
 
     main(csv_file)

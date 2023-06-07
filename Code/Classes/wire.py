@@ -1,3 +1,4 @@
+
 # create a network that keeps track of all the wires
 class Network:
 
@@ -22,7 +23,7 @@ class Wire:
 
     def __init__(self, gateA, gateB):
         self.gateA = gateA
-        self.gaetB = gateB
+        self.gateB = gateB
         self.wires = []
 
     def add_wire_part(self, from_location, to_location):
