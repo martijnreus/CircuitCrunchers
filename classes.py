@@ -6,6 +6,14 @@ class location:
         self.y = y
         self.z = z
 
+# create a grid
+class grid:
+
+    def __init__(self, width, heigth, layers):
+        self.width = width
+        self.heigth = heigth
+        self.layers = layers
+
 # create a gate, identified by id number. and location
 class gate:
 
