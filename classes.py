@@ -6,7 +6,7 @@ class location:
         self.y = y
         self.z = z
 
-# create a grid
+# create a grid, with a width, heigth and a amount of layers
 class grid:
 
     def __init__(self, width, heigth, layers):
