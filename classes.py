@@ -30,4 +30,3 @@ class wire:
         self.length = length
 
 
-
