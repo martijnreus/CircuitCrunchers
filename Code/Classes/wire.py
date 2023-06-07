@@ -1,16 +1,19 @@
-class network:
+class Network:
 
     def __init__(self):
-        self.wires = []
+        self.network = {}
 
-    def addWire(self, location, direction):
-        self.wires.append(wire(location, direction, 1))
+    def create_new_wire(self, gateA, gateB):
+        self.network[f"{gateA}-{gateB}"] = []
 
-    def removeWire(self):
-        return self.wires.pop()
+    def add_wire_part(self, gateA, gateB, location, direction):
+        self.network[f"{gateA}-{gateB}"].append(Wire(location, direction, 1))
+
+    def remove_wire_part(self, gateA, gateB):
+        return self.network[f"{gateA}-{gateB}"].pop()
 
 # create a wire, keeping track of length and the dd
-class wire:
+class Wire:
 
     def __init__(self, from_location, to_location, length):
         self.from_location = from_location
