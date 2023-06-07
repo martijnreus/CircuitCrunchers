@@ -45,7 +45,7 @@ def main(csv_file):
     plt.show()
 
 if __name__ == "__main__":
-    number_of_chip = input("What chip do we want to create?")
-    csv_file = "../../Code/gates&netlists/chip_" + number_of_chip + "/print_" + number_of_chip + ".csv"
+    chip_num = input("What chip do we want to create?")
+    csv_file = "../../Code/gates&netlists/chip_" + chip_num + "/print_" + chip_num + ".csv"
 
     main(csv_file)
