@@ -1,7 +1,7 @@
 # create a 3D space and keep track of all the locations in this space.
-class location:
+class grid:
 
-    def __init__(self, x, y, z, gatenum):
+    def __init__(self, x, y, z):
         self.x = x
         self.y = y
         self.z = z
