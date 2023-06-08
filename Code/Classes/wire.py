@@ -6,8 +6,12 @@ class Wire:
         self.gateB = gateB
         self.wires = []
 
-    def add_wire_part(self, from_location: object, to_location: object)-> None:
-        self.wires.append(WireUnit(from_location, to_location))
+    def add_wire_part(self, to_location: object)-> None:
+        if (self.get_wire_length() == 0):
+            self.wires.append(WireUnit(self.gateA.location, to_location))
+        else:
+            self.wires.append(WireUnit(self.wires[self.get_wire_length() - 1]), to_location)
+        
 
     def remove_wire_part(self)-> int:
         return self.wires.pop()
