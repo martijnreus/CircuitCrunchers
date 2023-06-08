@@ -7,12 +7,13 @@ class Wire:
         self.wires = []
 
     def add_wire_part(self, to_location: object)-> None:
+        # Add wire to gateA if there is no wire yet
         if (self.get_wire_length() == 0):
             self.wires.append(WireUnit(self.gateA.location, to_location))
+        # Add wire to the last wireUnit if there is
         else:
             self.wires.append(WireUnit(self.wires[self.get_wire_length() - 1]), to_location)
         
-
     def remove_wire_part(self)-> int:
         return self.wires.pop()
     
@@ -22,13 +23,12 @@ class Wire:
             if (self.wires[len(self.wires - 1)].to_location.y == self.gateB.location.y):
                 if (self.wires[len(self.wires - 1)].to_location.z == self.gateB.location.z):
                     return True
-                
         return False
     
     def get_wire_length(self)-> list[int]:
         return len(self.wires)
 
-# create a wire, keeping track of length and the dd
+# create a wireUnit, where its location of the start and end is tracked
 class WireUnit:
 
     def __init__(self, from_location: object, to_location: object):
