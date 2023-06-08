@@ -112,22 +112,16 @@ class Chip():
 
             # write the first line
             writer.writerow(["net", "wires"])
+            for wire in self.wires:
+                # gate a and b
+                gate_ab = f"{wire.gateA},{wire.gateB}"
+                gate_ab = gate_ab.strip()
 
-            i = 0
-            while True:
-                try:
-                    # gate a and b
-                    gate_ab = f"{self.wires[i].gateA},{self.wires[i].gateB}"
-                    gate_ab = gate_ab.strip()
+                # list of wireparts
+                list_of_wireparts = wire.wires
 
-                    # list of wireparts
-                    list_of_wireparts = self.wires[i].wires
-
-                    # write to csv
-                    writer.writerow([gate_ab.strip(),list_of_wireparts])
-                    i += 1
-                except:
-                    break
+                # write to csv
+                writer.writerow([gate_ab.strip(),list_of_wireparts])
 
             # test total cost
             total_cost = "example"
