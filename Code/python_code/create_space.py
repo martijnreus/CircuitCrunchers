@@ -20,7 +20,7 @@ def main():
 # class chip, as in which chip are we working on
 class Chip():
 
-    def __init__(self, chip, netlist, gates):
+    def __init__(self, chip: str, netlist: str, gates: str)-> None:
         # save chip and netlist file
         self.chip = chip
         self.netlist = netlist
@@ -33,13 +33,20 @@ class Chip():
         self.gates = {}
 
     # load connections between gates
-    def load_netlist(self):
+    def load_netlist(self)-> None:
+
+        print("loading netlist")
+
         # import data from files
         with open(f"../../gates&netlists/chip_{self.chip}/{self.netlist}.csv") as f:
             i = 0
+
+            # go to second line
             next(f)
+
             while True:
                 
+                # read line per line
                 netlist_info = f.readline()
                 
                 try:
@@ -48,8 +55,8 @@ class Chip():
                     
                     # get info from file
                     netlist_info = netlist_info.split(",")
-                    gate_a = netlist_info[0]
-                    gate_b = netlist_info[1]
+                    gate_a = int(netlist_info[0])
+                    gate_b = int(netlist_info[1])
 
                     # make new wire and add to wires
                     new_wire = Wire(gate_a, gate_b)
@@ -62,22 +69,31 @@ class Chip():
                     break
 
     # load gates
-    def load_gates(self):
+    def load_gates(self)-> None:
+
+        print("loading gates")
+
+        # open csv
         with open(f"../../gates&netlists/chip_{self.chip}/{self.gates_file}.csv") as f:
             i = 0
+
+            # go to second line
             next(f)
+
             while True:
+
+                # read line per line
                 gates_info = f.readline()
 
                 try:
                     print("################## gate ", i)
                     print("gates info: ", gates_info)
-                    
+
                     # get info from file 
                     gates_info = gates_info.split(",")
-                    gate_id = gates_info[0]
-                    x = gates_info[1].strip()
-                    y = gates_info[2].strip()
+                    gate_id = int(gates_info[0])
+                    x = int(gates_info[1].strip())
+                    y = int(gates_info[2].strip())
                     z = 0
 
                     # make new location
@@ -95,7 +111,9 @@ class Chip():
                     break
     
     # output
-    def output_to_csv(self):
+    def output_to_csv(self)-> None:
+
+        print("outputting")
 
         # open csv
         with open(f'output_{self.netlist}.csv', 'w', newline='') as csvfile:
@@ -125,7 +143,7 @@ class Chip():
                     break
 
             # test total cost
-            total_cost = 20
+            total_cost = "example"
 
             # write the last line
             writer.writerow([f"chip_{self.chip}_{self.netlist}", total_cost])
