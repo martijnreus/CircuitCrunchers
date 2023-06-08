@@ -61,7 +61,6 @@ class Chip():
                 
                 # make new wire and add to wires
                 new_wire = Wire(gate_a, gate_b)
-                print("new wire: ", new_wire)
                 wire_key = f"{gate_a_id}-{gate_b_id}"
                 self.wires[wire_key] = new_wire
 
@@ -152,6 +151,5 @@ if __name__ == "__main__":
     chip.load_netlist()
 
     basic_algorithm(chip.wires, chip.wire_connections)
-    print(chip.wires)
     visualize(chip.gate_list, chip.grid)
     chip.output_to_csv()
