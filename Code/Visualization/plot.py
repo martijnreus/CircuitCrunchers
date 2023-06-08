@@ -20,8 +20,8 @@ def visualize(gates, grid):
     ax = fig.add_subplot(111, projection='3d')
 
     # lines
+    # ax.plot([1, 6], [11, 11], [0, 0], linestyle='solid', linewidth=2,color = 'r')
     ax.plot([1, 6], [11, 11], [0, 0], linestyle='solid', linewidth=2,color = 'r')
-    
     # Plot the gate points
     ax.scatter(x, y, z, c='b', marker='o')
 

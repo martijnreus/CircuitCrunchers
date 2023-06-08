@@ -5,3 +5,6 @@ class Location:
         self.x = x
         self.y = y
         self.z = z
+
+    # def __repr__():
+    #     return f"{self.x}, {self.y}"
