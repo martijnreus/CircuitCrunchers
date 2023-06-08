@@ -101,7 +101,6 @@ class Chip():
             # make grid
             self.grid = Grid(max_x +1, max_y +1, z)
 
-    
     # output
     def output_to_csv(self)-> None:
 
@@ -111,16 +110,21 @@ class Chip():
 
             # write the first line
             writer.writerow(["net", "wires"])
-            for wire in self.wires:
+            for connection in self.wire_connections:
                 # gate a and b
-                gate_ab = f"{wire.gateA},{wire.gateB}"
+                gate_ab = f"{connection[0]},{connection[1]}"
                 gate_ab = gate_ab.strip()
 
                 # list of wireparts
-                list_of_wireparts = wire.wires
+                list_of_wireparts = self.wires[f"{connection[0]}-{connection[1]}"].wires
+                output_wireparts = []
+                for wirepart in list_of_wireparts:
+                    output_wireparts.append([wirepart.from_location.x,
+                                            wirepart.from_location.y,
+                                            wirepart.from_location.z])
 
                 # write to csv
-                writer.writerow([gate_ab.strip(),list_of_wireparts])
+                writer.writerow([gate_ab.strip(),output_wireparts])
 
             # test total cost
             total_cost = "example"
