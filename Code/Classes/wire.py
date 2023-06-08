@@ -13,9 +13,13 @@ class Wire:
         return self.wires.pop()
     
     def check_is_connected(self):
-        #TODO check if there is a completed wire between gateA and gateB and return true if there is
-        if (self.wires[len(self.wires - 1)].to_location):
-            return True
+        # checks if the location of the last wire matches the location of gateB
+        if (self.wires[len(self.wires - 1)].to_location.x == self.gateB.location.x):
+            if (self.wires[len(self.wires - 1)].to_location.y == self.gateB.location.y):
+                if (self.wires[len(self.wires - 1)].to_location.z == self.gateB.location.z):
+                    return True
+                
+        return False
     
     def get_wire_length(self):
         return len(self.wires)
