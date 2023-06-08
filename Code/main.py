@@ -15,6 +15,8 @@ from grid import *
 from location import *
 sys.path.append("./Visualization")
 from plot import *
+sys.path.append("./algorithms")
+from basic import *
 
 def main():
     pass
@@ -32,6 +34,7 @@ class Chip():
 
         # remember the wires and gates
         self.wires = {}
+        self.wire_connections = []
         self.gates = {}
 
         # list for visualisation
@@ -61,9 +64,13 @@ class Chip():
                     gate_a = int(netlist_info[0])
                     gate_b = int(netlist_info[1])
 
+                    # add connection
+                    self.wire_connections.append([gate_a, gate_b])
+
                     # make new wire and add to wires
                     new_wire = Wire(gate_a, gate_b)
-                    self.wires[i] = new_wire
+                    wire_key = f"{gate_a}-{gate_b}"
+                    self.wires[wire_key] = new_wire
                     i = i + 1
                 except:
                     break
@@ -165,5 +172,6 @@ if __name__ == "__main__":
     # load everything
     chip.load_netlist()
     chip.load_gates()
+    basic_algorithm(chip.wires, chip.wire_connections)
     visualize(chip.gate_list, chip.grid)
     chip.output_to_csv()
