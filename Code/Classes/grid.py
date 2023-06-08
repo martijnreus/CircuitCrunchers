@@ -1,7 +1,7 @@
 # create a grid, with a width, heigth and a amount of layers
 class Grid:
 
-    def __init__(self, width, heigth, layers):
+    def __init__(self, width: int, height: int, layers: int)-> None:
         self.width = width
-        self.heigth = heigth
+        self.height = height
         self.layers = layers

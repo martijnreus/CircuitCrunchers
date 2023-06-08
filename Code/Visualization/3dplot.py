@@ -16,7 +16,7 @@ def create_gate_points_from_csv(csv_file):
             x = float(row['x'])
             y = float(row['y'])
             z = 0.0  # Default z coordinate
-            location = Location(x, y, z, chip)
+            location = Location(x, y, z)
             gate = Gate(chip, location)
             gate_points.append(gate)
     return gate_points
@@ -45,7 +45,8 @@ def main(csv_file):
     ax.set_title('Gate Points')
 
     # Show the plot
-    plt.show()
+    # plt.show()
+    plt.savefig("leukplaatje")
 
 if __name__ == "__main__":
     chip_num = input("What chip do we want to create?")

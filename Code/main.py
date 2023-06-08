@@ -8,11 +8,13 @@
 # import classes 
 import csv
 import sys
-sys.path.append("../Classes")
+sys.path.append("./Classes")
 from gate import *
 from wire import *
 from grid import *
 from location import *
+sys.path.append("./Visualization")
+from plot import *
 
 def main():
     pass
@@ -32,13 +34,17 @@ class Chip():
         self.wires = {}
         self.gates = {}
 
+        # list for visualisation
+        self.gate_list = []
+
+        # grid
+        self.grid: object
+
     # load connections between gates
     def load_netlist(self)-> None:
 
-        print("loading netlist")
-
         # import data from files
-        with open(f"../../gates&netlists/chip_{self.chip}/{self.netlist}.csv") as f:
+        with open(f"./../gates&netlists/chip_{self.chip}/{self.netlist}.csv") as f:
             i = 0
 
             # go to second line
@@ -50,9 +56,6 @@ class Chip():
                 netlist_info = f.readline()
                 
                 try:
-                    print("##################### wire ", i)
-                    print("netlist_info: ", netlist_info)
-                    
                     # get info from file
                     netlist_info = netlist_info.split(",")
                     gate_a = int(netlist_info[0])
@@ -60,9 +63,6 @@ class Chip():
 
                     # make new wire and add to wires
                     new_wire = Wire(gate_a, gate_b)
-                    print("wire: ", new_wire)
-                    print("wire_a: ", new_wire.gateA)
-                    print("wire_b: ", new_wire.gateB)
                     self.wires[i] = new_wire
                     i = i + 1
                 except:
@@ -71,14 +71,16 @@ class Chip():
     # load gates
     def load_gates(self)-> None:
 
-        print("loading gates")
-
         # open csv
-        with open(f"../../gates&netlists/chip_{self.chip}/{self.gates_file}.csv") as f:
+        with open(f"./../gates&netlists/chip_{self.chip}/{self.gates_file}.csv") as f:
             i = 0
 
             # go to second line
             next(f)
+
+            # put all possible x and y in list for grid
+            x_list = []
+            y_list = []
 
             while True:
 
@@ -86,9 +88,6 @@ class Chip():
                 gates_info = f.readline()
 
                 try:
-                    print("################## gate ", i)
-                    print("gates info: ", gates_info)
-
                     # get info from file 
                     gates_info = gates_info.split(",")
                     gate_id = int(gates_info[0])
@@ -96,24 +95,31 @@ class Chip():
                     y = int(gates_info[2].strip())
                     z = 0
 
+                    # add to x and y list
+                    x_list.append(x)
+                    y_list.append(y)
+
                     # make new location
                     new_location = Location(x, y, z)
-                    print("location ", new_location)
 
                     # make new gate and add to gates 
                     new_gate = Gate(gate_id, new_location)
-                    print("gate: ", new_gate)
-                    print("gate id: ", new_gate.id_num)
-                    print("gate_location: ", new_gate.location.x, new_gate.location.y, new_gate.location.z,)
                     self.gates[gate_id] = new_gate
+                    self.gate_list.append(new_gate)
                     i = i + 1
                 except:
                     break
+            
+            # get max x and y
+            max_x = max(x_list)
+            max_y = max(y_list)
+
+            # make grid
+            self.grid = Grid(max_x +1, max_y +1, z)
+
     
     # output
     def output_to_csv(self)-> None:
-
-        print("outputting")
 
         # open csv
         with open(f'output_{self.netlist}.csv', 'w', newline='') as csvfile:
@@ -126,15 +132,11 @@ class Chip():
             while True:
                 try:
                     # gate a and b
-                    print("gate a", self.wires[i].gateA)
-                    print("gate b", self.wires[i].gateB)
                     gate_ab = f"{self.wires[i].gateA},{self.wires[i].gateB}"
                     gate_ab = gate_ab.strip()
-                    print(gate_ab)
 
                     # list of wireparts
                     list_of_wireparts = self.wires[i].wires
-                    print(list_of_wireparts)
 
                     # write to csv
                     writer.writerow([gate_ab.strip(),list_of_wireparts])
@@ -153,16 +155,15 @@ class Chip():
 if __name__ == "__main__":
 
     # test hardcoded for chip 0 and netlist_1
-    netlist = "netlist_1"
-    chip = "0"
-    gates_file = "print_0"
-    print(gates_file)
+    netlist = "netlist_4"
+    chip = "1"
+    gates_file = "print_1"
 
     # make new chip 
     chip = Chip(chip, netlist, gates_file)
-    print(chip.gates_file)
 
     # load everything
     chip.load_netlist()
     chip.load_gates()
+    visualize(chip.gate_list, chip.grid)
     chip.output_to_csv()
