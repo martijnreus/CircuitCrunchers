@@ -5,7 +5,6 @@
 # having the right structure but not yet any input
 ################################################################
 
-
 # import classes 
 import csv
 import sys
@@ -38,12 +37,15 @@ class Chip():
         # import data from files
         with open(f"../../gates&netlists/chip_{self.chip}/{self.netlist}.csv") as f:
             i = 0
+            next(f)
             while True:
-
+                
                 netlist_info = f.readline()
-                print("netlist_info: ", netlist_info)
                 
                 try:
+                    print("##################### wire ", i)
+                    print("netlist_info: ", netlist_info)
+                    
                     # get info from file
                     netlist_info = netlist_info.split(",")
                     gate_a = netlist_info[0]
@@ -52,7 +54,8 @@ class Chip():
                     # make new wire and add to wires
                     new_wire = Wire(gate_a, gate_b)
                     print("wire: ", new_wire)
-                    print("wire_: ", new_wire.gateA)
+                    print("wire_a: ", new_wire.gateA)
+                    print("wire_b: ", new_wire.gateB)
                     self.wires[i] = new_wire
                     i = i + 1
                 except:
@@ -62,25 +65,32 @@ class Chip():
     def load_gates(self):
         with open(f"../../gates&netlists/chip_{self.chip}/{self.gates_file}.csv") as f:
             i = 0
-
+            next(f)
             while True:
                 gates_info = f.readline()
-                print("gates info: ", gates_info)
 
                 try:
-                    i = i + 1
+                    print("################## gate ", i)
+                    print("gates info: ", gates_info)
+                    
                     # get info from file 
                     gates_info = gates_info.split(",")
                     gate_id = gates_info[0]
-                    x = gates_info[1]
-                    y = gates_info[2]
+                    x = gates_info[1].strip()
+                    y = gates_info[2].strip()
+                    z = 0
+
+                    # make new location
+                    new_location = Location(x, y, z)
+                    print("location ", new_location)
 
                     # make new gate and add to gates 
-                    new_gate = Gate(gate_id, x, y)
+                    new_gate = Gate(gate_id, new_location)
                     print("gate: ", new_gate)
-                    print("gate_x: ", new_gate.x)
+                    print("gate id: ", new_gate.id_num)
+                    print("gate_location: ", new_gate.location.x, new_gate.location.y, new_gate.location.z,)
                     self.gates[gate_id] = new_gate
-
+                    i = i + 1
                 except:
                     break
     
@@ -97,18 +107,24 @@ class Chip():
             i = 0
             while True:
                 try:
-                    i += 1
+                    # gate a and b
                     print("gate a", self.wires[i].gateA)
                     print("gate b", self.wires[i].gateB)
                     gate_ab = f"{self.wires[i].gateA},{self.wires[i].gateB}"
+                    gate_ab = gate_ab.strip()
                     print(gate_ab)
+
+                    # list of wireparts
                     list_of_wireparts = self.wires[i].wires
                     print(list_of_wireparts)
+
+                    # write to csv
                     writer.writerow([gate_ab.strip(),list_of_wireparts])
+                    i += 1
                 except:
                     break
 
-            # test ttal cost
+            # test total cost
             total_cost = 20
 
             # write the last line
