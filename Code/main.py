@@ -16,7 +16,7 @@ from location import *
 sys.path.append("./Visualization")
 from plot import *
 sys.path.append("./algorithms")
-from basic import *
+from greedy import *
 
 def main():
     pass
@@ -150,6 +150,6 @@ if __name__ == "__main__":
     chip.load_gates()
     chip.load_netlist()
 
-    basic_algorithm(chip.wires, chip.wire_connections)
+    greedy_algorithm(chip.wires, chip.wire_connections)
     visualize(chip.gate_list, chip.grid)
     chip.output_to_csv()
