@@ -61,11 +61,14 @@ class Chip():
                 try:
                     # get info from file
                     netlist_info = netlist_info.split(",")
-                    gate_a = int(netlist_info[0])
-                    gate_b = int(netlist_info[1])
+                    gate_a_id = int(netlist_info[0])
+                    gate_b_id = int(netlist_info[1])
+
+                    gate_a = self.gates[gate_a_id]
+                    gate_b = self.gates[gate_b_id]
 
                     # add connection
-                    self.wire_connections.append([gate_a, gate_b])
+                    self.wire_connections.append([gate_a_id, gate_b_id])
 
                     # make new wire and add to wires
                     new_wire = Wire(gate_a, gate_b)

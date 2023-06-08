@@ -30,6 +30,7 @@ def main(csv_file):
     x = [point.location.x for point in gate_points]
     y = [point.location.y for point in gate_points]
     z = [point.location.z for point in gate_points]
+    print(x)
 
     # Create a 3D plot
     fig = plt.figure()
@@ -45,7 +46,7 @@ def main(csv_file):
     ax.set_title('Gate Points')
 
     # Show the plot
-    # plt.show()
+    plt.show()
     plt.savefig("leukplaatje")
 
 if __name__ == "__main__":
