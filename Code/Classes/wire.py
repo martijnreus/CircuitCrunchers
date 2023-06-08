@@ -1,3 +1,5 @@
+from location import *
+
 # created a wire between two gates
 class Wire:
 
@@ -23,7 +25,7 @@ class Wire:
         to_y = self.get_wire_part_start().y + direction.y
         to_z = self.get_wire_part_start().z + direction.z
 
-        to_location = direction(to_x, to_y, to_z)
+        to_location = Location(to_x, to_y, to_z)
         return to_location
 
     def remove_wire_part(self)-> int:
