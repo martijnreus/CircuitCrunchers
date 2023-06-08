@@ -16,7 +16,7 @@ from location import *
 sys.path.append("./Visualization")
 from plot import *
 sys.path.append("./algorithms")
-from basic import *
+from greedy import *
 
 def main():
     pass
@@ -61,7 +61,6 @@ class Chip():
                 
                 # make new wire and add to wires
                 new_wire = Wire(gate_a, gate_b)
-                print("new wire: ", new_wire)
                 wire_key = f"{gate_a_id}-{gate_b_id}"
                 self.wires[wire_key] = new_wire
 
@@ -145,7 +144,6 @@ if __name__ == "__main__":
     chip.load_gates()
     chip.load_netlist()
 
-    basic_algorithm(chip.wires, chip.wire_connections)
-    print(chip.wires)
+    greedy_algorithm(chip.wires, chip.wire_connections)
     visualize(chip.gate_list, chip.grid)
     chip.output_to_csv()
