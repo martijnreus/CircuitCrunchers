@@ -124,7 +124,7 @@ class Chip():
         n = 0
         k = []
         for connection in self.wires:
-            n +=self.wires[connection].get_wire_length()
+            n += self.wires[connection].get_wire_length()
         
         # hardcode k
         k = len(k)
