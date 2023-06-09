@@ -101,7 +101,7 @@ class Chip():
                 gate_ab = gate_ab.strip()
 
                 # list of wireparts
-                list_of_wireparts = self.wires[f"{connection[0]}-{connection[1]}"].wires
+                list_of_wireparts = self.wires[f"{connection[0]}-{connection[1]}"].wireparts
                 output_wireparts = []
                 for wirepart in list_of_wireparts:
                     output_wireparts.append([wirepart.from_location.x,
@@ -122,10 +122,10 @@ class Chip():
 
         # get number of wireparts
         n = 0
+        k = []
         for connection in self.wires:
             n +=self.wires[connection].get_wire_length()
         
-
         # hardcode k
-        k = 5
-        return n + 300 * k
+        k = len(k)
+        return k

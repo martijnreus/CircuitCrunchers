@@ -36,7 +36,7 @@ def visualize(gates, grid, wires):
 
     # lines
     for wire in wires:
-        for wirepart in wires[wire].wires:
+        for wirepart in wires[wire].wireparts:
             ax.plot([wirepart.from_location.x, wirepart.to_location.x], 
                     [wirepart.from_location.y, wirepart.to_location.y], 
                     [wirepart.from_location.z, wirepart.to_location.z], 

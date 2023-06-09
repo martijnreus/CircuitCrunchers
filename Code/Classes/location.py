@@ -5,6 +5,7 @@ class Location:
         self.x = x
         self.y = y
         self.z = z
-
-    # def __repr__():
-    #     return f"{self.x}, {self.y}"
+    
+    # if compared, it compares the whole location
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y and self.z == other.z

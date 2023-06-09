@@ -6,10 +6,10 @@ class Wire:
     def __init__(self, gateA: object, gateB: object)-> None:
         self.gateA = gateA
         self.gateB = gateB
-        self.wires = []
+        self.wireparts = []
 
     def add_wire_part(self, direction: object)-> None:
-        self.wires.append(WireUnit(self.get_wire_part_start(),self.get_wire_part_end(direction)))
+        self.wireparts.append(WireUnit(self.get_wire_part_start(),self.get_wire_part_end(direction)))
         
     def get_wire_part_start(self):
         # Add wire to gateA if there is no wire yet
@@ -17,7 +17,7 @@ class Wire:
             return self.gateA.location
         # add wire to the last wire part if there is not
         else:
-            return self.wires[self.get_wire_length() - 1].to_location
+            return self.wireparts[self.get_wire_length() - 1].to_location
         
     def get_wire_part_end(self, direction):
         # add the direction to the begin_position
@@ -29,18 +29,18 @@ class Wire:
         return to_location
 
     def remove_wire_part(self)-> int:
-        return self.wires.pop()
+        return self.wireparts.pop()
     
     def check_is_connected(self)-> bool:
         # checks if the location of the last wire matches the location of gateB
-        if self.wires[len(self.wires) -1].to_location.x == self.gateB.location.x:
-            if self.wires[len(self.wires)- 1].to_location.y == self.gateB.location.y:
-                if self.wires[len(self.wires)- 1].to_location.z == self.gateB.location.z:
+        if self.wireparts[len(self.wireparts) -1].to_location.x == self.gateB.location.x:
+            if self.wireparts[len(self.wireparts)- 1].to_location.y == self.gateB.location.y:
+                if self.wireparts[len(self.wireparts)- 1].to_location.z == self.gateB.location.z:
                     return True
         return False
     
     def get_wire_length(self)-> list[int]:
-        return len(self.wires)
+        return len(self.wireparts)
 
 # create a wireUnit, where its location of the start and end is tracked
 class WireUnit:
@@ -49,3 +49,6 @@ class WireUnit:
         self.from_location = from_location
         self.to_location = to_location
 
+    # if compared with each other, it compares where the cable lies 
+    def __eq__(self, other):
+        return self.from_location == other.from_location and self.to_location == other.to_location

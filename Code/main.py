@@ -5,11 +5,11 @@
 # import  
 import sys
 from sys import argv
-sys.path.append("./Classes")
+sys.path.append("Classes")
 from chip import *
-sys.path.append("./Visualization")
+sys.path.append("Visualization")
 from plot import *
-sys.path.append("./algorithms")
+sys.path.append("algorithms")
 from greedy import *
 
 def main():
@@ -47,5 +47,5 @@ if __name__ == "__main__":
     # run algorithm and output
     greedy_algorithm(chip.wires, chip.wire_connections)
     visualize(chip.gate_list, chip.grid, chip.wires)
-    chip.calculate_cost()
+    print("final:", chip.calculate_cost())
     chip.output_to_csv()
