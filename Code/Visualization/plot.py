@@ -1,12 +1,13 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-
+import numpy as np
+ 
 import sys
 sys.path.append("../Classes")
 from gate import *
 from location import *
 
-def visualize(gates, grid):
+def visualize(gates, grid, wires):
     # Create gate points from the CSV file
     gate_points = gates
 
@@ -19,11 +20,27 @@ def visualize(gates, grid):
     fig = plt.figure(figsize=(grid.width, grid.height))
     ax = fig.add_subplot(111, projection='3d')
 
-    # lines
-    # ax.plot([1, 6], [11, 11], [0, 0], linestyle='solid', linewidth=2,color = 'r')
-    ax.plot([1, 6], [11, 11], [0, 0], linestyle='solid', linewidth=2,color = 'r')
+    # creating a range of width and height
+    X = np.arange(grid.height +1)
+    Y =X = np.arange(grid.width +1)
+    
+    # Creating a mesh grid of X and Y
+    X, Y = np.meshgrid(X, Y)
+    
+    # set z to 0, because baseline 
+    Z = X*0+Y*0
+    ax.plot_wireframe(X, Y, Z, color='grey')
+
     # Plot the gate points
     ax.scatter(x, y, z, c='b', marker='o')
+
+    # lines
+    for wire in wires:
+        for wirepart in wires[wire].wires:
+            ax.plot([wirepart.from_location.x, wirepart.to_location.x], 
+                    [wirepart.from_location.y, wirepart.to_location.y], 
+                    [wirepart.from_location.z, wirepart.to_location.z], 
+                    linestyle='solid', linewidth=2,color = 'r')
 
     # Set labels and title
     ax.set_xlabel('X')

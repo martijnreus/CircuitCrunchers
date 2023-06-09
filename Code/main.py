@@ -135,12 +135,13 @@ class Chip():
     
     # calculate cost
     def calculate_cost(self):
-        
+
         # get number of wireparts
         n = 0
         for connection in self.wires:
             n +=self.wires[connection].get_wire_length()
-            
+        
+        
         # hardcode k
         k = 5
         return n + 300 * k
@@ -176,6 +177,6 @@ if __name__ == "__main__":
 
     # run algorithm and output
     greedy_algorithm(chip.wires, chip.wire_connections)
-    visualize(chip.gate_list, chip.grid)
+    visualize(chip.gate_list, chip.grid, chip.wires)
     chip.calculate_cost()
     chip.output_to_csv()
