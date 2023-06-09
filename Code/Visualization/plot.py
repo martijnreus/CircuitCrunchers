@@ -29,7 +29,7 @@ def visualize(gates, grid, wires):
     
     # set z to 0, because baseline 
     Z = X*0+Y*0
-    ax.plot_wireframe(X, Y, Z, color='grey')
+    ax.plot_wireframe(X, Y, Z, color='grey', alpha=0.5)
 
     # Plot the gate points
     ax.scatter(x, y, z, c='b', marker='o')
