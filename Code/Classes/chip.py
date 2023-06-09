@@ -128,4 +128,5 @@ class Chip():
             k += self.wires[connection].check_collision_amount(self.wires)
         
         k = k/2 #because we count every collision twice
-        return k
+        cost = n + k * 300
+        return cost
