@@ -158,6 +158,5 @@ class Chip():
                     if collisions != 0:
                         k += collisions - 1
 
-        print(k)
         return k
 
