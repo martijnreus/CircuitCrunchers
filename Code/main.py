@@ -8,6 +8,7 @@
 # import classes 
 import csv
 import sys
+from sys import argv
 sys.path.append("./Classes")
 from gate import *
 from wire import *
@@ -127,19 +128,44 @@ class Chip():
                 writer.writerow([gate_ab.strip(),output_wireparts])
 
             # test total cost
-            total_cost = "example"
+            total_cost = self.calculate_cost()
 
             # write the last line
             writer.writerow([f"chip_{self.chip}_{self.netlist}", total_cost])
-
+    
+    # calculate cost
+    def calculate_cost(self):
+        
+        # get number of wireparts
+        n = 0
+        for connection in self.wires:
+            n +=self.wires[connection].get_wire_length()
+            
+        # hardcode k
+        k = 5
+        return n + 300 * k
 
 # main
 if __name__ == "__main__":
 
-    # test hardcoded for chip 0 and netlist_1
-    netlist = "netlist_1"
-    chip = "0"
-    gates_file = "print_0"
+    # Check command line arguments
+    if len(argv) not in [1,4]:
+        print("Usage: python main.py [number_chip] [number_netlist] [number_gates_file]")
+        exit(1)
+
+    # Load the requested chip or else example
+    if len(argv) == 1:
+        number_chip = 0
+        number_netlist = 1
+        number_gates_file = 0
+    elif len(argv) == 4:
+        number_chip = argv[1]
+        number_netlist = argv[2]
+        number_gates_file = argv[3]
+
+    netlist = f"netlist_{number_netlist}"
+    chip = f"{number_chip}"
+    gates_file = f"print_{number_gates_file}"
 
     # make new chip 
     chip = Chip(chip, netlist, gates_file)
@@ -148,6 +174,8 @@ if __name__ == "__main__":
     chip.load_gates()
     chip.load_netlist()
 
+    # run algorithm and output
     greedy_algorithm(chip.wires, chip.wire_connections)
     visualize(chip.gate_list, chip.grid)
+    chip.calculate_cost()
     chip.output_to_csv()

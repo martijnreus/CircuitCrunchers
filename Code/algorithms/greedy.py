@@ -46,6 +46,7 @@ def greedy_algorithm( wires, wire_connections):
                 direction = Location(0, 0, check_sign(distance.z))
                 wire.add_wire_part(direction)
             else:
+                wire.add_wire_part(direction)
                 print("connected!", wire.get_wire_length())
                 break
 
