@@ -122,10 +122,10 @@ class Chip():
 
         # get number of wireparts
         n = 0
-        k = []
+        k = 0
         for connection in self.wires:
             n += self.wires[connection].get_wire_length()
+            k += self.wires[connection].check_collision_amount(self.wires)
         
-        # hardcode k
-        k = len(k)
+        k = k/2 #because we count every collision twice
         return k

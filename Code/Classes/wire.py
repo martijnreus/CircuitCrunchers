@@ -42,12 +42,18 @@ class Wire:
     def get_wire_length(self)-> list[int]:
         return len(self.wireparts)
     
-    def check_is_colliding(self, other_wire: list[object])-> bool:
-        # loop over the location of each wire part to check if its colliding with the new wire unit
-        for wire_unit in other_wire.wireparts:
-            if self.wireparts[len(self.wireparts)] == wire_unit:
-                return True
-        return False
+    def check_collision_amount(self, wires: dict[object])-> int:
+        collisions: int = 0
+
+        # loop over the location of each wire part to check if its colliding with another wire part
+        for connection in wires:
+            if connection != f"{self.gateA}-{self.gateB}":
+                for other_wire_unit in wires[connection].wireparts:
+                    for wire_unit in self.wireparts:
+                        if wire_unit == other_wire_unit:
+                            collisions += 1
+        
+        return collisions
 
 # create a wireUnit, where its location of the start and end is tracked
 class WireUnit:
