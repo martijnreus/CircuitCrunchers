@@ -84,7 +84,7 @@ class Chip():
             max_y = max(y_list)
 
             # make grid
-            self.grid = Grid(max_x +1, max_y +1, z)
+            self.grid = Grid(max_x +1, max_y +1, z + 1)
 
     # output
     def output_to_csv(self)-> None:
@@ -122,11 +122,42 @@ class Chip():
 
         # get number of wireparts
         n = 0
-        k = 0
+        k = self.calculate_collision_amount()
+
         for connection in self.wires:
             n += self.wires[connection].get_wire_length()
-            k += self.wires[connection].check_collision_amount(self.wires)
+            #k += self.wires[connection].check_collision_amount(self.wires)
         
-        k = k/2 #because we count every collision twice
+        #k = k/2 #because we count every collision twice doesnt work yet for more collisions on 1 location
         cost = n + k * 300
         return cost
+    
+    def calculate_collision_amount(self):
+
+        k = 0
+
+        # loop over every location of the grid
+        for x in range(0, self.grid.width):
+            for y in range(0, self.grid.height):
+                for z in range(0, self.grid.layers):
+                    location = Location(x, y, z)
+                    collisions = 0
+                    on_gate = False
+
+                    # check if the location is not on a gate
+                    for gate_ids in self.gates:
+                        if self.gates[gate_ids].location == location:
+                            on_gate = True
+
+                    if (on_gate == False):
+                        for connection in self.wires:
+                            for wire_unit in self.wires[connection].wireparts:
+                                if wire_unit.to_location == location:
+                                    collisions += 1
+
+                    if collisions != 0:
+                        k += collisions - 1
+
+        print(k)
+        return k
+
