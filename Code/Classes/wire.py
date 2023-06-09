@@ -51,7 +51,7 @@ class Wire:
                 for other_wire_unit in wires[connection].wireparts:
                     for wire_unit in self.wireparts:
                         if wire_unit == other_wire_unit:
-                            if wire_unit.from_location != self.gateA.location:
+                            if wire_unit.to_location != self.gateB.location:
                                 collisions += 1
         
         return collisions
@@ -65,4 +65,4 @@ class WireUnit:
 
     # if compared with each other, it compares where the cable lies 
     def __eq__(self, other):
-        return self.from_location == other.from_location 
+        return self.to_location == other.to_location 
