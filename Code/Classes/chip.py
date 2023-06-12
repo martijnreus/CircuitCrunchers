@@ -7,9 +7,9 @@ from grid import *
 # class chip, as in which chip are we working on
 class Chip():
 
-    def __init__(self, chip: str, netlist: str, gates: str)-> None:
+    def __init__(self, chip_id: str, netlist: str, gates: str)-> None:
         # save chip and netlist file
-        self.chip = chip
+        self.chip_id = chip_id
         self.netlist = netlist
 
         # save gates file
@@ -28,7 +28,7 @@ class Chip():
 
     # load connections
     def load_netlist(self):
-        csv_file = f"./../gates&netlists/chip_{self.chip}/{self.netlist}.csv"
+        csv_file = f"./../gates&netlists/chip_{self.chip_id}/{self.netlist}.csv"
         with open(csv_file, 'r') as file:
             reader = csv.DictReader(file)
 
@@ -53,7 +53,7 @@ class Chip():
         # put all possible x and y in list for grid
         x_list = []
         y_list = []
-        csv_file = f"./../gates&netlists/chip_{self.chip}/{self.gates_file}.csv"
+        csv_file = f"./../gates&netlists/chip_{self.chip_id}/{self.gates_file}.csv"
 
         with open(csv_file, 'r') as file:
             reader = csv.DictReader(file)
