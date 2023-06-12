@@ -1,4 +1,3 @@
-
 import csv
 from location import *
 from gate import *
@@ -43,7 +42,7 @@ class Chip():
 
                 # add connection
                 self.wire_connections.append([gate_a_id, gate_b_id])
-                
+
                 # make new wire and add to wires
                 new_wire = Wire(gate_a, gate_b)
                 wire_key = f"{gate_a_id}-{gate_b_id}"
@@ -55,7 +54,7 @@ class Chip():
         x_list = []
         y_list = []
         csv_file = f"./../gates&netlists/chip_{self.chip}/{self.gates_file}.csv"
-        
+
         with open(csv_file, 'r') as file:
             reader = csv.DictReader(file)
 
@@ -90,7 +89,7 @@ class Chip():
     def output_to_csv(self)-> None:
 
         # open csv
-        with open(f'output_{self.netlist}.csv', 'w', newline='') as csvfile:
+        with open(f'../output/output_{self.netlist}.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, dialect='excel')
 
             # write the first line

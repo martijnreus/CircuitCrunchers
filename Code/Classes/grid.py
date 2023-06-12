@@ -7,8 +7,8 @@ class Grid:
         self.layers = layers
 
     def get_max_locations(self):
-        max_x = self.width - 1
-        max_y = self.height - 1
-        max_z = self.layers - 1
+        max_x = self.width
+        max_y = self.height
+        max_z = self.layers
         xyz = [max_x, max_y, max_z]
         return xyz
