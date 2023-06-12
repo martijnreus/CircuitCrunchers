@@ -20,6 +20,7 @@ class Wire:
             return self.wireparts[self.get_wire_length() - 1].to_location
         
     def get_wire_part_end(self, direction):
+
         # add the direction to the begin_position
         to_x = self.get_wire_part_start().x + direction.x
         to_y = self.get_wire_part_start().y + direction.y
