@@ -2,7 +2,7 @@
 # calls functions and methods from other files
 ################################################################
 
-# import  
+# import
 import sys
 from sys import argv
 sys.path.append("Classes")
@@ -13,10 +13,6 @@ sys.path.append("algorithms")
 from greedy import *
 
 def main():
-    pass
-
-# main
-if __name__ == "__main__":
 
     # Check command line arguments
     if len(argv) not in [1,4]:
@@ -37,7 +33,7 @@ if __name__ == "__main__":
     chip = f"{number_chip}"
     gates_file = f"print_{number_gates_file}"
 
-    # make new chip 
+    # make new chip
     chip = Chip(chip, netlist, gates_file)
 
     # load everything
@@ -49,3 +45,6 @@ if __name__ == "__main__":
     visualize(chip.gate_list, chip.grid, chip.wires)
     print("final:", chip.calculate_cost())
     chip.output_to_csv()
+
+if __name__ == "__main__":
+    main()
