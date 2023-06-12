@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     # Check command line arguments
     if len(argv) not in [1,4]:
-        print("Usage: python main.py [number_chip] [number_netlist] [number_gates_file]")
+        print("Usage: python main.py [number_chip] [number_netlist] [number_print]")
         exit(1)
 
     # Load the requested chip or else example

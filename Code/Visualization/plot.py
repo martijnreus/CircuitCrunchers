@@ -8,6 +8,19 @@ from gate import *
 from location import *
 
 def visualize(gates, grid, wires):
+
+    # GENERAL PLOT
+    # Create a 3D plot
+    fig = plt.figure(figsize=(grid.width, grid.height))
+    ax = fig.add_subplot(111, projection='3d')
+
+    # Set labels and title
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    ax.set_title('Gate Points')
+
+    # GATES
     # Create gate points from the CSV file
     gate_points = gates
 
@@ -16,10 +29,10 @@ def visualize(gates, grid, wires):
     y = [point.location.y for point in gate_points]
     z = [point.location.z for point in gate_points]
 
-    # Create a 3D plot
-    fig = plt.figure(figsize=(grid.width, grid.height))
-    ax = fig.add_subplot(111, projection='3d')
+    # Plot the gate points
+    ax.scatter(x, y, z, c='b', marker='o')
 
+    # PLATFORM IN THE MIDDLE
     # creating a range of width and height
     X = np.arange(grid.height +1)
     Y =X = np.arange(grid.width +1)
@@ -31,9 +44,7 @@ def visualize(gates, grid, wires):
     Z = X*0+Y*0
     ax.plot_wireframe(X, Y, Z, color='grey', alpha=0.5)
 
-    # Plot the gate points
-    ax.scatter(x, y, z, c='b', marker='o')
-
+    # WIRES
     # lines
     for wire in wires:
         for wirepart in wires[wire].wireparts:
@@ -41,12 +52,6 @@ def visualize(gates, grid, wires):
                     [wirepart.from_location.y, wirepart.to_location.y], 
                     [wirepart.from_location.z, wirepart.to_location.z], 
                     linestyle='solid', linewidth=2,color = 'r')
-
-    # Set labels and title
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-    ax.set_title('Gate Points')
 
     # Show the plot
     plt.show()
