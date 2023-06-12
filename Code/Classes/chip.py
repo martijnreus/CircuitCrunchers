@@ -126,9 +126,7 @@ class Chip():
 
         for connection in self.wires:
             n += self.wires[connection].get_wire_length()
-            #k += self.wires[connection].check_collision_amount(self.wires)
         
-        #k = k/2 #because we count every collision twice doesnt work yet for more collisions on 1 location
         cost = n + k * 300
         return cost
     
