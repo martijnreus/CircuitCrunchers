@@ -12,11 +12,15 @@ from plot import *
 sys.path.append("algorithms")
 from greedy import *
 from randomize import *
+
+
 def choose_algorithm(algorithm, chip):
     if algorithm == "greedy":
         greedy_algorithm(chip.wires, chip.wire_connections)
     elif algorithm == "random":
         random_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates)
+
+
 def main():
     """
     hello
