@@ -12,16 +12,15 @@ from plot import *
 sys.path.append("algorithms")
 from greedy import *
 from randomize import *
-
-# choose the algorithm based on the arguments
 def choose_algorithm(algorithm, chip):
     if algorithm == "greedy":
         greedy_algorithm(chip.wires, chip.wire_connections)
     elif algorithm == "random":
         random_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates)
-
-# main
 def main():
+    """
+    hello
+    """
 
     # Check command line arguments
     if len(argv) not in [1,2,3,4]:
