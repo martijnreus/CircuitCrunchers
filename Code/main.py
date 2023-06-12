@@ -12,11 +12,15 @@ from plot import *
 sys.path.append("algorithms")
 from greedy import *
 from randomize import *
-
+def choose_algorithm(algorithm, chip):
+    if algorithm == "greedy":
+        greedy_algorithm(chip.wires, chip.wire_connections)
+    elif algorithm == "random":
+        random_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates)
 def main():
 
     # Check command line arguments
-    if len(argv) not in [1,3]:
+    if len(argv) not in [1,2,3,4]:
         print("Usage: python main.py [number_chip] [number_netlist]")
         exit(1)
 
@@ -25,10 +29,23 @@ def main():
         number_chip = 0
         number_netlist = 1
         number_gates_file = 0
+        algorithm = "greedy"
+    if len(argv) == 2:
+        number_chip = 0
+        number_netlist = 1
+        number_gates_file = 0
+        algorithm = argv[1]
     elif len(argv) == 3:
         number_chip = argv[1]
         number_netlist = argv[2]
         number_gates_file = argv[1]
+        algorithm = "greedy"
+    elif len(argv) == 4:
+        number_chip = argv[1]
+        number_netlist = argv[2]
+        number_gates_file = argv[1]
+        algorithm = argv[3]
+
 
     netlist = f"netlist_{number_netlist}"
     chip = f"{number_chip}"
@@ -42,8 +59,7 @@ def main():
     chip.load_netlist()
 
     # run algorithm and output
-    # greedy_algorithm(chip.wires, chip.wire_connections)
-    random_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates)
+    choose_algorithm(algorithm, chip)
     visualize(chip.gate_list, chip.grid, chip.wires)
     print("final:", chip.calculate_cost())
     chip.output_to_csv()
