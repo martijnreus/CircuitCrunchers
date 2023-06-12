@@ -27,7 +27,7 @@ def greedy_algorithm( wires, wire_connections):
             
             # calculate distance
             distance = calculate_distance(location_a, location_b) 
-            
+
             # if not yet on same x, go one step further
             if distance.x != 0:
                 # get direction as e.g.(1,0,0)
