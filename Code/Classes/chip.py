@@ -84,7 +84,7 @@ class Chip():
             max_y = max(y_list)
 
             # make grid
-            self.grid = Grid(max_x +1, max_y +1, z + 1)
+            self.grid = Grid(max_x +1, max_y +1, 7)
 
     # output
     def output_to_csv(self)-> None:

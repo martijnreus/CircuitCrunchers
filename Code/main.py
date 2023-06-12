@@ -11,6 +11,7 @@ sys.path.append("Visualization")
 from plot import *
 sys.path.append("algorithms")
 from greedy import *
+from randomize import *
 
 def main():
     pass
@@ -19,8 +20,8 @@ def main():
 if __name__ == "__main__":
 
     # Check command line arguments
-    if len(argv) not in [1,4]:
-        print("Usage: python main.py [number_chip] [number_netlist] [number_print]")
+    if len(argv) not in [1,3]:
+        print("Usage: python main.py [number_chip] [number_netlist]")
         exit(1)
 
     # Load the requested chip or else example
@@ -28,10 +29,10 @@ if __name__ == "__main__":
         number_chip = 0
         number_netlist = 1
         number_gates_file = 0
-    elif len(argv) == 4:
+    elif len(argv) == 3:
         number_chip = argv[1]
         number_netlist = argv[2]
-        number_gates_file = argv[3]
+        number_gates_file = argv[1]
 
     netlist = f"netlist_{number_netlist}"
     chip = f"{number_chip}"
@@ -45,7 +46,8 @@ if __name__ == "__main__":
     chip.load_netlist()
 
     # run algorithm and output
-    greedy_algorithm(chip.wires, chip.wire_connections)
+    # greedy_algorithm(chip.wires, chip.wire_connections)
+    random_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates)
     visualize(chip.gate_list, chip.grid, chip.wires)
     print("final:", chip.calculate_cost())
     chip.output_to_csv()
