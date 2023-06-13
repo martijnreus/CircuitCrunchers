@@ -13,6 +13,10 @@ def change_netlist_order(chip, order_choice):
         wire_connections = change_order_random(chip)
         return wire_connections
 
+    elif order_choice == "reverse":
+        wire_connections = change_order_reverse(chip)
+        return wire_connections
+
     elif order_choice == "short":
         wire_connections = change_order_shortest_first(chip)
         return wire_connections
@@ -56,6 +60,23 @@ def change_order_random(chip):
 
     wire_connections = chip.wire_connections
     random.shuffle(wire_connections)
+
+    return wire_connections
+
+
+def change_order_reverse(chip):
+    """
+    Function that sorts the wire connections in reverse order.
+
+    Args:
+        chip (chip): the current chip that we are working on
+
+    Returns:
+        wire_connections: the sorted wire connections between the gates on this chip
+    """
+    wire_connections = chip.wire_connections
+
+    wire_connections.reverse()
 
     return wire_connections
 
