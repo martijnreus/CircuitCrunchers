@@ -12,6 +12,7 @@ from plot import *
 sys.path.append("algorithms")
 from greedy import *
 from randomize import *
+from hillclimber import *
 
 
 def choose_algorithm(algorithm, chip):
@@ -29,6 +30,10 @@ def choose_algorithm(algorithm, chip):
     # if algoritm is random, run the random algorithm
     elif algorithm == "random":
         random_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates)
+    
+    # if algoritzhm is hillclimber, run the hillclimber algorithm
+    elif algorithm == "hillclimber":
+        hillclimber_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates, chip)
 
 
 def main():
