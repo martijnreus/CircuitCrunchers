@@ -1,3 +1,4 @@
+
 import sys
 sys.path.append("../Classes")
 from gate import *
@@ -13,11 +14,11 @@ class PathNode:
 
         self.location = location
 
+        self.has_wire = False
+
         self.f_cost = 0
         self.g_cost = 0
         self.h_cost = 0
-
-        self.has_cable = False
 
     def calculate_f_cost(self):
         self.f_cost = self.g_cost + self.f_cost
@@ -26,11 +27,11 @@ class PathNode:
     
     # add a extra cost of 300 if there is a wire on the node
     def add_wire_cost(self):
-        if self.has_cable == True:
+        if self.has_wire == True:
             f_cost += 300
 
     def __eq__(self, other):
-        self.location == other.location
+        return self.location == other.location
     
 def astar_algorithm(wires, wire_connections, grid, gates):
 
@@ -44,50 +45,58 @@ def astar_algorithm(wires, wire_connections, grid, gates):
         # get the wire for the two gates
         wire = wires[f"{gate_a}-{gate_b}"]
 
-        # reset alle path nodes
-        # zorg ervoor dat alle path nodes met een kabel een cost van 300 extra krijgen 
-        start_node = PathNode(None, wire.gateA.location)
-        end_node = PathNode(None, wire.gateB.location)
+        find_path(wire, grid, gates)
 
-        open_list = []
-        close_list = []
+def find_path(wire, grid, gates):
+    # zorg ervoor dat alle path nodes met een kabel een cost van 300 extra krijgen 
+    start_node = PathNode(None, wire.gateA.location)
+    end_node = PathNode(None, wire.gateB.location)
 
-        open_list.append(start_node)
+    open_list = []
+    close_list = []
 
-        start_node.g_cost = 0
-        start_node.h_cost = calculate_h_cost(start_node, end_node)
-        start_node.calculate_f_cost()
+    open_list.append(start_node)
 
-        while(len(open_list) > 0):
-            # always pick the node with the lowest f_cost
-            current_node_index = get_lowest_f_node_index(open_list)
-            current_node = open_list[current_node_index]
+    start_node.g_cost = 0
+    start_node.h_cost = calculate_h_cost(start_node, end_node)
+    start_node.calculate_f_cost()
 
-            # found a path
-            if current_node == end_node:
-                print("Path found")
-                break
+    while(len(open_list) > 0):
+        # always pick the node with the lowest f_cost
+        current_node_index = get_lowest_f_node_index(open_list)
+        current_node = open_list[current_node_index]
 
-            # move the current node from the open list to the closed list
-            open_list.pop(current_node_index)
-            close_list.append(current_node)
+        # found a path
+        if current_node == end_node:
+            print("Path found")
+            break
 
-            neighbour_nodes = []
-            # add all the neighbour nodes of the current_node to the list
-            add_neighbour_nodes(current_node, neighbour_nodes, grid)
+        # move the current node from the open list to the closed list
+        open_list.pop(current_node_index)
+        close_list.append(current_node)
 
-            for neighbours in neighbour_nodes:
-                in_close_list = False
-                
-                # the neighbour is already in the close_list so we dont look at it again
-                for nodes in close_list:
-                    if (neighbours == nodes):
-                        in_close_list = True
+        neighbour_nodes = []
+        # add all the neighbour nodes of the current_node to the list
+        add_neighbour_nodes(current_node, neighbour_nodes, grid)
 
-                if (in_close_list == False):
-                    # if the neighbour is on a gate set to unwalkable
-                    if (check_is_on_gate()):
-                        pass #continue
+        for neighbour in neighbour_nodes:
+            
+            # the neighbour is already in the close list so we dont look at it again
+            if (check_is_in_list(neighbour, close_list) == False):
+                # if the neighbour is on a gate place in close list
+                if (check_is_on_gate(neighbour, gates, wire)):
+                    close_list.append(neighbour)
+
+                else:
+                    # put the neighbour node in the open list if it is not in it yet
+                    if (check_is_in_list(neighbour, open_list) == False):
+                        neighbour.g_cost = neighbour.parent.g_cost + 1
+                        neighbour.h_cost = calculate_h_cost(neighbour, end_node)
+                        #TODO check if the node has a wire on it so it can add extra f cost
+                        neighbour.calculate_f_cost()
+
+                        open_list.append(neighbour)
+
 
 # calculate the h_cost by walking to the end note over the grid
 def calculate_h_cost(node, end_node):
@@ -107,27 +116,40 @@ def get_lowest_f_node_index(node_list):
     return index
 
 def add_neighbour_nodes(current_node, node_list, grid):
-    # right
+    # left
     if current_node.location.x > 0:
-        node_position = Location(current_node.x + 1, current_node.y, current_node.z)
+        node_position = Location(current_node.location.x - 1, current_node.location.y, current_node.location.z)
         node_list.append(PathNode(current_node, node_position))
     
-    # left
+    # right
     if current_node.location.x < grid.width:
-        node_position = Location(current_node.x - 1, current_node.y, current_node.z)
+        node_position = Location(current_node.location.x + 1, current_node.location.y, current_node.location.z)
         node_list.append(PathNode(current_node, node_position))
 
     # forward
     if current_node.location.y > 0:
-        node_position = Location(current_node.x, current_node.y + 1, current_node.z)
+        node_position = Location(current_node.location.x, current_node.location.y - 1, current_node.location.z)
         node_list.append(PathNode(current_node, node_position))
     
     # backward
     if current_node.location.x < grid.width:
-        node_position = Location(current_node.x, current_node.y - 1, current_node.z)
+        node_position = Location(current_node.location.x, current_node.location.y + 1, current_node.location.z)
         node_list.append(PathNode(current_node, node_position))
 
     #TODO add z 
 
-def check_is_on_gate():
-    pass # continue
+def check_is_on_gate(node, gates, wire):
+    # check if the location of the gate is on a node
+    for gate in gates:
+        # the location of gateB is allowed as this is the goal
+        if gates[gate] == wire.gateB:
+            break
+        elif gates[gate].location == node.location:
+            return True
+    return False
+
+def check_is_in_list(node, list):
+    for nodes in list:
+        if node == nodes:
+            return True
+    return False
