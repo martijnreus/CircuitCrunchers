@@ -12,6 +12,7 @@ from plot import *
 sys.path.append("algorithms")
 from greedy import *
 from randomize import *
+from astar import *
 
 
 def choose_algorithm(algorithm, chip):
@@ -29,6 +30,10 @@ def choose_algorithm(algorithm, chip):
     # if algoritm is random, run the random algorithm
     elif algorithm == "random":
         random_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates)
+
+    # if algoritm is astar, run the astar algorithm
+    elif algorithm == "astar":
+        astar_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates)
 
 
 def main():
