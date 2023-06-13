@@ -45,7 +45,7 @@ def astar_algorithm(wires, wire_connections, grid, gates):
         # get the wire for the two gates
         wire = wires[f"{gate_a}-{gate_b}"]
 
-        find_path(wire, grid, gates)
+        path = find_path(wire, grid, gates)
 
 def find_path(wire, grid, gates):
     # zorg ervoor dat alle path nodes met een kabel een cost van 300 extra krijgen 
@@ -69,7 +69,7 @@ def find_path(wire, grid, gates):
         # found a path
         if current_node == end_node:
             print("Path found")
-            break
+            return calculate_path(current_node)
 
         # move the current node from the open list to the closed list
         open_list.pop(current_node_index)
@@ -97,6 +97,18 @@ def find_path(wire, grid, gates):
 
                         open_list.append(neighbour)
 
+    # no path has been found somehow
+    return None
+
+def calculate_path(end_node):
+    path = []
+    current_node = end_node
+    while current_node.parent is not None:
+        path.append(current_node)
+        current_node = current_node.parent
+    
+    path.reverse()
+    return path
 
 # calculate the h_cost by walking to the end note over the grid
 def calculate_h_cost(node, end_node):
