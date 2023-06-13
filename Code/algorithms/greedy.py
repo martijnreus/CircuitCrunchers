@@ -10,7 +10,6 @@ from location import *
 from wire import *
 from grid import *
 
-
 def greedy_algorithm( wires, wire_connections):
 
     # get gates
