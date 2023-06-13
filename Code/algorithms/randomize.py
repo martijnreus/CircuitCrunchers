@@ -17,22 +17,25 @@ def random_algorithm(wires, wire_connections, grid, gates):
 
         wire = wires[f"{gate_a}-{gate_b}"]
 
-        while True:
-
-            direction = random.choice(possibilities)
-            location = Location(direction[0], direction[1], direction[2])
-            if check_if_valid(wire, grid, location, gates) == True:
-                # print("valid")
-                wire.add_wire_part(location)
             
-            if wire.check_is_connected() == True:
-                print("is connected")
-                break
+        random_add_wire(possibilities, wire, grid, gates)
+            
 
-def check_if_valid(wire, grid, location, gates):
+def random_add_wire(possibilities, wire, grid, gates):
+    while True:
+        direction = random.choice(possibilities)
+        location = Location(direction[0], direction[1], direction[2])
+        if check_if_valid(wire, grid, location, gates) == True:
+            wire.add_wire_part(location)
+        
+        if wire.check_is_connected() == True:
+            # print("is connected")
+            break
+
+def check_if_valid(wire, grid, direction, gates):
 
     if wire.wireparts != []:
-        current_wirepart = wire.wireparts[-1].to_location + location
+        current_wirepart = wire.wireparts[-1].to_location + direction
     else: 
         # print("not yet any wireparts")
         return True

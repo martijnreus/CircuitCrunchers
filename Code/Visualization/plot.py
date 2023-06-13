@@ -11,8 +11,10 @@ def visualize(gates, grid, wires):
 
     # GENERAL PLOT
     # Create a 3D plot
-    fig = plt.figure(figsize=(grid.width, grid.height))
+    fig = plt.figure(figsize=(10, 10))
+    # ax = plt.axes(projection='3d')
     ax = fig.add_subplot(111, projection='3d')
+
 
     # Set labels and title
     ax.set_xlabel('X')
@@ -34,9 +36,14 @@ def visualize(gates, grid, wires):
 
     # PLATFORM IN THE MIDDLE
     # creating a range of width and height
-    X = np.arange(grid.height +1)
-    Y =X = np.arange(grid.width +1)
-    
+    X = np.arange(grid.width+1)
+    Y = np.arange(grid.height+1)
+    ax.set_xticks(X)
+    ax.set_xlim(0,grid.width +1)
+    ax.set_yticks(Y)
+    ax.set_ylim(0,grid.height +1)
+    ax.set_zticks([-3, -2, -1, 0, 1, 2, 3, 4])
+    ax.set_zlim(-3, 4)
     # Creating a mesh grid of X and Y
     X, Y = np.meshgrid(X, Y)
     
@@ -52,7 +59,7 @@ def visualize(gates, grid, wires):
                     [wirepart.from_location.y, wirepart.to_location.y], 
                     [wirepart.from_location.z, wirepart.to_location.z], 
                     linestyle='solid', linewidth=2,color = 'r')
-
+    
     # Show the plot
     plt.show()
     plt.savefig("./Visualization/plot")
