@@ -76,7 +76,18 @@ def astar_algorithm(wires, wire_connections, grid, gates):
             # add all the neighbour nodes of the current_node to the list
             add_neighbour_nodes(current_node, neighbour_nodes, grid)
 
+            for neighbours in neighbour_nodes:
+                in_close_list = False
+                
+                # the neighbour is already in the close_list so we dont look at it again
+                for nodes in close_list:
+                    if (neighbours == nodes):
+                        in_close_list = True
 
+                if (in_close_list == False):
+                    # if the neighbour is on a gate set to unwalkable
+                    if (check_is_on_gate()):
+                        pass #continue
 
 # calculate the h_cost by walking to the end note over the grid
 def calculate_h_cost(node, end_node):
@@ -117,3 +128,6 @@ def add_neighbour_nodes(current_node, node_list, grid):
         node_list.append(PathNode(current_node, node_position))
 
     #TODO add z 
+
+def check_is_on_gate():
+    pass # continue
