@@ -1,5 +1,5 @@
 #################################################################
-# calls functions and methods from other files
+# calls functions and methods from the other files
 ################################################################
 
 # import
