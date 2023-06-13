@@ -1,4 +1,3 @@
-
 import sys
 sys.path.append("../Classes")
 from gate import *
@@ -11,7 +10,6 @@ class PathNode:
     def __init__(self, parent: object, location: object):
 
         self.parent = parent
-
         self.location = location
 
         self.has_wire = False
@@ -21,14 +19,14 @@ class PathNode:
         self.h_cost = 0
 
     def calculate_f_cost(self):
-        self.f_cost = self.g_cost + self.f_cost
+        self.f_cost = self.g_cost + self.h_cost
         self.add_wire_cost()
         return self.f_cost
     
     # add a extra cost of 300 if there is a wire on the node
     def add_wire_cost(self):
         if self.has_wire == True:
-            f_cost += 300
+            self.f_cost += 300
 
     def __eq__(self, other):
         return self.location == other.location
@@ -45,25 +43,20 @@ def astar_algorithm(wires, wire_connections, grid, gates):
         # get the wire for the two gates
         wire = wires[f"{gate_a}-{gate_b}"]
 
-        path = find_path(wire, grid, gates)
+        path = find_path(wire, grid, gates, wires)
 
         make_wire(wire, path)
 
+# put a wireUnit on each part of the path
 def make_wire(wire, path):
-    # skip one as it is the begin location of the wire
     for i in range(0, len(path)):
-        print(path[i].location)
         if i == 0:
             direction = path[i].location - wire.gateA.location
         else:
             direction = path[i].location - path[i - 1].location
         wire.add_wire_part(direction)
 
-
-
-
-
-def find_path(wire, grid, gates):
+def find_path(wire, grid, gates, wires):
     # zorg ervoor dat alle path nodes met een kabel een cost van 300 extra krijgen 
     start_node = PathNode(None, wire.gateA.location)
     end_node = PathNode(None, wire.gateB.location)
@@ -100,6 +93,7 @@ def find_path(wire, grid, gates):
             
             # the neighbour is already in the close list so we dont look at it again
             if (check_is_in_list(neighbour, close_list) == False):
+                
                 # if the neighbour is on a gate place in close list
                 if (check_is_on_gate(neighbour, gates, wire)):
                     close_list.append(neighbour)
@@ -109,7 +103,10 @@ def find_path(wire, grid, gates):
                     if (check_is_in_list(neighbour, open_list) == False):
                         neighbour.g_cost = neighbour.parent.g_cost + 1
                         neighbour.h_cost = calculate_h_cost(neighbour, end_node)
-                        #TODO check if the node has a wire on it so it can add extra f cost
+
+                        if check_is_on_wire(neighbour, wires):
+                            neighbour.has_wire = True
+
                         neighbour.calculate_f_cost()
 
                         open_list.append(neighbour)
@@ -161,11 +158,19 @@ def add_neighbour_nodes(current_node, node_list, grid):
         node_list.append(PathNode(current_node, node_position))
     
     # backward
-    if current_node.location.x < grid.width:
+    if current_node.location.y < grid.width:
         node_position = Location(current_node.location.x, current_node.location.y + 1, current_node.location.z)
         node_list.append(PathNode(current_node, node_position))
 
-    #TODO add z 
+    # down
+    if current_node.location.z > -3:
+        node_position = Location(current_node.location.x, current_node.location.y, current_node.location.z - 1)
+        node_list.append(PathNode(current_node, node_position))
+    
+    # up
+    if current_node.location.z < 4:
+        node_position = Location(current_node.location.x, current_node.location.y, current_node.location.z + 1)
+        node_list.append(PathNode(current_node, node_position))
 
 def check_is_on_gate(node, gates, wire):
     # check if the location of the gate is on a node
@@ -175,6 +180,13 @@ def check_is_on_gate(node, gates, wire):
             break
         elif gates[gate].location == node.location:
             return True
+    return False
+
+def check_is_on_wire(node, wires):
+    for connection in wires:
+        for wire_unit in wires[connection].wireparts:
+            if node.location == wire_unit.from_location:
+                return True
     return False
 
 def check_is_in_list(node, list):
