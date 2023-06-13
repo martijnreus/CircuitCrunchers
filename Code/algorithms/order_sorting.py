@@ -49,6 +49,14 @@ def change_netlist_order(chip, order_choice):
         wire_connections = change_order_middle_to_outside(chip, reverse=True)
         return wire_connections
 
+    elif order_choice == "intra-quadrant":
+        wire_connections = change_order_quadrant(chip, reverse=False)
+        return wire_connections
+
+    elif order_choice == "inter-quadrant":
+        wire_connections = change_order_quadrant(chip, reverse=True)
+        return wire_connections
+
     # if none of these applied, just use the basic sorting (not sorting)
     else:
         wire_connections = chip.wire_connections
@@ -89,7 +97,7 @@ def change_order_reverse(chip):
     return wire_connections
 
 
-def change_order_distance(chip):
+def change_order_distance(chip, reverse):
     """
     Function that sorts the wire connections from the shortest to longest distance between the two gates.
 
@@ -101,7 +109,7 @@ def change_order_distance(chip):
     """
     wire_connections = chip.wire_connections
 
-    wire_connections.sort(key=lambda connection: calculate_distance(connection, chip))
+    wire_connections.sort(key=lambda connection: calculate_distance(connection, chip), reverse=reverse)
 
     return wire_connections
 
@@ -211,8 +219,8 @@ def change_order_middle_to_outside(chip, reverse):
     wire_connections = chip.wire_connections
 
     # Calculate the coordinates of the middle of the chip
-    middle_x = chip.width / 2
-    middle_y = chip.height / 2
+    middle_x = chip.grid.width / 2
+    middle_y = chip.grid.height / 2
 
     # Sort wire_connections based on the distance from the middle to each gate involved in the connection
     wire_connections.sort(key=lambda connection: calculate_distance_to_middle(connection, chip, middle_x, middle_y), reverse=reverse)
@@ -244,3 +252,83 @@ def calculate_distance_to_middle(connection, chip, middle_x, middle_y):
 
     # Return the maximum distance among the gates involved in the connection
     return max(distance_a, distance_b)
+
+
+def change_order_quadrant(chip, reverse):
+    """
+    Function that sorts the wire connections by dividing the chip into quadrants and sorting connections within the same
+    quadrant first, followed by connections between gates in different quadrants.
+
+    Args:
+        chip (chip): the current chip that we are working on
+
+    Returns:
+        wire_connections: the sorted wire connections between the gates on this chip
+    """
+    wire_connections = chip.wire_connections
+
+    # Divide the chip into quadrants based on the center point
+    center_x = chip.grid.width / 2
+    center_y = chip.grid.height / 2
+
+    # Sort wire connections by quadrant first, and then by distance within each quadrant
+    wire_connections.sort(key=lambda connection: (
+        is_same_quadrant(connection, chip, center_x, center_y),
+        -calculate_distance(connection, chip)  # negate the distance to sort in reverse order within the quadrant
+    ), reverse=reverse)
+
+    return wire_connections
+
+
+def is_same_quadrant(connection, chip, center_x, center_y):
+    """
+    Function to check if the gates in a connection belong to the same quadrant.
+
+    Args:
+        connection (wire_connection): the connection between two gates
+        chip (chip): the current chip that we are working on
+        center_x (float): the x-coordinate of the center point
+        center_y (float): the y-coordinate of the center point
+
+    Returns:
+        bool: True if the gates are in the same quadrant, False otherwise
+    """
+    gate_a_id, gate_b_id = connection
+
+    # Get the quadrant indices for the gates
+    quadrant_a = get_quadrant_index(chip.gates[gate_a_id].location, center_x, center_y)
+    quadrant_b = get_quadrant_index(chip.gates[gate_b_id].location, center_x, center_y)
+
+    return quadrant_a == quadrant_b
+
+
+def get_quadrant_index(location, center_x, center_y):
+    """
+    Function to determine the quadrant index for a given location based on the center point.
+
+    Args:
+        location (Location): the location of a gate
+        center_x (float): the x-coordinate of the center point
+        center_y (float): the y-coordinate of the center point
+
+    Returns:
+        int: the quadrant index (0, 1, 2, 3) based on the location
+    """
+    x = location.x
+    y = location.y
+
+    # Quadrant 1
+    if x <= center_x and y <= center_y:
+        return 0
+
+    # Quadrant 2
+    elif x > center_x and y <= center_y:
+        return 1
+
+    # Quadrant 3
+    elif x <= center_x and y > center_y:
+        return 2
+
+    # Quadrant 4
+    else:
+        return 3
