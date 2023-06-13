@@ -93,7 +93,7 @@ def main():
 
     # run algorithm and output
     choose_algorithm(algorithm, chip, order_choice)
-    # visualize(chip.gate_list, chip.grid, chip.wires)
+    visualize(chip.gate_list, chip.grid, chip.wires)
     print("final:", chip.calculate_cost())
     chip.output_to_csv()
 

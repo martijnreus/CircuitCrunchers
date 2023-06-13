@@ -47,6 +47,22 @@ def astar_algorithm(wires, wire_connections, grid, gates):
 
         path = find_path(wire, grid, gates)
 
+        make_wire(wire, path)
+
+def make_wire(wire, path):
+    # skip one as it is the begin location of the wire
+    for i in range(0, len(path)):
+        print(path[i].location)
+        if i == 0:
+            direction = path[i].location - wire.gateA.location
+        else:
+            direction = path[i].location - path[i - 1].location
+        wire.add_wire_part(direction)
+
+
+
+
+
 def find_path(wire, grid, gates):
     # zorg ervoor dat alle path nodes met een kabel een cost van 300 extra krijgen 
     start_node = PathNode(None, wire.gateA.location)
@@ -68,8 +84,9 @@ def find_path(wire, grid, gates):
 
         # found a path
         if current_node == end_node:
-            print("Path found")
-            return calculate_path(current_node)
+            path = calculate_path(current_node)
+            print(f"Path found: {len(path)}")
+            return path
 
         # move the current node from the open list to the closed list
         open_list.pop(current_node_index)
@@ -165,3 +182,4 @@ def check_is_in_list(node, list):
         if node == nodes:
             return True
     return False
+
