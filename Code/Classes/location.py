@@ -6,7 +6,7 @@ class Location:
         self.y = y
         self.z = z
     
-    # if compared, it compares the whole location
+    # if compared, it compares the whole location with their respective x y and z 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y and self.z == other.z
 

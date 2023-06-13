@@ -1,4 +1,3 @@
-
 import csv
 from location import *
 from gate import *
@@ -8,9 +7,9 @@ from grid import *
 # class chip, as in which chip are we working on
 class Chip():
 
-    def __init__(self, chip: str, netlist: str, gates: str)-> None:
+    def __init__(self, chip_id: str, netlist: str, gates: str)-> None:
         # save chip and netlist file
-        self.chip = chip
+        self.chip_id = chip_id
         self.netlist = netlist
 
         # save gates file
@@ -29,7 +28,7 @@ class Chip():
 
     # load connections
     def load_netlist(self):
-        csv_file = f"./../gates&netlists/chip_{self.chip}/{self.netlist}.csv"
+        csv_file = f"./../gates&netlists/chip_{self.chip_id}/{self.netlist}.csv"
         with open(csv_file, 'r') as file:
             reader = csv.DictReader(file)
 
@@ -43,7 +42,7 @@ class Chip():
 
                 # add connection
                 self.wire_connections.append([gate_a_id, gate_b_id])
-                
+
                 # make new wire and add to wires
                 new_wire = Wire(gate_a, gate_b)
                 wire_key = f"{gate_a_id}-{gate_b_id}"
@@ -54,8 +53,8 @@ class Chip():
         # put all possible x and y in list for grid
         x_list = []
         y_list = []
-        csv_file = f"./../gates&netlists/chip_{self.chip}/{self.gates_file}.csv"
-        
+        csv_file = f"./../gates&netlists/chip_{self.chip_id}/{self.gates_file}.csv"
+
         with open(csv_file, 'r') as file:
             reader = csv.DictReader(file)
 
@@ -90,7 +89,7 @@ class Chip():
     def output_to_csv(self)-> None:
 
         # open csv
-        with open(f'output_{self.netlist}.csv', 'w', newline='') as csvfile:
+        with open(f'../output/output_{self.netlist}.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, dialect='excel')
 
             # write the first line
