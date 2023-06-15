@@ -51,7 +51,7 @@ def main():
     main function, calling to 
     """
     # check for valid usage
-    if len(argv) not in [1, 2, 3, 4, 5]:
+    if len(argv) not in [1, 3, 4, 5]:
         print("Usage: python main.py [number_chip] [number_netlist] [algorithm] [sorting_order]")
         print("sorting order cosists of: \"basic\", \"random\", \"short\", \"long\", \"most-connections\", \"least-connections\"")
         exit(1)
@@ -63,22 +63,19 @@ def main():
     algorithm = "greedy"
     order_choice = "basic"
 
-    if len(argv) == 2:
-        algorithm = argv[1]
-
     # if we have a third argument, we should take that as our netlists.
-    elif len(argv) in [3, 4, 5]:
+    if len(argv) in [3, 4, 5]:
         number_chip = argv[1]
         number_netlist = argv[2]
         number_gates_file = argv[1]
 
-    # if we have a fourth argument, then it specifies our algorithm
-    if len(argv) in [4, 5]:
-        algorithm = argv[3]
+        # if we have a fourth argument, then it specifies our algorithm
+        if len(argv) in [4, 5]:
+            algorithm = argv[3]
 
-        # check for order argument
-        if len(argv) == 5:
-            order_choice = argv[4]
+            # check for order argument
+            if len(argv) == 5:
+                order_choice = argv[4]
 
     netlist = f"netlist_{number_netlist}"
     chip_id = f"{number_chip}"
