@@ -28,6 +28,10 @@ class PathNode:
         if self.has_wire == True:
             self.f_cost += 300
 
+    # add extra f_cost to nodes that you might want to avoid
+    def add_additional_f_cost(self, value):
+        self.f_cost += value
+
     def __eq__(self, other):
         return self.location == other.location
     
