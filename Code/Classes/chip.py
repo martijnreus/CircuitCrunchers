@@ -41,12 +41,12 @@ class Chip():
                 gate_b = self.gates[gate_b_id]
 
                 # add connection
-                self.wire_connections.append([gate_a_id, gate_b_id])
+                self.wire_connections.append([gate_a_id,gate_b_id])
 
                 # make new wire and add to wires
-                new_wire = Wire(gate_a, gate_b)
-                wire_key = f"{gate_a_id}-{gate_b_id}"
-                self.wires[wire_key] = new_wire
+                new_wire=Wire(gate_a, gate_b)
+                wire_key=f"{gate_a_id}-{gate_b_id}"
+                self.wires[wire_key]=new_wire
 
     # load gates
     def load_gates(self)-> None:
@@ -87,34 +87,37 @@ class Chip():
 
     # output
     def output_to_csv(self)-> None:
-
+        
         # open csv
-        with open(f'../output/output_{self.netlist}.csv', 'w', newline='') as csvfile:
+        with open('output/output.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, dialect='excel')
 
             # write the first line
-            writer.writerow(["net", "wires"])
+            writer.writerow(["net","wires"])
             for connection in self.wire_connections:
                 # gate a and b
-                gate_ab = f"{connection[0]},{connection[1]}"
+                gate_ab = f"({int(connection[0])},{int(connection[1])})"
                 gate_ab = gate_ab.strip()
 
                 # list of wireparts
                 list_of_wireparts = self.wires[f"{connection[0]}-{connection[1]}"].wireparts
+                print(list_of_wireparts[0])
                 output_wireparts = []
                 for wirepart in list_of_wireparts:
-                    output_wireparts.append([wirepart.from_location.x,
-                                            wirepart.from_location.y,
-                                            wirepart.from_location.z])
-
+                    output_wireparts.append((int(wirepart.from_location.x),
+                                            int(wirepart.from_location.y),
+                                            int(wirepart.from_location.z)))
+                print(wirepart.from_location.x,wirepart.from_location.y)
                 # write to csv
-                writer.writerow([gate_ab.strip(),output_wireparts])
+                writer.writerow((gate_ab,(output_wireparts)))
 
             # test total cost
             total_cost = self.calculate_cost()
 
             # write the last line
-            writer.writerow([f"chip_{self.chip}_{self.netlist}", total_cost])
+            netlist_number = self.netlist.split("_")
+            netlist_number = netlist_number[1]
+            writer.writerow([f"chip_{int(self.chip_id)}_net_{int(netlist_number)}", f"{int(total_cost)}"])
     
     # calculate cost
     def calculate_cost(self):

@@ -1,7 +1,6 @@
 ###################################################
 # Hill Climber's algorithm
 ###################################################
-import random
 import sys
 from randomize import random_add_wire
 sys.path.append("../Classes")
@@ -10,12 +9,9 @@ from location import *
 from wire import *
 from grid import *
 
-
-
 def hillclimber_algorithm(wires, wire_connections, grid, gates, chip):
     
     # Kies een random start state
-    random.shuffle(wire_connections)
     possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
 
     # for every wire
@@ -39,11 +35,12 @@ def hillclimber_algorithm(wires, wire_connections, grid, gates, chip):
             wire.wireparts = []
             random_add_wire(possibilities, wire, grid, gates)
             new_cost = chip.calculate_cost()
-            # while new cost is higher than old cost, wire is old wire again
+            # if good move: new wire is now the old wire
             if new_cost < old_cost: 
                 # print("good move, new cost:", new_cost)
                 old_wire = wire.wireparts
                 old_cost = new_cost
+            # else if bad move, wire becomes old wire again
             else:
                 # print("bad move, old cost:", old_cost, new_cost)
                 wire.wireparts = old_wire
