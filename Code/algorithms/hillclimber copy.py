@@ -13,7 +13,6 @@ from grid import *
 def hillclimber_algorithm(wires, wire_connections, grid, gates, chip):
     
     # Kies een random start state
-    random.shuffle(wire_connections)
     possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
 
     for connection in wire_connections:
