@@ -36,7 +36,7 @@ def random_algorithm(wires: dict[object], wire_connections: list[str], grid: obj
         random_add_wire(possibilities, wire, grid, gates)
             
 # add wire function
-def random_add_wire(possibilities: list[(int,int,int)], wire: object, grid: object, gates: list(object)):
+def random_add_wire(possibilities: list[(int,int,int)], wire: object, grid: object, gates: list[object]):
     """
     Add a randomly generated wire part to the given wire.
 
