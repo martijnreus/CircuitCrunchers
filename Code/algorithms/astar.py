@@ -18,8 +18,10 @@ class PathNode:
         self.g_cost = 0
         self.h_cost = 0
 
+        self.extra_cost = 0
+
     def calculate_f_cost(self):
-        self.f_cost = self.g_cost + self.h_cost
+        self.f_cost = self.g_cost + self.h_cost + self.extra_cost
         self.add_wire_cost()
         return self.f_cost
     
@@ -30,12 +32,12 @@ class PathNode:
 
     # add extra f_cost to nodes that you might want to avoid
     def add_additional_f_cost(self, value):
-        self.f_cost += value
+        self.extra_cost += value
 
     def __eq__(self, other):
         return self.location == other.location
     
-def astar_algorithm(wires, wire_connections, grid, gates):
+def astar_algorithm(wires, wire_connections, grid, gates, version):
 
     # go over all the connections between two gates
     for connection in wire_connections:
@@ -47,7 +49,7 @@ def astar_algorithm(wires, wire_connections, grid, gates):
         # get the wire for the two gates
         wire = wires[f"{gate_a}-{gate_b}"]
 
-        path = find_path(wire, grid, gates, wires)
+        path = find_path(wire, grid, gates, wires, version)
 
         make_wire(wire, path)
 
@@ -60,7 +62,7 @@ def make_wire(wire, path):
             direction = path[i].location - path[i - 1].location
         wire.add_wire_part(direction)
 
-def find_path(wire, grid, gates, wires):
+def find_path(wire, grid, gates, wires, version):
     # zorg ervoor dat alle path nodes met een kabel een cost van 300 extra krijgen 
     start_node = PathNode(None, wire.gateA.location)
     end_node = PathNode(None, wire.gateB.location)
@@ -110,6 +112,10 @@ def find_path(wire, grid, gates, wires):
 
                         if check_is_on_wire(neighbour, wires):
                             neighbour.has_wire = True
+
+                        # Add extra cost depending on the mode the algoritm is in
+                        if (version != "normal"):
+                            pick_node_cost_version(version, neighbour, gates, wire)
 
                         neighbour.calculate_f_cost()
 
@@ -199,3 +205,19 @@ def check_is_in_list(node, list):
             return True
     return False
 
+def pick_node_cost_version(version, node, gates, wire):
+    if (version == "avoid_gate"):
+        for gate in gates:
+            # the location of gateB is allowed as this is the goal
+            if get_distance_to_gate(node, gates[gate], wire) <= 1:
+                node.add_additional_f_cost(300)
+
+def get_distance_to_gate(node, gate, wire):
+    if gate.location == wire.gateB.location:
+        return 99
+    else:
+        x_distance = abs(node.location.x - gate.location.x)
+        y_distance = abs(node.location.y - gate.location.y)
+        z_distance = abs(node.location.z - gate.location.z)
+
+        return x_distance + y_distance + z_distance
