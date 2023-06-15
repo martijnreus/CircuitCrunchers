@@ -110,13 +110,11 @@ class Chip():
 
                 # list of wireparts
                 list_of_wireparts = self.wires[f"{connection[0]}-{connection[1]}"].wireparts
-                #print(list_of_wireparts[0])
                 output_wireparts = []
                 for wirepart in list_of_wireparts:
                     output_wireparts.append((int(wirepart.from_location.x),
                                             int(wirepart.from_location.y),
                                             int(wirepart.from_location.z)))
-                #print(wirepart.from_location.x,wirepart.from_location.y)
                 # write to csv
                 writer.writerow((gate_ab,(output_wireparts)))
 

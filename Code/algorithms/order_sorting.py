@@ -57,6 +57,10 @@ def change_netlist_order(chip, order_choice):
         wire_connections = change_order_quadrant(chip, reverse=True)
         return wire_connections
 
+    elif order_choice == "optimal":
+        wire_connections = change_order_optimal(chip, reverse=False)
+        return wire_connections
+
     # if none of these applied, just use the basic sorting (not sorting)
     else:
         wire_connections = chip.wire_connections
