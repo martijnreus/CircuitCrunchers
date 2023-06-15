@@ -210,7 +210,7 @@ def pick_node_cost_version(version, node, gates, wire):
         for gate in gates:
             # the location of gateB is allowed as this is the goal
             if get_distance_to_gate(node, gates[gate], wire) <= 1:
-                node.add_additional_f_cost(300)
+                node.add_additional_f_cost(20)
 
 def get_distance_to_gate(node, gate, wire):
     if gate.location == wire.gateB.location:
