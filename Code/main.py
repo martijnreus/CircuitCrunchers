@@ -38,7 +38,7 @@ def choose_algorithm(algorithm, chip, order_choice):
 
     # if algoritm is astar, run the astar algorithm
     elif algorithm == "astar":
-        astar_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates, "avoid_gate")
+        astar_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates, "avoid_both")
 
     
     # if algoritzhm is hillclimber, run the hillclimber algorithm

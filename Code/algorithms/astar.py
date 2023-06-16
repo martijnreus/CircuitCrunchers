@@ -196,6 +196,22 @@ class Astar:
                 if self.get_distance_to_gate(node, self.gates[gate], wire) <= 1:
                     node.add_additional_f_cost(20)
 
+        if (self.version == "avoid_center"):
+            if (node.location.x > 5 and node.location.x < self.grid.width - 5):
+                if (node.location.y > 5 and node.location.y < self.grid.height - 5):
+                    node.add.addidional_f_cost(3)
+
+        if (self.version == "avoid_both"):
+            for gate in self.gates:
+                # the location of gateB is allowed as this is the goal
+                if self.get_distance_to_gate(node, self.gates[gate], wire) <= 1:
+                    node.add_additional_f_cost(20)
+
+            if (node.location.x > 5 and node.location.x < self.grid.width - 5):
+                if (node.location.y > 5 and node.location.y < self.grid.height - 5):
+                    node.add_additional_f_cost(3)
+
+
     def get_distance_to_gate(self, node, gate, wire):
         if gate.location == wire.gateB.location:
             return 99
