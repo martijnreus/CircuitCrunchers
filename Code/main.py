@@ -13,7 +13,7 @@ sys.path.append("algorithms")
 from greedy import *
 from randomize import *
 from hillclimber import *
-from astar_copy import *
+from astar import *
 from order_sorting import *
 
 
