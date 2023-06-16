@@ -162,7 +162,7 @@ class Chip():
                                 if wire_unit.to_location == location:
                                     collisions += 1
 
-                    if collisions != 0:
+                    if collisions > 1:
                         k += collisions - 1
 
         print(f"collision: {k}")
