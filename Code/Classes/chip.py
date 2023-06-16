@@ -165,6 +165,6 @@ class Chip():
                     if collisions > 1:
                         k += collisions - 1
 
-        print(f"collision: {k}")
+        # print(f"collision: {k}")
         return k
 

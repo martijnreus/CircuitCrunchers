@@ -45,54 +45,101 @@ def choose_algorithm(algorithm, chip, order_choice):
     elif algorithm == "hillclimber":
         hillclimber_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates, chip)
 
+def testing():
+    """
+    Automated testing
+    """
+
+    number_chips = [0, 1, 2]
+
+    # go over all the chips
+    for number_chip in number_chips:
+        if number_chip == 0:
+            netlists = [1, 2, 3]
+        elif number_chip == 1:
+            netlists = [4, 5, 6]
+        elif number_chip == 2:
+            netlists = [7, 8, 9]
+
+        number_gates_file = number_chip
+        sorting_orders = ["short", "middle", "inter-quadrant"]
+        algorithm = "astar"
+
+        # go over all netlists of the chip
+        for number_netlist in netlists:
+
+            for order_choice in sorting_orders:
+                
+                netlist = f"netlist_{number_netlist}"
+                chip_id = f"{number_chip}"
+                gates_file = f"print_{number_gates_file}"
+
+                # make new chip
+                chip = Chip(chip_id, netlist, gates_file)
+
+                # load everything
+                chip.load_gates()
+                chip.load_netlist()
+                
+                choose_algorithm(algorithm, chip, order_choice)
+
+                print(f"sort: {order_choice} || final score for chip: {chip_id} and netlist: {number_netlist} -> ", chip.calculate_cost())
+            
+            print("----------------------")
+
 
 def main():
     """
     main function, calling to 
     """
     # check for valid usage
-    if len(argv) not in [1, 3, 4, 5]:
+    if len(argv) not in [1, 2, 3, 4, 5]:
         print("Usage: python main.py [number_chip] [number_netlist] [algorithm] [sorting_order]")
         print("sorting order cosists of: \"basic\", \"random\", \"short\", \"long\", \"most-connections\", \"least-connections\"")
         exit(1)
 
-    # get all the necessary information.
-    number_chip = 0
-    number_netlist = 1
-    number_gates_file = 0
-    algorithm = "greedy"
-    order_choice = "basic"
+    if len(argv) == 2:
+        if argv[1] == "test":
+            testing()
 
-    # if we have a third argument, we should take that as our netlists.
-    if len(argv) in [3, 4, 5]:
-        number_chip = argv[1]
-        number_netlist = argv[2]
-        number_gates_file = argv[1]
+    else:
+        # get all the necessary information.
+        number_chip = 0
+        number_netlist = 1
+        number_gates_file = 0
+        algorithm = "greedy"
+        order_choice = "basic"
 
-        # if we have a fourth argument, then it specifies our algorithm
-        if len(argv) in [4, 5]:
-            algorithm = argv[3]
+        # if we have a third argument, we should take that as our netlists.
+        if len(argv) in [3, 4, 5]:
+            number_chip = argv[1]
+            number_netlist = argv[2]
+            number_gates_file = argv[1]
 
-            # check for order argument
-            if len(argv) == 5:
-                order_choice = argv[4]
+            # if we have a fourth argument, then it specifies our algorithm
+            if len(argv) in [4, 5]:
+                algorithm = argv[3]
 
-    netlist = f"netlist_{number_netlist}"
-    chip_id = f"{number_chip}"
-    gates_file = f"print_{number_gates_file}"
+                # check for order argument
+                if len(argv) == 5:
+                    order_choice = argv[4]
 
-    # make new chip
-    chip = Chip(chip_id, netlist, gates_file)
+        netlist = f"netlist_{number_netlist}"
+        chip_id = f"{number_chip}"
+        gates_file = f"print_{number_gates_file}"
 
-    # load everything
-    chip.load_gates()
-    chip.load_netlist()
+        # make new chip
+        chip = Chip(chip_id, netlist, gates_file)
 
-    # run algorithm and output
-    choose_algorithm(algorithm, chip, order_choice)
-    visualize(chip.gate_list, chip.grid, chip.wires)
-    print("final:", chip.calculate_cost())
-    chip.output_to_csv()
+        # load everything
+        chip.load_gates()
+        chip.load_netlist()
+
+        # run algorithm and output
+        choose_algorithm(algorithm, chip, order_choice)
+        visualize(chip.gate_list, chip.grid, chip.wires)
+        print("final:", chip.calculate_cost())
+        chip.output_to_csv()
 
 if __name__ == "__main__":
     main()
