@@ -222,6 +222,9 @@ class Astar:
 
             return x_distance + y_distance + z_distance
         
+    def set_version(self, version):
+        self.version = version
+        
 
 def astar_algorithm(wires, wire_connections, grid, gates, version):
 
@@ -242,7 +245,8 @@ def astar_algorithm(wires, wire_connections, grid, gates, version):
 
     # run again but with no extra heuristics for the optimal solution
     if (version == "optimal"):
-        version == "normal"
+        astar.set_version("normal")
+
         # go over all the connections between two gates
         for connection in wire_connections:
 
