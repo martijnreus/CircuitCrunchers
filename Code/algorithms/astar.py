@@ -201,7 +201,7 @@ class Astar:
                 if (node.location.y > 5 and node.location.y < self.grid.height - 5):
                     node.add.addidional_f_cost(3)
 
-        if (self.version == "avoid_both"):
+        if (self.version == "avoid_both" or self.version == "optimal"):
             for gate in self.gates:
                 # the location of gateB is allowed as this is the goal
                 if self.get_distance_to_gate(node, self.gates[gate], wire) <= 1:
@@ -239,6 +239,23 @@ def astar_algorithm(wires, wire_connections, grid, gates, version):
 
         path = astar.find_path(wire)
         make_wire(wire, path)
+
+    # run again but with no extra heuristics for the optimal solution
+    if (version == "optimal"):
+        version == "normal"
+        # go over all the connections between two gates
+        for connection in wire_connections:
+
+            # get gate indexes to get the appropriate wire
+            gate_a = connection[0]
+            gate_b = connection[1]
+
+            # get the wire for the two gates
+            wire = wires[f"{gate_a}-{gate_b}"]
+            wire.clear_wire()
+
+            path = astar.find_path(wire)
+            make_wire(wire, path)
 
 # put a wireUnit on each part of the path
 def make_wire(wire, path):
