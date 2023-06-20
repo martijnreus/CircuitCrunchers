@@ -40,7 +40,6 @@ def choose_algorithm(algorithm, chip, order_choice):
     elif algorithm == "astar":
         astar_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates, "optimal")
 
-    
     # if algoritzhm is hillclimber, run the hillclimber algorithm
     elif algorithm == "hillclimber":
         hillclimber_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates, chip)
@@ -62,17 +61,18 @@ def testing():
             netlists = [7, 8, 9]
 
         number_gates_file = number_chip
-        sorting_orders = ["short", "middle", "inter-quadrant"]
+        sorting_orders = ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant"]
         algorithm = "astar"
 
         # go over all netlists of the chip
         for number_netlist in netlists:
 
+            netlist = f"netlist_{number_netlist}"
+            chip_id = f"{number_chip}"
+            gates_file = f"print_{number_gates_file}"
+
+            print(f"---chip: {chip_id} and netlist: {number_netlist}-------------------")
             for order_choice in sorting_orders:
-                
-                netlist = f"netlist_{number_netlist}"
-                chip_id = f"{number_chip}"
-                gates_file = f"print_{number_gates_file}"
 
                 # make new chip
                 chip = Chip(chip_id, netlist, gates_file)
@@ -83,10 +83,8 @@ def testing():
                 
                 choose_algorithm(algorithm, chip, order_choice)
 
-                print(f"sort: {order_choice} || final score for chip: {chip_id} and netlist: {number_netlist} -> ", chip.calculate_cost())
+                print(f"sort: {order_choice} || final score", chip.calculate_cost())
             
-            print("----------------------")
-
 
 def main():
     """
