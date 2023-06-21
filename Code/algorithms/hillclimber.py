@@ -63,6 +63,6 @@ def hillclimber_algorithm(wires: dict[object], wire_connections:list[str], grid:
             i += 1
 
             # repeat this ... times
-            if i == 500:
+            if i == 50:
                 print("connected")
                 break

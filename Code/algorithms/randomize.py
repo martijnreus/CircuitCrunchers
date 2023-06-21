@@ -76,8 +76,10 @@ def check_if_valid(wire:object, grid:object, direction, gates:list[object]):
     
     # check if wire direction goes out of grid
     if current_wirepart.x < 0 or current_wirepart.y < 0 or current_wirepart.z < -3:
+        print("negative")
         return False
     elif current_wirepart.x > grid.width or current_wirepart.y > grid.height or current_wirepart.z > 4:
+        print("too high")
         return False
     
     # check if wire goes through gate that is not gate b
@@ -85,9 +87,11 @@ def check_if_valid(wire:object, grid:object, direction, gates:list[object]):
         if gates[gate] == wire.gateB:
             break
         if gates[gate].location == current_wirepart:
+            print("a gate in the way")
             return False
     
     # check if wire goes right back, repeating the move
     if current_wirepart == wire.wireparts[-1].from_location:
+        print("going back")
         return False
     return True

@@ -12,7 +12,7 @@ from plot import *
 sys.path.append("algorithms")
 from greedy import *
 from randomize import *
-from hillclimber import *
+from hillclimber_per_unit import *
 from astar import *
 from order_sorting import *
 
@@ -43,7 +43,7 @@ def choose_algorithm(algorithm, chip, order_choice):
     
     # if algoritzhm is hillclimber, run the hillclimber algorithm
     elif algorithm == "hillclimber":
-        hillclimber_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates, chip)
+        unit_hillclimber_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates, chip)
 
 
 def main():
