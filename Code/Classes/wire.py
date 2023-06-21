@@ -42,6 +42,9 @@ class Wire:
     
     def get_wire_length(self)-> list[int]:
         return len(self.wireparts)
+    
+    def clear_wire(self):
+        self.wireparts = []
 
 # create a wireUnit, where its location of the start and end is tracked
 class WireUnit:

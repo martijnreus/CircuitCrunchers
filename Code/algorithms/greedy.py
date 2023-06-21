@@ -61,7 +61,7 @@ def greedy_algorithm( wires, wire_connections):
             # we are at the end location
             else:
                 # wire.add_wire_part(direction)
-                print("connected!", wire.get_wire_length())
+                # print("connected!", wire.get_wire_length())
                 break
 
 def check_sign(number):

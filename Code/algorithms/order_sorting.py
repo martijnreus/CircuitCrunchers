@@ -57,6 +57,10 @@ def change_netlist_order(chip, order_choice):
         wire_connections = change_order_quadrant(chip, reverse=True)
         return wire_connections
 
+    elif order_choice == "manhattan":
+        wire_connections = change_order_manhattan(chip)
+        return wire_connections
+
     # if none of these applied, just use the basic sorting (not sorting)
     else:
         wire_connections = chip.wire_connections
@@ -233,25 +237,39 @@ def calculate_distance_to_middle(connection, chip, middle_x, middle_y):
     Function to calculate the distance between the middle of the chip and the gates involved in the wire connection.
 
     Args:
-        connection (wire_connection): the connection between the two gates
+        connection (wire_connection): the connection between two gates
         chip (chip): the current chip that we are working on
-        middle_x (float): x-coordinate of the middle of the chip
-        middle_y (float): y-coordinate of the middle of the chip
+        middle_x (float): the x-coordinate of the middle point
+        middle_y (float): the y-coordinate of the middle point
 
     Returns:
-        distance: distance from the middle of the chip to the gates involved in the connection
+        float: the distance from the middle of the chip to the gates involved in the connection
     """
-    # Get the locations of the gates involved in the connection
     gate_a_id, gate_b_id = connection
+
     gate_a = chip.gates[gate_a_id]
     gate_b = chip.gates[gate_b_id]
 
-    # Calculate the distances from each gate to the middle of the chip
-    distance_a = sqrt((gate_a.location.x - middle_x) ** 2 + (gate_a.location.y - middle_y) ** 2)
-    distance_b = sqrt((gate_b.location.x - middle_x) ** 2 + (gate_b.location.y - middle_y) ** 2)
+    distance_a = calculate_distance_between_points(gate_a.location.x, gate_a.location.y, middle_x, middle_y)
+    distance_b = calculate_distance_between_points(gate_b.location.x, gate_b.location.y, middle_x, middle_y)
 
-    # Return the maximum distance among the gates involved in the connection
-    return max(distance_a, distance_b)
+    return min(distance_a, distance_b)
+
+
+def calculate_distance_between_points(x1, y1, x2, y2):
+    """
+    Function to calculate the distance between two points in a 2D space.
+
+    Args:
+        x1 (float): x-coordinate of the first point
+        y1 (float): y-coordinate of the first point
+        x2 (float): x-coordinate of the second point
+        y2 (float): y-coordinate of the second point
+
+    Returns:
+        float: the distance between the two points
+    """
+    return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
 
 
 def change_order_quadrant(chip, reverse):
@@ -332,3 +350,40 @@ def get_quadrant_index(location, center_x, center_y):
     # Quadrant 4
     else:
         return 3
+
+
+def change_order_manhattan(chip):
+    """
+    changes the order based on the manhattan distance, the difference between the x and y coordinates of the two gates
+
+    Args:
+        chip (object): the current chip
+
+    Returns:
+        _type_: _description_
+    """
+    wire_connections = chip.wire_connections
+
+    sorted_connections = sorted(wire_connections, key=lambda connection: calculate_manhattan_distance(chip, connection))
+
+    return sorted_connections
+
+
+def calculate_manhattan_distance(chip, connection):
+    """
+    The calculation fo the manhattan distance.
+
+    Args:
+        chip (_type_): _description_
+        connection (_type_): _description_
+
+    Returns:
+        manhattan_distance: the manhattan distance
+    """
+    gate_a_id, gate_b_id = connection
+    gate_a = chip.gates[gate_a_id]
+    gate_b = chip.gates[gate_b_id]
+    x_distance = abs(gate_a.location.x - gate_b.location.x)
+    y_distance = abs(gate_a.location.y - gate_b.location.y)
+
+    return x_distance + y_distance
