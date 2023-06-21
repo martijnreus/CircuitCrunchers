@@ -13,6 +13,8 @@ sys.path.append("algorithms")
 from greedy import *
 from randomize import *
 from hillclimber_per_unit import *
+from hillclimber import *
+from hillclimber_unit import *
 from astar import *
 from order_sorting import *
 
@@ -42,7 +44,9 @@ def choose_algorithm(algorithm, chip, order_choice):
 
     # if algoritzhm is hillclimber, run the hillclimber algorithm
     elif algorithm == "hillclimber":
-        unit_hillclimber_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates, chip)
+        hillclimber_unit(chip)
+    elif algorithm == "basichillclimber":
+        hillclimber_algorithm(chip)
 
 def testing():
     """
@@ -84,7 +88,6 @@ def testing():
                 choose_algorithm(algorithm, chip, order_choice)
 
                 print(f"sort: {order_choice} || final score", chip.calculate_cost())
-            
 
 def main():
     """

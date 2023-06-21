@@ -9,7 +9,7 @@ from location import *
 from wire import *
 from grid import *
 
-def hillclimber_algorithm(wires: dict[object], wire_connections:list[str], grid: object, gates:list[object], chip:object):
+def hillclimber_algorithm(chip:object):
     """
     Perform the hill climbing algorithm to optimize wire connections on a chip.
 
@@ -25,7 +25,7 @@ def hillclimber_algorithm(wires: dict[object], wire_connections:list[str], grid:
     possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
 
     # for every wire
-    for connection in wire_connections:
+    for connection in chip.wire_connections:
 
         # get gate a and gate b
         gate_a = connection[0]
@@ -33,11 +33,11 @@ def hillclimber_algorithm(wires: dict[object], wire_connections:list[str], grid:
         print(gate_a, gate_b)
 
         # get the associated wire
-        wire = wires[f"{gate_a}-{gate_b}"]
+        wire = chip.wires[f"{gate_a}-{gate_b}"]
         i = 0
 
         # make new random wire and save it and the total cost
-        random_add_wire(possibilities, wire, grid, gates)
+        random_add_wire(possibilities, wire, chip.grid, chip.gates)
         old_wire = wire.wireparts
         old_cost = chip.calculate_cost()
 
@@ -48,7 +48,7 @@ def hillclimber_algorithm(wires: dict[object], wire_connections:list[str], grid:
             wire.wireparts = []
 
             # add random new wire and calculate new cost
-            random_add_wire(possibilities, wire, grid, gates)
+            random_add_wire(possibilities, wire, chip.grid, chip.gates)
             new_cost = chip.calculate_cost()
 
             # if good move: new wire is now the old wire
@@ -63,6 +63,6 @@ def hillclimber_algorithm(wires: dict[object], wire_connections:list[str], grid:
             i += 1
 
             # repeat this ... times
-            if i == 50:
+            if i == 500:
                 print("connected")
                 break
