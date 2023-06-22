@@ -144,8 +144,11 @@ class Chip():
         k = 0
         new_location = location + direction
         
+        # for every wire
         for connection in self.wires:
+            # for every wireunit
             for wire_unit in self.wires[connection].wireparts:
+                
                 if wire_unit.to_location == location:
                     k += 1
                 if wire_unit.to_location == new_location:

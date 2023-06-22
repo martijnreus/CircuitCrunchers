@@ -12,9 +12,9 @@ from plot import *
 sys.path.append("algorithms")
 from greedy import *
 from randomize import *
-from hillclimber_per_unit import *
+# from hillclimber_per_unit import *
 from hillclimber import *
-from hillclimber_unit import *
+from hillclimber_unit import hillclimber_unit
 from astar import *
 from order_sorting import *
 
@@ -102,6 +102,8 @@ def main():
     if len(argv) == 2:
         if argv[1] == "test":
             testing()
+        else:
+             print("Usage: python main.py [number_chip] [number_netlist] [algorithm] [sorting_order]")
 
     else:
         # get all the necessary information.

@@ -76,8 +76,10 @@ def check_sign(number):
     """
     if number > 0:
         return 1
-    else:
+    elif number < 0:
         return -1 
+    else:
+        return 0
 
 def calculate_distance(location_a, location_b):
     """
