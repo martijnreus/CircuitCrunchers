@@ -149,9 +149,9 @@ class Chip():
             # for every wireunit
             for wire_unit in self.wires[connection].wireparts:
                 
-                if wire_unit.to_location == location:
+                if wire_unit.to_location == location or wire_unit.to_location == new_location:
                     k += 1
-                if wire_unit.to_location == new_location:
+                if wire_unit.from_location == location or wire_unit.from_location == new_location:
                     k += 1
 
         cost = 1 + k*300

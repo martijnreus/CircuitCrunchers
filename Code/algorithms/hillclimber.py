@@ -3,6 +3,8 @@
 ###################################################
 import sys
 from randomize import random_add_wire
+import random
+from greedy import greedy_algorithm
 sys.path.append("../Classes")
 from gate import *
 from location import *
@@ -20,49 +22,65 @@ def hillclimber_algorithm(chip:object):
     Post-conditions:
         - The wire connections are optimized based on the hill climbing algorithm.
     """
+    greedy_algorithm(chip)
 
     # initialize moving possibilities
     possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
-
+    i = 0
     # for every wire
-    for connection in chip.wire_connections:
+    while True:
+        for connection in chip.wire_connections:
 
-        # get gate a and gate b
-        gate_a = connection[0]
-        gate_b = connection[1]
-        print(gate_a, gate_b)
+            # get gate a and gate b
+            gate_a = connection[0]
+            gate_b = connection[1]
+            # print(gate_a, gate_b)
 
-        # get the associated wire
-        wire = chip.wires[f"{gate_a}-{gate_b}"]
-        i = 0
+            # get the associated wire
+            wire = chip.wires[f"{gate_a}-{gate_b}"]
 
-        # make new random wire and save it and the total cost
-        random_add_wire(possibilities, wire, chip.grid, chip.gates)
-        old_wire = wire.wireparts
-        old_cost = chip.calculate_cost()
+            old_wire = wire.wireparts
+            old_cost = chip.calculate_cost()
 
-        # repeat
-        while True:
+            j = 0
+            # repeat
+            while True:
 
-            new_cost = 0
-            wire.wireparts = []
+                new_cost = 0
+                wire.wireparts = []
 
-            # add random new wire and calculate new cost
-            random_add_wire(possibilities, wire, chip.grid, chip.gates)
-            new_cost = chip.calculate_cost()
+                # add random new wire and calculate new cost
+                random_add_wire(possibilities, wire, chip)
+                new_cost = chip.calculate_cost()
 
-            # if good move: new wire is now the old wire
-            if new_cost < old_cost: 
-                old_wire = wire.wireparts
-                old_cost = new_cost
+                # if good move: new wire is now the old wire
+                if new_cost <= old_cost: 
+                    old_wire = wire.wireparts
+                    old_cost = new_cost
 
-            # else if bad move, wire becomes old wire again
-            else:
-                wire.wireparts = old_wire
+                # else if bad move, wire becomes old wire again
+                else:
+                    wire.wireparts = old_wire
 
-            i += 1
+                j += 1
 
-            # repeat this ... times
-            if i == 500:
-                print("connected")
+                # repeat this ... times
+                if j == 50:
+                    # print("connected")
+                    break
+
+        # print("again")
+        i += 1
+        if i == 100:
                 break
+        
+
+def hillclimber_n_times(chip):
+    total = 0
+    n =10
+    for number in range(n):
+        hillclimber_algorithm(chip)
+        cost = chip.calculate_cost()
+        total += cost
+        print(cost)
+    return total / n

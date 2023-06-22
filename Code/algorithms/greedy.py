@@ -10,7 +10,7 @@ from location import *
 from wire import *
 from grid import *
 
-def greedy_algorithm( wires, wire_connections):
+def greedy_algorithm(chip):
     """
     greedy algorithm, making the optimal choice for every stage.
 
@@ -20,14 +20,14 @@ def greedy_algorithm( wires, wire_connections):
     """
 
     # go over all the connections between two gates
-    for connection in wire_connections:
+    for connection in chip.wire_connections:
 
         # get gate indexes to get the appropriate wire
         gate_a = connection[0]
         gate_b = connection[1]
 
         # get the wire for the two gates
-        wire = wires[f"{gate_a}-{gate_b}"]
+        wire = chip.wires[f"{gate_a}-{gate_b}"]
 
         # loop until we find are at the end location.
         while True:

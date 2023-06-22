@@ -10,7 +10,7 @@ from location import *
 from wire import *
 from grid import *
 
-def hillclimber_algorithm(wires, wire_connections, grid, gates, chip):
+def random_with_n(wires, wire_connections, grid, gates, chip):
     
     # Kies een random start state
     possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]

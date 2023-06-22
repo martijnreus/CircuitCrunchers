@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
+import time
  
 import sys
 sys.path.append("../Classes")
@@ -59,6 +60,9 @@ def visualize(gates, grid, wires):
                     [wirepart.from_location.y, wirepart.to_location.y], 
                     [wirepart.from_location.z, wirepart.to_location.z], 
                     linestyle='solid', linewidth=2,color = 'r')
+            plt.savefig("./Visualization/plot")
+            plt.show()
+            
     
     # Show the plot
     plt.show()
