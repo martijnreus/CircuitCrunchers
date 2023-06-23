@@ -21,7 +21,7 @@ def visualize(gates, grid, wires):
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
-    ax.set_title('Gate Points')
+    ax.set_title('Visualization wires and gates')
 
     # GATES
     # Create gate points from the CSV file

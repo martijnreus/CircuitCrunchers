@@ -5,7 +5,7 @@ from gate import *
 from location import *
 
 # main random algorithm
-def random_twee_d(chip):
+def random2D(chip):
     """
     Perform a random algorithm to generate wire connections on a chip.
 
@@ -33,11 +33,3 @@ def random_twee_d(chip):
         # add wire
         random_add_wire(possibilities, wire, chip)
  
-
-def average_random_twee_d(chip,n):
-    total = 0
-    for number in range(n):
-        random_twee_d(chip)
-        cost = chip.calculate_cost()
-        total += cost
-    return total / n

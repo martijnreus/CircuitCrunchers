@@ -97,10 +97,3 @@ def check_if_valid(wire:object, chip:object, direction):
             return False
     return True
 
-def random_n_times(chip,n):
-    total = 0
-    for number in range(n):
-        random_algorithm(chip)
-        cost = chip.calculate_cost()
-        total += cost
-    return total / n
