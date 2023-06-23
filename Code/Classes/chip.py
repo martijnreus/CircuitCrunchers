@@ -6,8 +6,27 @@ from grid import *
 
 # class chip, as in which chip are we working on
 class Chip():
+    """
+    Represents a chip and provides methods for manipulating and analyzing the chip.
+
+    Methods:
+        load_netlist(): Loads the connections from the netlist file.
+        load_gates(): Loads the gates from the gates file.
+        output_to_csv(): Outputs the chip information to a CSV file.
+        calculate_cost(): Calculates the cost of the chip.
+        calculate_collision_amount(): Calculates the number of wire collisions on the chip.
+    """
 
     def __init__(self, chip_id: str, netlist: str, gates: str)-> None:
+        """
+        Initialize a Chip object with the given chip ID, netlist, and gates.
+        Post-conditions:
+            - Initializes a Chip object with the provided attributes:
+            chip_id (str): The ID of the chip.
+            netlist (str): The netlist file name.
+            gates_file (str): The gates file name.
+            wires(dict), wire_connections(list), gate_list(list) and gates(dict): empty, to be filled with methods
+        """
         # save chip and netlist file
         self.chip_id = chip_id
         self.netlist = netlist
@@ -28,6 +47,15 @@ class Chip():
 
     # load connections
     def load_netlist(self):
+        """
+        Load the connections from the netlist file.
+        Pre-conditions:
+            - Assumes the netlist file exists and is in the correct format.
+        Post-conditions:
+            - Adds the wire connections to the `wire_connections` list.
+            - Creates wire objects and adds them to the `wires` dictionary.
+        """
+
         csv_file = f"./../gates&netlists/chip_{self.chip_id}/{self.netlist}.csv"
         with open(csv_file, 'r') as file:
             reader = csv.DictReader(file)
@@ -50,6 +78,17 @@ class Chip():
 
     # load gates
     def load_gates(self)-> None:
+
+        """
+        Load the gates from the gates file.
+        Pre-conditions:
+            - Assumes the gates file exists and is in the correct format.
+        Post-conditions:
+            - Adds the gates to the `gates` dictionary.
+            - Updates the `gate_list` attribute.
+            - Creates the chip grid based on the maximum x and y values of the gates.
+        """
+
         # put all possible x and y in list for grid
         x_list = []
         y_list = []
@@ -128,6 +167,15 @@ class Chip():
     
     # calculate cost
     def calculate_cost(self):
+        """
+        Calculate the cost of the chip.
+        Pre-conditions:
+            - Assumes the chip has been initialized and loaded with netlist, gates, and wire connections.
+
+        Post-conditions:
+            - Calculates the cost of the chip based on the number of wireparts and collisions.
+            - Returns the calculated cost.
+        """
 
         # get number of wireparts
         n = 0

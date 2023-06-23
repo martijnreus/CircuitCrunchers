@@ -52,7 +52,84 @@ def choose_algorithm(algorithm, chip, order_choice):
     elif algorithm == "hillclimber":
         hillclimber_algorithm(chip)
 
+
+def get_netlists(number_chip):
+        if number_chip == 0:
+            netlists = [1, 2, 3]
+        # elif number_chip == 1:
+        #     netlists = [4, 5, 6]
+        # elif number_chip == 2:
+        #     netlists = [7, 8, 9]
+
+        return netlists
+
+def testing_order(netlist, chip_id, gates_file, algorithm):
+    """
+    Automated testing
+    """
+    sorting_orders = ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant"]
+    algorithm = algorithm
+    
+    for order_choice in sorting_orders:
+
+        # make new chip
+        chip = Chip(chip_id, netlist, gates_file)
+
+        # load everything
+        chip.load_gates()
+        chip.load_netlist()
         
+        choose_algorithm(algorithm, chip, order_choice)
+
+        print(f"sort: {order_choice} || final score", chip.calculate_cost())
+        
+
+def testing_algorithms(netlist,chip_id,gates_file):
+    algorithms = ["greedy","average_random", "average_random2D","average_hillclimber","astar"]
+    cost_list = []
+    for algorithm in algorithms:
+        # make new chip
+        chip = Chip(chip_id, netlist, gates_file)
+        order_choice = "basic"
+        
+        # load everything
+        chip.load_gates()
+        chip.load_netlist()
+        cost = choose_algorithm(algorithm, chip, order_choice)
+
+        print(f"algorithm: {algorithm} || final score", cost)
+        cost_list.append(cost)
+    return cost_list
+   
+        
+def test(subject):
+    number_chips = [0, 1, 2]
+    algorithm = "astar"
+    for number_chip in number_chips:
+        if number_chip == 0:
+            netlists = [1, 2, 3]
+        elif number_chip == 1:
+            netlists = [4, 5, 6]
+        elif number_chip == 2:
+            netlists = [7, 8, 9]
+
+        number_gates_file = number_chip
+        sorting_orders = ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant", "weighted", "x", "y", "x-rev", "y-rev"]
+        algorithm = "astar"
+
+        # go over all netlists of the chip
+        for number_netlist in netlists:
+            netlist = f"netlist_{number_netlist}"
+            chip_id = f"{number_chip}"
+            gates_file = f"print_{number_chip}"
+        	
+            print(f"---chip: {chip_id} and netlist: {number_netlist}-------------------")
+            if subject == "algorithms":
+                testing_algorithms(netlist,chip_id,gates_file)
+            elif subject == "order":
+                testing_order(netlist, chip_id, gates_file, algorithm)
+
+
 def main():
     """
     main function, calling to 
