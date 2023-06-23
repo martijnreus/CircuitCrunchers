@@ -75,12 +75,10 @@ def hillclimber_algorithm(chip:object):
                 break
         
 
-def hillclimber_n_times(chip):
+def hillclimber_n_times(chip,n):
     total = 0
-    n =10
     for number in range(n):
         hillclimber_algorithm(chip)
         cost = chip.calculate_cost()
         total += cost
-        print(cost)
     return total / n

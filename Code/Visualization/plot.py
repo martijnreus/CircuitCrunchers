@@ -60,8 +60,6 @@ def visualize(gates, grid, wires):
                     [wirepart.from_location.y, wirepart.to_location.y], 
                     [wirepart.from_location.z, wirepart.to_location.z], 
                     linestyle='solid', linewidth=2,color = 'r')
-            plt.savefig("./Visualization/plot")
-            plt.show()
             
     
     # Show the plot
