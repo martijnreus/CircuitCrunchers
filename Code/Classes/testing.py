@@ -23,8 +23,8 @@ class Test():
         self.variables = []
 
     def make_bar_graph(self):
-        print(self.cost_library)
-        print(self.variables)
+        # print(self.cost_library)
+        # print(self.variables)
         bargraph(self.cost_library, self.variables)
 
     def make_graph(self):
@@ -44,7 +44,6 @@ class Test():
         """
         Automated testing
         """
-        
         self.cost_library[f"{netlist}"]= []
 
         sorting_orders = ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant"]

@@ -44,8 +44,6 @@ def choose_algorithm(algorithm, chip, order_choice):
     elif algorithm == "random2D":
         random_twee_d(chip)
     
-
-
     # if algoritm is astar, run the astar algorithm
     elif algorithm == "astar":
         astar_algorithm(chip.wires, chip.wire_connections, chip.grid, chip.gates, "optimal")

@@ -139,25 +139,6 @@ class Chip():
         cost = n + k * 300
         return cost
     
-    def calculate_cost_wirepart(self, location, direction):
-        
-        k = 0
-        new_location = location + direction
-        
-        # for every wire
-        for connection in self.wires:
-            # for every wireunit
-            for wire_unit in self.wires[connection].wireparts:
-                
-                if wire_unit.to_location == location or wire_unit.to_location == new_location:
-                    k += 1
-                if wire_unit.from_location == location or wire_unit.from_location == new_location:
-                    k += 1
-
-        cost = 1 + k*300
-        return cost
-
-    
     def calculate_collision_amount(self):
 
         k = 0
