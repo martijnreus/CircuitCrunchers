@@ -58,7 +58,7 @@ class Testing():
         """
         self.cost_library[f"{netlist}"]= []
 
-        sorting_orders = ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant"]
+        sorting_orders = ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]
         self.variables = sorting_orders
         for order_choice in sorting_orders:
 
