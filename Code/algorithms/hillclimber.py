@@ -5,6 +5,7 @@ import sys
 from randomize import random_add_wire
 import random
 from greedy import greedy_algorithm
+from astar import *
 sys.path.append("../Classes")
 from gate import *
 from location import *
@@ -26,51 +27,46 @@ def hillclimber_algorithm(chip:object):
 
     # initialize moving possibilities
     possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
-    i = 0
     # for every wire
-    while True:
-        for connection in chip.wire_connections:
 
-            # get gate a and gate b
-            gate_a = connection[0]
-            gate_b = connection[1]
-            # print(gate_a, gate_b)
+    for connection in chip.wire_connections:
 
-            # get the associated wire
-            wire = chip.wires[f"{gate_a}-{gate_b}"]
+        # get gate a and gate b
+        gate_a = connection[0]
+        gate_b = connection[1]
+        # print(gate_a, gate_b)
 
-            old_wire = wire.wireparts
-            old_cost = chip.calculate_cost()
+        # get the associated wire
+        wire = chip.wires[f"{gate_a}-{gate_b}"]
 
-            j = 0
-            # repeat
-            while True:
+        old_wire = wire.wireparts
+        old_cost = chip.calculate_cost()
 
-                new_cost = 0
-                wire.wireparts = []
+        j = 0
+        # repeat
+        while True:
 
-                # add random new wire and calculate new cost
-                random_add_wire(possibilities, wire, chip)
-                new_cost = chip.calculate_cost()
+            new_cost = 0
+            wire.wireparts = []
 
-                # if good move: new wire is now the old wire
-                if new_cost <= old_cost: 
-                    old_wire = wire.wireparts
-                    old_cost = new_cost
+            # add random new wire and calculate new cost
+            random_add_wire(possibilities, wire, chip)
+            new_cost = chip.calculate_cost()
 
-                # else if bad move, wire becomes old wire again
-                else:
-                    wire.wireparts = old_wire
+            # if good move: new wire is now the old wire
+            if new_cost <= old_cost: 
+                old_wire = wire.wireparts
+                old_cost = new_cost
 
-                j += 1
+            # else if bad move, wire becomes old wire again
+            else:
+                wire.wireparts = old_wire
 
-                # repeat this ... times
-                if j == 50:
-                    # print("connected")
-                    break
+            j += 1
 
-        # print("again")
-        i += 1
-        if i == 100:
+            # repeat this ... times
+            if j == 10000:
+                # print("connected")
                 break
-        
+
+    
