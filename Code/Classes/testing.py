@@ -80,7 +80,6 @@ class Testing():
         self.cost_library[f"{netlist}"]= []
 
         if algorithm == "random":
-            print("in here")
             for number in range(n):
                 
                 chip = Chip(chip_id, netlist, gates_file)
@@ -145,7 +144,6 @@ def test(subject):
 
             elif subject == "average_random2D":
                 testing.average(netlist, chip_id, gates_file,n,"random2D")
-                testing.make_bar_graph()
             
             elif subject == "average_random":
                 testing.average(netlist, chip_id, gates_file,n,"random")

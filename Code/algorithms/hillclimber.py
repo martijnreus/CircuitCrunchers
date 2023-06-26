@@ -23,7 +23,6 @@ def hillclimber_algorithm(chip:object):
         - The wire connections are optimized based on the hill climbing algorithm.
     """
     greedy_algorithm(chip)
-
     # initialize moving possibilities
     possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
     # for every wire
@@ -65,7 +64,7 @@ def hillclimber_algorithm(chip:object):
 
             # repeat this ... times
             if j == 10000:
-                # print("connected")
+                print("connected")
                 break
 
     

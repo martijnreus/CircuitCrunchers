@@ -180,9 +180,7 @@ class Chip():
         # get number of wireparts
         n = 0
         k = self.calculate_collision_amount()
-
-        for connection in self.wires:
-            n += self.wires[connection].get_wire_length()
+        n = sum(self.wires[connection].get_wire_length() for connection in self.wires)
         
         cost = n + k * 300
         return cost
@@ -204,7 +202,7 @@ class Chip():
                         if self.gates[gate_ids].location == location:
                             on_gate = True
 
-                    if (on_gate == False):
+                    if on_gate == False:
                         for connection in self.wires:
                             for wire_unit in self.wires[connection].wireparts:
                                 if wire_unit.to_location == location:
