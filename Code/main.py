@@ -42,7 +42,7 @@ def choose_algorithm(algorithm, chip, order_choice):
         random_algorithm(chip)
     
     elif algorithm == "random2D":
-        random_twee_d(chip)
+        random_2D(chip)
     
     # if algoritm is astar, run the astar algorithm
     elif algorithm == "astar":
