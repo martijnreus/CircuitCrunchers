@@ -1,5 +1,6 @@
 import sys
 import csv
+from datetime import datetime
 from location import *
 from gate import *
 from wire import *
@@ -23,16 +24,14 @@ class Testing():
         self.netlists = []
         self.variables = []
 
-    def make_bar_graph(self):
-        # print(self.cost_library)
-        # print(self.variables)
-        bargraph(self.cost_library, self.variables)
-
-    def make_graph(self):
-        pass
+    def get_time(self):
+        now = datetime.now()
+        current_time = now.strftime("%H_%M")
+        return current_time
 
     def make_csv(self, title):
-        with open(f'output/{title}.csv', 'w', newline='') as csvfile:
+        time = self.get_time()
+        with open(f'output/{title}_{time}.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, dialect='excel')
 
             # write the first line
@@ -116,8 +115,10 @@ class Testing():
                 print(f"algorithm: {algorithm} || score", cost)
 
 def test(subject):
+
     number_chips = [0, 1, 2]
     testing = Testing()
+    print(testing.get_time())
     n = 100
     print(subject)
     if subject == "order":
@@ -134,7 +135,7 @@ def test(subject):
             
             if subject == "order":
                 testing.testing_order(netlist, chip_id, gates_file, algorithm)
-                testing.make_csv(f"ordertest_{}")
+                testing.make_csv(f"ordertest_{netlist}_{algorithm}")
 
             elif subject == "average_random2D":
                 testing.average(netlist, chip_id, gates_file,n,"random2D")
