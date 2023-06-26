@@ -3,7 +3,6 @@
 ###################################################
 import sys
 from randomize import random_add_wire
-import random
 from greedy import greedy_algorithm
 from astar import *
 sys.path.append("../Classes")
