@@ -113,30 +113,34 @@ def main():
         visualize(chip.gate_list, chip.grid, chip.wires)
 
         chip.output_to_csv()
+def get_number_chip(netlist_number):
+    if netlist_number in ["1","2","3"]:
+        number_chip = 0
+
+    elif netlist_number in ["4","5","6"]:
+        number_chip = 1
+
+    elif netlist_number in ["7","8","9"]:
+        number_chip = 2
+    
+    return number_chip
 
 def main2():
 
     # check for second argument
-    if len(argv) == 2:
-
+    if len(argv) in [1,3]:
+        testing = False
         # we want to do testing
-        if argv[1] == "test":
-
-            # what type of test do we want
-            testing_type = input("Do you want to do an order or algorithm test?")
-            while testing_type not in ["order", "algorithm"]:
-                testing_type = input("Please specify \"order\" or \"algorithm\".")
-
-        # unclear what the user wants, quit the program
-        else:
-            print("Usage: main.py test[optional]")
-            sys.exit()
-
-    # get the input that we need to run / test
-    if len(argv) in [1,2]:
-
-        # check the netlist we want to run/test
-        netlist_number = input("What netlist do you want to run?")
+        if len(argv) == 3 and argv[1] == "test":
+           
+            testing = True
+            if argv[2] not in ["order", "algorithm"]:
+                print("Usage: main.py test[optional] testingtype")
+                sys.exit()
+            else:
+                testing_type = argv[2]
+                  # check the netlist we want to run/test
+        netlist_number = input("Netlist: ")
 
         # if we are running normally, we may not give "all" as input.
         if len(argv) == 1 and netlist_number == "all":
@@ -144,7 +148,7 @@ def main2():
             netlist_number = 0
 
         while netlist_number not in ["1","2","3","4","5","6","7","8","9", "all"]:
-            netlist_number = input("Please specify your netlist number - options are: 1,2,3,4,5,6,7,8,9, all[only for testing purposes]")
+            netlist_number = input(f"Please specify your netlist number \n - options are: 1,2,3,4,5,6,7,8,9, all[only for testing purposes] \n")
 
             # if we are running normally, we may not give "all" as input.
             if len(argv) == 1 and netlist_number == "all":
@@ -152,67 +156,54 @@ def main2():
                 netlist_number = 0
 
         # check what algorithm we want to run and check for validity
-        algorithm = input("What algorithm do you want to use? ")
+        algorithm = input("Algorithm: ")
 
         while algorithm not in ["greedy", "hillclimber", "astar", "random", "random2D"]:
-            algorithm = input("This algorithm is invalid, please specify one of the following - greedy, hillclimber, astar, random, random2D")
+            algorithm = input(f"This algorithm is invalid, please specify one of the following \n - greedy, hillclimber, astar, random, random2D\n")
 
-        # check what order we want to run / test
-        order = input("What sorting order do you want to use? ")
+    # unclear what the user wants, quit the program
+    else:
+        print("Usage: main.py test[optional] testingtype")
+        sys.exit()
+    
+    # if test
+    if testing:
+
+        if testing_type == "order":
+            test("order", algorithm, netlist_number)
+            
+        elif testing_type == "algorithm":
+             # check what order we want to run / test
+            order = input("Sorting order: ")
+            while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
+                order = input("Please choose one of the following orders: \nbasic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted\n")
+            test("algorithm", algorithm, netlist_number)
+
+    # run the normal process
+    else:
+        get_number_chip(netlist_number)
+        order = input("Sorting order: ")
         while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
-            order = input("Please choose one of the following orders: basic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted")
-
-        # run the testing
-        if len(argv) == 2:
-            if testing_type == "order":
-                test("order", algorithm)
-
-            elif testing_type == "algorithm":
-
-                if algorithm == "random":
-                    test("average_random", None)
+            order = input("Please choose one of the following orders: \nbasic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted\n")
+        test("order", algorithm, netlist_number)
             
-                elif algorithm == "random2D":
-                    test("average_random2D", None)
+        netlist = f"netlist_{netlist_number}"
+        chip_id = f"{number_chip}"
+        gates_file = f"print_{number_chip}"
 
-                elif algorithm == "hillclimber":
-                    test("average_hillclimber", None)
+        # make new chip
+        chip = Chip(chip_id, netlist, gates_file)
 
-                # moet nog gemaakt worden ----------------------------------------------------
-                elif algorithm == "greedy":
-                    test("greedy_once", None)
-                elif algorithm == "astar":
-                    test("astar_once", None)
+        # load everything
+        chip.load_gates()
+        chip.load_netlist()
 
-        # run the normal process
-        else:
-            if netlist_number in ["1","2","3"]:
-                number_chip = 0
+        # run algorithm and output
+        choose_algorithm(algorithm, chip, order)
+        print("final:", chip.calculate_cost())
+        visualize(chip.gate_list, chip.grid, chip.wires)
 
-            elif netlist_number in ["4","5","6"]:
-                number_chip = 1
-
-            elif netlist_number in ["7","8","9"]:
-                number_chip = 2
-
-            
-            netlist = f"netlist_{netlist_number}"
-            chip_id = f"{number_chip}"
-            gates_file = f"print_{number_chip}"
-
-            # make new chip
-            chip = Chip(chip_id, netlist, gates_file)
-
-            # load everything
-            chip.load_gates()
-            chip.load_netlist()
-
-            # run algorithm and output
-            choose_algorithm(algorithm, chip, order)
-            print("final:", chip.calculate_cost())
-            visualize(chip.gate_list, chip.grid, chip.wires)
-
-            chip.output_to_csv()
+        chip.output_to_csv()
 
 
 if __name__ == "__main__":
