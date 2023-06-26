@@ -1,5 +1,6 @@
 import sys
 import csv
+import os
 from datetime import datetime
 from location import *
 from gate import *
@@ -31,15 +32,20 @@ class Testing():
 
     def make_csv(self, title):
         time = self.get_time()
-        with open(f'output/{title}_{time}.csv', 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile, dialect='excel')
+        filepath = f'output/{title}_{time}.csv'
 
-            # write the first line
-            writer.writerow(["net","cost"])
+        if not os.path.exists(filepath):
+            # Create the file if it doesn't exist
+            with open(filepath, 'w', newline='') as newfile:
+                writer = csv.writer(newfile, dialect='excel')
+                writer.writerow(["net", "cost"])
+
+        with open(filepath, 'a', newline='') as csvfile:  # Open in append mode
+            writer = csv.writer(csvfile, dialect='excel')
 
             for index in self.cost_library:
                 for cost in self.cost_library[index]:
-                    writer.writerow([index,cost])
+                    writer.writerow([index, cost])
 
     def get_netlists(self, number_chip):
         if number_chip == 0:
