@@ -114,9 +114,15 @@ class Testing():
                 self.cost_library[f"{netlist}"].append(cost)
                 print(f"algorithm: {algorithm} || score", cost)
 
-def test(subject):
 
-    number_chips = [0, 1, 2]
+def test(subject):
+    number_chip = input("chip: ")
+    number_chips = []
+    if number_chip == "all":
+        number_chips = [0, 1, 2]
+    else:
+        number_chips.append(int(number_chip))
+    print(number_chips)
     testing = Testing()
     print(testing.get_time())
     n = 100
