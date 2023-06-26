@@ -116,5 +116,24 @@ def main():
         
         chip.output_to_csv()
 
+# def main():
+
+#     # normal running of the code
+#     if len[argv] == 1:
+#         continue
+
+#     # probably testing
+#     if len[argv] == 2:
+
+#         # we want to do testing
+#         if argv[1] == "test":
+#             netlist_number = input("What netlist do you want to test?")
+
+
+#         else:
+#             print("Usage: main.py test[optional]")
+#             break
+
+
 if __name__ == "__main__":
     main()
