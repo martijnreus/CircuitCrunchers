@@ -10,82 +10,49 @@ def change_netlist_order(chip, order_choice):
     Returns:
         wire_connections : the sorted connections between the gates for this chip.
     """
+    # set the reverse variable for opposite sorting methods using the same function
+    reverse = True
+    if order_choice in ["short", "least-connections", "sum-lowest", "middle", "intra-quadrant", "x", "y", "weighted"]:
+        reverse = False
+
     if order_choice == "random":
         wire_connections = change_order_random(chip)
-        return wire_connections
 
     elif order_choice == "reverse":
         wire_connections = change_order_reverse(chip)
-        return wire_connections
 
-    elif order_choice == "short":
-        wire_connections = change_order_distance(chip, reverse=False)
-        return wire_connections
+    elif order_choice in ["short", "long"]:
+        wire_connections = change_order_distance(chip, reverse=reverse)
 
-    elif order_choice == "long":
-        wire_connections = change_order_distance(chip, reverse=True)
-        return wire_connections
+    elif order_choice in ["least-connections", "most-connections"]:
+        wire_connections = change_order_number_of_connections(chip, reverse=reverse)
 
-    elif order_choice == "least-connections":
-        wire_connections = change_order_number_of_connections(chip, reverse=False)
-        return wire_connections
+    elif order_choice in ["sum-lowest", "sum-highest"]:
+        wire_connections = change_order_sum(chip, reverse=reverse)
 
-    elif order_choice == "most-connections":
-        wire_connections = change_order_number_of_connections(chip, reverse= True)
-        return wire_connections
+    elif order_choice in ["middle", "outside"]:
+        wire_connections = change_order_middle_to_outside(chip, reverse=reverse)
 
-    elif order_choice == "sum-lowest":
-        wire_connections = change_order_sum(chip, reverse=False)
-        return wire_connections
-
-    elif order_choice == "sum-highest":
-        wire_connections = change_order_sum(chip, reverse=True)
-        return wire_connections
-
-    elif order_choice == "middle":
-        wire_connections = change_order_middle_to_outside(chip, reverse=False)
-        return wire_connections
-
-    elif order_choice == "outside":
-        wire_connections = change_order_middle_to_outside(chip, reverse=True)
-        return wire_connections
-
-    elif order_choice == "intra-quadrant":
-        wire_connections = change_order_quadrant(chip, reverse=False)
-        return wire_connections
-
-    elif order_choice == "inter-quadrant":
-        wire_connections = change_order_quadrant(chip, reverse=True)
-        return wire_connections
+    elif order_choice in ["intra-quadrant", "inter-quadrant"]:
+        wire_connections = change_order_quadrant(chip, reverse=reverse)
 
     elif order_choice == "manhattan":
         wire_connections = change_order_manhattan(chip)
-        return wire_connections
 
-    elif order_choice == "x":
-        wire_connections = change_order_xy(chip, "x", reverse=False)
-        return wire_connections
+    elif order_choice in ["x", "x-rev"]:
+        wire_connections = change_order_xy(chip, "x", reverse=reverse)
 
-    elif order_choice == "x-rev":
-        wire_connections = change_order_xy(chip, "x", reverse=True)
-        return wire_connections
+    elif order_choice in ["y", "y-rev"]:
+        wire_connections = change_order_xy(chip, "y", reverse=reverse)
 
-    elif order_choice == "y":
-        wire_connections = change_order_xy(chip, "y", reverse=False)
-        return wire_connections
-
-    elif order_choice == "y-rev":
-        wire_connections = change_order_xy(chip, "y", reverse=True)
-        return wire_connections
-
-    elif order_choice == "weighted":
-        wire_connections = change_order_weighted_average(chip, reverse=False)
-        return wire_connections
+    elif order_choice in ["weighted", "weighted-rev"]:
+        wire_connections = change_order_weighted_average(chip, reverse=reverse)
 
     # if none of these applied, just use the basic sorting (not sorting)
     else:
         wire_connections = chip.wire_connections
-        return wire_connections
+
+    return wire_connections
 
 
 def change_order_random(chip):

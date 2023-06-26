@@ -135,16 +135,16 @@ def main2():
            
             testing = True
             if argv[2] not in ["order", "algorithm"]:
-                print("Usage: main.py test[optional] testingtype")
+                print("Usage: main.py test[optional] testingtype[required in case of test]")
                 sys.exit()
             else:
                 testing_type = argv[2]
-                  # check the netlist we want to run/test
+
+        # check the netlist we want to run/test
         netlist_number = input("Netlist: ")
 
         # if we are running normally, we may not give "all" as input.
         if len(argv) == 1 and netlist_number == "all":
-            print("changed netlist to 0")
             netlist_number = 0
 
         while netlist_number not in ["1","2","3","4","5","6","7","8","9", "all"]:
@@ -152,7 +152,6 @@ def main2():
 
             # if we are running normally, we may not give "all" as input.
             if len(argv) == 1 and netlist_number == "all":
-                print("changed netlist to 0")
                 netlist_number = 0
 
         # check what algorithm we want to run and check for validity

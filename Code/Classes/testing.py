@@ -64,7 +64,7 @@ class Testing():
         """
         self.cost_library[f"{netlist}"]= []
 
-        sorting_orders = ["basic","reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]
+        sorting_orders = ["basic","reverse", "short", "long","least-connections", "most-connections", "sum-lowest", "sum-highest", "middle", "outside", "intra-quadrant", "inter-quadrant", "manhattan","x","y","x-rev","y,rev", "weighted", "weighted-rev"]
         self.variables = sorting_orders
         
         # go through all the orders
@@ -177,15 +177,19 @@ def test(subject, algorithm, number_netlist):
 
     # choose if all netlists or just one
     if number_netlist == "all":
-        print("all")
         netlists = ["1","2","3","4","5","6","7","8","9"]
-        
+
+        # ask if later we want to test the specified orders or the random ordering sort.
+        order_choice = input("Test all orders or random order? ")
+        while order_choice not in ["random", "all"]:
+            order_choice = input("Please specify: \"orders\" or \"random\" ->")
+
         for number_netlist in netlists:
             netlist = f"netlist_{number_netlist}"
             chip_id = f"{get_number_chip(number_netlist)}"
             gates_file = f"print_{get_number_chip(number_netlist)}"
             print(f"---chip: {chip_id} and netlist: {number_netlist}-------------------")
-            choose_test(subject, algorithm, testing, netlist, chip_id, gates_file, n)
+            choose_test(subject, algorithm, testing, netlist, chip_id, gates_file, n, order_choice)
     
     # just one
     else:
@@ -194,23 +198,19 @@ def test(subject, algorithm, number_netlist):
         gates_file = f"print_{get_number_chip(number_netlist)}"
         
         print(f"---chip: {chip_id} and netlist: {number_netlist}-------------------")
-        choose_test(subject, algorithm, testing, netlist, chip_id, gates_file, n)
+        choose_test(subject, algorithm, testing, netlist, chip_id, gates_file, n, order_choice)
 
 # function to choose the test
-def choose_test(subject, algorithm, testing, netlist, chip_id, gates_file, n):
+def choose_test(subject, algorithm, testing, netlist, chip_id, gates_file, n, order_choice):
     
     # test order
     if subject == "order":
-
-        # ask if testing random
-        random = input("random [Y/N]: ")
-        while random not in ["Y", "y", "N", "n"]:
-            random = input("random [Y/N]: ")
         
-        # test random
-        if random in ["Y", "y"]:
+        # test random order
+        if order_choice == "random":
             testing.testing_random_order(netlist, chip_id, gates_file, algorithm, n)
             testing.make_csv(f"random_ordertest_{netlist}_{algorithm}")
+
         # test all
         else:
             testing.testing_order(netlist, chip_id, gates_file, algorithm)
