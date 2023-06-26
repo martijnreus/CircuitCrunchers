@@ -1,4 +1,5 @@
 import sys
+import csv
 from location import *
 from gate import *
 from wire import *
@@ -13,7 +14,7 @@ from randomize_twee_d import *
 sys.path.append("../Visualization")
 from bargraph import *
 
-class Test():
+class Testing():
 
     def __init__(self) -> None:
         self.cost_list = []
@@ -30,8 +31,16 @@ class Test():
     def make_graph(self):
         pass
 
-    def make_csv(self):
-        pass
+    def make_csv(self, title):
+        with open(f'output/{title}.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, dialect='excel')
+
+            # write the first line
+            writer.writerow(["net","cost"])
+
+            for index in self.cost_library:
+                for cost in self.cost_library[index]:
+                    writer.writerow([index,cost])
 
     def get_netlists(self, number_chip):
         if number_chip == 0:
@@ -91,7 +100,9 @@ class Test():
         self.cost_library[f"{netlist}"]= []
 
         if algorithm == "random":
+            print("in here")
             for number in range(n):
+                
                 chip = Chip(chip_id, netlist, gates_file)
                 # load everything
                 chip.load_gates()
@@ -125,10 +136,11 @@ class Test():
 
 def test(subject):
     number_chips = [0]
-    test = Test()
+    testing = Testing()
     n = 100
+    print(subject)
     for number_chip in number_chips:
-        netlists = test.get_netlists(number_chip)
+        netlists = testing.get_netlists(number_chip)
         
         for number_netlist in netlists:
             netlist = f"netlist_{number_netlist}"
@@ -138,21 +150,21 @@ def test(subject):
             print(f"---chip: {chip_id} and netlist: {number_netlist}-------------------")
             
             if subject == "algorithms":
-                test.testing_all_algorithms(netlist,chip_id,gates_file)
+                testing.testing_all_algorithms(netlist,chip_id,gates_file)
             
             elif subject == "order":
                 algorithm = "astar"
-                test.testing_order(netlist, chip_id, gates_file, algorithm)
-                test.make_bar_graph()
+                testing.testing_order(netlist, chip_id, gates_file, algorithm)
+                testing.make_csv("order")
 
             elif subject == "average_random2D":
-                test.average(netlist, chip_id, gates_file,n,"random2D")
-                test.make_bar_graph()
+                testing.average(netlist, chip_id, gates_file,n,"random2D")
+                testing.make_bar_graph()
             
             elif subject == "average_random":
-                test.average(netlist, chip_id, gates_file,n,"random")
-                test.make_bar_graph()
+                testing.average(netlist, chip_id, gates_file,n,"random")
+                testing.make_csv("average_random")
 
             elif subject == "average_hillclimber":
-                test.average(netlist, chip_id, gates_file,n,"hillclimber")
-                test.make_bar_graph()
+                testing.average(netlist, chip_id, gates_file,n,"hillclimber")
+                testing.make_bar_graph()
