@@ -30,6 +30,9 @@ class Test():
     def make_graph(self):
         pass
 
+    def make_csv(self):
+        pass
+
     def get_netlists(self, number_chip):
         if number_chip == 0:
             self.netlists = [1, 2, 3]
