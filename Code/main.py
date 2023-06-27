@@ -119,9 +119,6 @@ def main2():
         elif testing_type == "algorithm":
             order_choice = None
             # check what order we want to run / test
-            order = input("Sorting order: ")
-            while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
-                order = input("Please choose one of the following orders: \nbasic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted\n")
             test("algorithm", algorithm, netlist_number, order_choice, n)
 
     # run the normal process
@@ -145,8 +142,9 @@ def main2():
 
         # run algorithm and output
         choose_algorithm(algorithm, chip, order)
-        print("final:", chip.calculate_cost())
-        visualize(chip.gate_list, chip.grid, chip.wires)
+        # print("final:", chip.calculate_cost())
+        title = f"{algorithm}_{netlist}"
+        visualize(chip, title)
 
         chip.output_to_csv()
 
