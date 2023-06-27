@@ -75,10 +75,10 @@ def check_if_valid(wire:object, chip:object, direction):
         current_wirepart = wire.gateA.location + direction
         
     # check if wire direction goes out of grid
-    if current_wirepart.x < 0 or current_wirepart.y < 0 or current_wirepart.z < -3:
+    if current_wirepart.x < 0 or current_wirepart.y < 0 or current_wirepart.z < 0:
         # print("negative")
         return False
-    elif current_wirepart.x > chip.grid.width or current_wirepart.y > chip.grid.height or current_wirepart.z > 4:
+    elif current_wirepart.x > chip.grid.width or current_wirepart.y > chip.grid.height or current_wirepart.z > chip.grid.layers:
         # print("too high")
         return False
     

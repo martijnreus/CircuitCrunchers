@@ -97,6 +97,10 @@ class Astar:
                             if self.check_is_on_wire(neighbour):
                                 neighbour.has_wire = True
 
+                            # this neighbour would create a collision
+                            if self.check_has_collision(current_node, neighbour):
+                                neighbour.add_additional_f_cost(99999)
+
                             # Add extra cost depending on the mode the algoritm is in
                             if (self.version != "normal"):
                                 self.pick_node_cost_version(neighbour, wire)
@@ -182,6 +186,19 @@ class Astar:
                 if node.location == wire_unit.from_location:
                     return True
         return False
+    
+    def check_has_collision(self, current_node, neighbour_node):
+        if current_node.has_wire == False:
+            return False 
+        
+        for connection in self.wires:
+            for wire_unit in self.wires[connection].wireparts:
+                if current_node.location == wire_unit.to_location and neighbour_node.location == wire_unit.from_location:
+                    return True
+                elif current_node.location == wire_unit.from_location and neighbour_node.location == wire_unit.to_location:
+                    return True
+
+        return False
 
     def check_is_in_list(self, node, list):
         for nodes in list:
@@ -199,7 +216,10 @@ class Astar:
         if (self.version == "avoid_center"):
             if (node.location.x > 5 and node.location.x < self.grid.width - 5):
                 if (node.location.y > 5 and node.location.y < self.grid.height - 5):
-                    node.add.addidional_f_cost(3)
+                    node.add_additional_f_cost(3)
+
+        if (self.version == "use_layers"):
+            node.add_additional_f_cost(7 - node.location.z)
 
         if (self.version == "avoid_both" or self.version == "optimal"):
             for gate in self.gates:
@@ -210,6 +230,8 @@ class Astar:
             if (node.location.x > 5 and node.location.x < self.grid.width - 5):
                 if (node.location.y > 5 and node.location.y < self.grid.height - 5):
                     node.add_additional_f_cost(3)
+
+            node.add_additional_f_cost(7 - node.location.z)
 
 
     def get_distance_to_gate(self, node, gate, wire):
