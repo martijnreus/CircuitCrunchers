@@ -167,22 +167,17 @@ class Testing():
             self.cost_library[f"{netlist}"].append(cost)
 
 # main test function
-def test(subject, algorithm, number_netlist):
+def test(subject, algorithm, number_netlist, order_choice):
     
     # make new test object
     testing = Testing()
 
     # define n
-    n = 100
+    n = 10000
 
     # choose if all netlists or just one
     if number_netlist == "all":
         netlists = ["1","2","3","4","5","6","7","8","9"]
-
-        # ask if later we want to test the specified orders or the random ordering sort.
-        order_choice = input("Test all orders or random order? ")
-        while order_choice not in ["random", "all"]:
-            order_choice = input("Please specify: \"orders\" or \"random\" ->")
 
         for number_netlist in netlists:
             netlist = f"netlist_{number_netlist}"

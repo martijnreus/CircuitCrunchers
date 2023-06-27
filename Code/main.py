@@ -169,14 +169,20 @@ def main2():
     if testing:
 
         if testing_type == "order":
-            test("order", algorithm, netlist_number)
+            # ask if later we want to test the specified orders or the random ordering sort.
+            order_choice = input("Test all orders or random order? ")
+            while order_choice not in ["random", "all"]:
+                order_choice = input("Please specify: \"orders\" or \"random\" ->")
+
+            test("order", algorithm, netlist_number, order_choice)
             
         elif testing_type == "algorithm":
+            order_choice = None
              # check what order we want to run / test
             order = input("Sorting order: ")
             while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
                 order = input("Please choose one of the following orders: \nbasic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted\n")
-            test("algorithm", algorithm, netlist_number)
+            test("algorithm", algorithm, netlist_number, order_choice)
 
     # run the normal process
     else:
