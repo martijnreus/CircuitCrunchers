@@ -97,6 +97,7 @@ class Testing():
         
         # do n times
         for number in range(n):
+            print(number)
             
             # make new chip
             chip = Chip(self.chip_id, self.netlist, self.gates_file)
