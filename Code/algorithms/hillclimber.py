@@ -23,6 +23,7 @@ class Hillclimber:
         self.old_cost = 0
         self.new_cost = 0
         self.possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
+        self.cost_list = []
     
     def start_wire(self, connection):
         # get gate a and gate b
@@ -47,6 +48,7 @@ class Hillclimber:
             self.old_wire = self.wire.wireparts
             self.old_cost = self.new_cost
             print("accept:", self.new_cost)
+            self.cost_list.append(self.old_cost)
         else:
             self.wire.wireparts = self.old_wire
     
@@ -70,7 +72,7 @@ class Hillclimber:
         self.new_cost = self.chip.calculate_cost()
 
 
-def hillclimber_algorithm(chip:object):
+def hillclimber_algorithm(chip:object, n):
     """
     Perform the hill climbing algorithm to optimize wire connections on a chip.
 
@@ -106,12 +108,13 @@ def hillclimber_algorithm(chip:object):
                     break
         i += 1
         # repeat this ... times
-        if i == 1000:
+        if i == n:
             print("done")
+            print(hillclimber.cost_list)
             break
 
 
-def simulated_annealing(chip:object):
+def simulated_annealing(chip:object, n):
     i = 0
     hillclimber = Hillclimber(chip)
     hillclimber.start_with_greedy()
@@ -131,11 +134,11 @@ def simulated_annealing(chip:object):
                 hillclimber.check_is_better_annealing(start_t, i)
                 j += 1
                 # repeat this ... times
-                if j == 20:
+                if j == 2:
                     # print("connected")
                     break
         i += 1
         # repeat this ... times
-        if i == 1000:
+        if i == n:
             print("done")
             break

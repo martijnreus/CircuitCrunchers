@@ -35,7 +35,7 @@ class Testing():
         self.gates_file = f"print_{get_number_chip(number_netlist)}"
         self.title = f"{subject}_{self.netlist}_{algorithm}_{order}"
         self.cost_list = []
-        self.cost_library = {}
+
         
         self.netlists = []
         self.variables = []
@@ -55,13 +55,16 @@ class Testing():
             writer = csv.writer(newfile, dialect='excel')
             writer.writerow(["test", "cost"])
 
+    def get_filepath(self, title):
+        if self.subject == "order":
+            filepath = f'output/{self.subject}/{title}'
+        else:
+            filepath = f'output/{self.subject}/{self.algorithm}/{title}'
+        return filepath
     
     def write_to_csv(self,title,info):
         
-        if self.subject == "order":
-            filepath = f'output/{self.subject}/{title}.csv'
-        else:
-            filepath = f'output/{self.subject}/{self.algorithm}/{title}.csv'
+        filepath = self.get_filepath(title) + ".csv"
         
         if not os.path.exists(filepath):
             self.make_csv(filepath)
@@ -78,15 +81,11 @@ class Testing():
             # Close the file object
             f_object.close()
 
-    def make_histogram(self, title):
-        histogram(self.cost_library[self.netlist], title)
-
     # test the orders for a netlist and algorithm
     def testing_order(self,algorithm):
         """
         Automated testing
         """
-        self.cost_library[f"{self.netlist}"]= []
 
         sorting_orders = ["basic","reverse", "short", "long","least-connections", "most-connections", "sum-lowest", "sum-highest", "middle", "outside", "intra-quadrant", "inter-quadrant", "manhattan","x","y","x-rev","y,rev", "weighted", "weighted-rev"]
         self.variables = sorting_orders
@@ -109,7 +108,6 @@ class Testing():
 
     # get the average of the random order
     def testing_random_order(self, algorithm, n):
-        self.cost_library[f"{self.netlist}"]= []
         
         # do n times
         for number in range(n):
@@ -125,16 +123,13 @@ class Testing():
             # run the random algorithm and calculate the cost
             choose_algorithm(algorithm, chip, "random")
             cost = chip.calculate_cost()
-            self.cost_library[f"{self.netlist}"].append(cost)
-            info = [f"random_try_{n}", cost]
+            info = [f"random_try_{number}", cost]
             self.write_to_csv(self.title, info)
 
     # get the average of some algorithms
     def average(self,n, algorithm):
         
         self.variables = list(range(n))
-        self.cost_library = {}
-        self.cost_library[f"{self.netlist}"]= []
 
         # for the random algorithm
         if algorithm == "random":
@@ -147,6 +142,7 @@ class Testing():
                 cost = chip.calculate_cost()
                 info = [f"random_try_{number}", cost]
                 self.write_to_csv(self.title, info)
+                
         
         # for the 2D random algorithm
         elif algorithm == "random2D":
@@ -160,29 +156,27 @@ class Testing():
                 info = [f"random2D_try_{number}", cost]
                 self.write_to_csv(self.title, info)
 
+    def hillclimber(self,n,algorithm):    
         # for the hillclimber
-        elif algorithm == "hillclimber":
-            for number in range(n):
-                chip = Chip(self.chip_id, self.netlist, self.gates_file)
-                # load everything
-                chip.load_gates()
-                chip.load_netlist()
-                hillclimber_algorithm(chip)
-                cost = chip.calculate_cost()
-                info = [f"hillclimber_try_{number}", cost]
-                self.write_to_csv(self.title, info)
+        if algorithm == "hillclimber":
+
+            chip = Chip(self.chip_id, self.netlist, self.gates_file)
+            # load everything
+            chip.load_gates()
+            chip.load_netlist()
+            hillclimber_algorithm(chip, n)
+            cost = chip.calculate_cost()
+            print("final cost: ", cost)
         
         # for the annealing
         elif algorithm == "annealing":
-            for number in range(n):
-                chip = Chip(self.chip_id, self.netlist, self.gates_file)
-                # load everything
-                chip.load_gates()
-                chip.load_netlist()
-                simulated_annealing(chip)
-                cost = chip.calculate_cost()
-                info = [f"annealing_try_{number}", cost]
-                self.write_to_csv(self.title, info)
+            chip = Chip(self.chip_id, self.netlist, self.gates_file)
+            # load everything
+            chip.load_gates()
+            chip.load_netlist()
+            simulated_annealing(chip, n)
+            cost = chip.calculate_cost()
+            print("final cost: ", cost)
 
     # test the algorithms that always give the same answer
     def only_once(self,algorithm, order):
@@ -202,7 +196,6 @@ class Testing():
                 info = [f"astar_algorithm_{version}_{order}", cost]
                 self.write_to_csv(self.title, info)
         else:
-            self.cost_library[f"{self.netlist}"] = []
             # astar
             chip = Chip(self.chip_id, self.netlist, self.gates_file)
             # load everything
@@ -268,12 +261,19 @@ def choose_test(testing, n, order):
         # test the algorithms that dont give the same answer 
         if algorithm == "random2D":
             testing.average(n,"random2D")
-
+            make_histogram(filepath, algorithm, n, order)
+            
         elif algorithm == "random":
             testing.average(n,"random")
+            print("here again")
+            filepath = testing.get_filepath(testing.title) + ".csv"
+            make_histogram(filepath, algorithm, n, order)
 
         elif algorithm == "hillclimber":
-            testing.average(n,"hillclimber")
+            testing.hillclimber(n,"hillclimber")
+        
+        elif algorithm == "annealing":
+            testing.hillclimber(n,"annealing")
 
         # test the algorithms that do give the same answer
         elif algorithm == "astar":
