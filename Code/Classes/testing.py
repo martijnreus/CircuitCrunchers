@@ -167,8 +167,15 @@ class Testing():
         print(f"cost: {cost}")
         visualize(chip, title)
 
-        
-# main test function
+    def output(title, average):
+        if average:
+            self.make_csv(title)
+            self.make_histogram(title)
+            visualize(chip, title)
+        else:
+            self.make_csv(title)
+            visualize(chip, title)
+    # main test function
 def test(subject, algorithm, number_netlist, order_choice, n):
     order = "all"
     if algorithm in ["astar", "greedy", "hillclimber"] and subject == "algorithm":
@@ -205,38 +212,39 @@ def choose_test(testing, n, order):
         
         # test random order
         if testing.order_choice == "random":
+            average = True
             testing.testing_random_order(algorithm, n)
-            testing.make_csv(title)
-            testing.make_histogram(title)
+            testing.output(title, average)
 
         # test all
         else:
+            average = False
             testing.testing_order(algorithm)
-            testing.make_csv(title)
+            testing.output(title, average)
     
     # test algorithms
     else:
         # test the algorithms that dont give the same answer 
+        average = True
         if algorithm == "random2D":
             testing.average(n,"random2D")
-            testing.make_csv(title)
-            testing.make_histogram(title)
+            testing.output(title, average)
 
         elif algorithm == "random":
             testing.average(n,"random")
-            testing.make_csv(title)
-            testing.make_histogram(title)
+            testing.output(title, average)
 
         elif algorithm == "hillclimber":
             testing.average(n,"hillclimber")
-            testing.make_csv(title)
-            testing.make_histogram(title)
+            testing.output(title, average)
 
         # test the algorithms that do give the same answer
         elif algorithm == "astar":
+            average = False
             testing.only_once("astar", order)
-            testing.make_csv(title)
+            testing.output(title, average)
 
         elif algorithm == "greedy":
+            average = False
             testing.only_once("greedy", order)
-            testing.make_csv(title)
+            testing.output(title, average)
