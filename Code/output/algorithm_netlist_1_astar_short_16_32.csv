@@ -1,0 +1,6 @@
+net,cost
+netlist_1_optimal,20
+netlist_1_avoid_center,20
+netlist_1_avoid_gates,20
+netlist_1_avoid_both,22
+netlist_1_normal,20

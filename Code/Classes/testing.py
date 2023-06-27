@@ -155,18 +155,32 @@ class Testing():
     # test the algorithms that always give the same answer
     def only_once(self,algorithm, order):
         title = f"{algorithm}_{self.netlist}"
-        self.cost_library[f"{self.netlist}"] = []
         
-        # astar
-        chip = Chip(self.chip_id, self.netlist, self.gates_file)
-        # load everything
-        chip.load_gates()
-        chip.load_netlist()
-        choose_algorithm(algorithm, chip, order)
-        cost = chip.calculate_cost()
-        self.cost_library[f"{self.netlist}"].append(cost)
-        print(f"cost: {cost}")
-        visualize(chip, title)
+        if algorithm == "astar":
+            versions = ["optimal", "avoid_center", "avoid_gates", "avoid_both", "normal"]
+            for version in versions:
+                self.cost_library[f"{self.netlist}_{version}"] = []
+                chip = Chip(self.chip_id, self.netlist, self.gates_file)
+                # load everything
+                chip.load_gates()
+                chip.load_netlist()
+
+                astar_algorithm(chip,version)
+                cost = chip.calculate_cost()
+                self.cost_library[f"{self.netlist}_{version}"].append(cost)
+                print(f"{version} cost: {cost}")
+        else:
+            self.cost_library[f"{self.netlist}"] = []
+            # astar
+            chip = Chip(self.chip_id, self.netlist, self.gates_file)
+            # load everything
+            chip.load_gates()
+            chip.load_netlist()
+            choose_algorithm(algorithm, chip, order)
+            cost = chip.calculate_cost()
+            self.cost_library[f"{self.netlist}"].append(cost)
+            print(f"cost: {cost}")
+            visualize(chip, title)
 
     def output(self,title, average):
         if average:
@@ -180,12 +194,7 @@ class Testing():
     # main test function
 def test(subject, algorithm, number_netlist, order_choice, n):
     order = "all"
-
-    if algorithm == "astar":
-        version = input("Version: ")
-        while version not in ["optimal", "avoid_center", "avoid_gates", "avoid_both", "normal"]:
-            print("choose from optimal, avoid_center, avoid_gates, avoid_both, normal")
-            version = input("Version: ")
+            
 
     if algorithm in ["astar", "greedy", "hillclimber"] and subject == "algorithm":
         order = input("Sorting order: ")
