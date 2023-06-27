@@ -39,11 +39,6 @@ class Testing():
         self.netlists = []
         self.variables = []
 
-    # get the current time
-    def get_time(self):
-        now = datetime.now()
-        current_time = now.strftime("%H_%M")
-        return current_time
 
     # output to csv
     def make_csv(self, title):
@@ -188,15 +183,9 @@ class Testing():
             # visualize(chip, title)
         else:
             self.make_csv(title)
-<<<<<<< HEAD
             # visualize(chip, title)
-            
-    # main test function
-=======
-            visualize(chip, title)
 
 # main test function
->>>>>>> f6f16d8 (idk)
 def test(subject, algorithm, number_netlist, order_choice, n):
     order = "all"
             
