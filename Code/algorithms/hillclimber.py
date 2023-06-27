@@ -85,6 +85,7 @@ def hillclimber_algorithm(chip:object):
     i = 0
     hillclimber = Hillclimber(chip)
     hillclimber.start_with_greedy()
+
     while True:
         random.shuffle(chip.wire_connections)
         
@@ -108,6 +109,7 @@ def hillclimber_algorithm(chip:object):
         if i == 1000:
             print("done")
             break
+
 
 def simulated_annealing(chip:object):
     i = 0
