@@ -47,8 +47,8 @@ def visualize(chip, title):
     ax.set_xlim(0,grid.width +1)
     ax.set_yticks(Y)
     ax.set_ylim(0,grid.height +1)
-    ax.set_zticks([-3, -2, -1, 0, 1, 2, 3, 4])
-    ax.set_zlim(-3, 4)
+    ax.set_zticks([0, 1, 2, 3, 4, 5, 6, 7])
+    ax.set_zlim(0, grid.layers)
     # Creating a mesh grid of X and Y
     X, Y = np.meshgrid(X, Y)
     
