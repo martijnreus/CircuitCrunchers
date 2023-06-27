@@ -40,6 +40,7 @@ class Testing():
         self.netlists = []
         self.variables = []
 
+       
     def delete_csv(self):
         filepath = f'output/{self.title}.csv'
         if not os.path.exists(filepath):
@@ -48,18 +49,22 @@ class Testing():
             os.remove(filepath)
 
     # output to csv
-    def make_csv(self, title):
-        filepath = f'output/{title}.csv'
-
+    def make_csv(self, filepath):
+        
         with open(filepath, 'w', newline='') as newfile:
             writer = csv.writer(newfile, dialect='excel')
             writer.writerow(["test", "cost"])
 
     
     def write_to_csv(self,title,info):
-        filepath = f'output/{title}.csv'
+        
+        if self.subject == "order":
+            filepath = f'output/{self.subject}/{title}.csv'
+        else:
+            filepath = f'output/{self.subject}/{self.algorithm}/{title}.csv'
+        
         if not os.path.exists(filepath):
-            self.make_csv(title)
+            self.make_csv(filepath)
 
         with open(filepath, 'a') as f_object:
             # Pass this file object to csv.writer()
@@ -101,7 +106,7 @@ class Testing():
             print(f"sort: {order_choice} || final score", cost)
             info = [f"sort_{order_choice}_{algorithm}", cost]
             self.write_to_csv(self.title, info)  
-              
+
     # get the average of the random order
     def testing_random_order(self, algorithm, n):
         self.cost_library[f"{self.netlist}"]= []
