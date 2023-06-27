@@ -113,6 +113,7 @@ def main():
         visualize(chip.gate_list, chip.grid, chip.wires)
 
         chip.output_to_csv()
+
 def get_number_chip(netlist_number):
     if netlist_number in ["1","2","3"]:
         number_chip = 0
@@ -129,6 +130,7 @@ def main2():
 
     # check for second argument
     if len(argv) in [1,3]:
+        n = 0
         testing = False
         # we want to do testing
         if len(argv) == 3 and argv[1] == "test":
@@ -159,7 +161,8 @@ def main2():
 
         while algorithm not in ["greedy", "hillclimber", "astar", "random", "random2D"]:
             algorithm = input(f"This algorithm is invalid, please specify one of the following \n - greedy, hillclimber, astar, random, random2D\n")
-
+        if algorithm in ["hillclimber","random", "random2D"]:
+            n = int(input("n: "))
     # unclear what the user wants, quit the program
     else:
         print("Usage: main.py test[optional] testingtype")
@@ -173,20 +176,21 @@ def main2():
             order_choice = input("Test all orders or random order? ")
             while order_choice not in ["random", "all"]:
                 order_choice = input("Please specify: \"orders\" or \"random\" ->")
-
-            test("order", algorithm, netlist_number, order_choice)
+            if order_choice == "random":
+                n = int(input("n: "))
+            test("order", algorithm, netlist_number, order_choice, n)
             
         elif testing_type == "algorithm":
             order_choice = None
-             # check what order we want to run / test
+            # check what order we want to run / test
             order = input("Sorting order: ")
             while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
                 order = input("Please choose one of the following orders: \nbasic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted\n")
-            test("algorithm", algorithm, netlist_number, order_choice)
+            test("algorithm", algorithm, netlist_number, order_choice, n)
 
     # run the normal process
     else:
-        get_number_chip(netlist_number)
+        number_chip=get_number_chip(netlist_number)
         order = input("Sorting order: ")
         while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
             order = input("Please choose one of the following orders: \nbasic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted\n")
