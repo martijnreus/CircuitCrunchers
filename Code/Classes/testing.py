@@ -47,8 +47,7 @@ class Testing():
 
     # output to csv
     def make_csv(self, title):
-        time = self.get_time()
-        filepath = f'output/{title}_{time}.csv'
+        filepath = f'output/{title}.csv'
 
         if not os.path.exists(filepath):
             # Create the file if it doesn't exist
@@ -97,6 +96,7 @@ class Testing():
         
         # do n times
         for number in range(n):
+            print(number)
             
             # make new chip
             chip = Chip(self.chip_id, self.netlist, self.gates_file)
@@ -154,30 +154,53 @@ class Testing():
     # test the algorithms that always give the same answer
     def only_once(self,algorithm, order):
         title = f"{algorithm}_{self.netlist}"
-        self.cost_library[f"{self.netlist}"] = []
         
-        # astar
-        chip = Chip(self.chip_id, self.netlist, self.gates_file)
-        # load everything
-        chip.load_gates()
-        chip.load_netlist()
-        choose_algorithm(algorithm, chip, order)
-        cost = chip.calculate_cost()
-        self.cost_library[f"{self.netlist}"].append(cost)
-        print(f"cost: {cost}")
-        visualize(chip, title)
+        if algorithm == "astar":
+            versions = ["optimal", "avoid_center", "avoid_gates", "avoid_both", "normal"]
+            for version in versions:
+                self.cost_library[f"{self.netlist}_{version}"] = []
+                chip = Chip(self.chip_id, self.netlist, self.gates_file)
+                # load everything
+                chip.load_gates()
+                chip.load_netlist()
 
-    def output(title, average):
+                astar_algorithm(chip,version)
+                cost = chip.calculate_cost()
+                self.cost_library[f"{self.netlist}_{version}"].append(cost)
+                print(f"{version} cost: {cost}")
+        else:
+            self.cost_library[f"{self.netlist}"] = []
+            # astar
+            chip = Chip(self.chip_id, self.netlist, self.gates_file)
+            # load everything
+            chip.load_gates()
+            chip.load_netlist()
+            choose_algorithm(algorithm, chip, order)
+            cost = chip.calculate_cost()
+            self.cost_library[f"{self.netlist}"].append(cost)
+            print(f"cost: {cost}")
+            visualize(chip, title)
+
+    def output(self,title, average):
         if average:
             self.make_csv(title)
             self.make_histogram(title)
-            visualize(chip, title)
+            # visualize(chip, title)
         else:
             self.make_csv(title)
-            visualize(chip, title)
+<<<<<<< HEAD
+            # visualize(chip, title)
+            
     # main test function
+=======
+            visualize(chip, title)
+
+# main test function
+>>>>>>> f6f16d8 (idk)
 def test(subject, algorithm, number_netlist, order_choice, n):
     order = "all"
+            
+
     if algorithm in ["astar", "greedy", "hillclimber"] and subject == "algorithm":
         order = input("Sorting order: ")
         while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
@@ -202,16 +225,19 @@ def test(subject, algorithm, number_netlist, order_choice, n):
         
 # function to choose the test
 def choose_test(testing, n, order):
+    
     algorithm = testing.algorithm
     netlist = testing.netlist
     if testing.order_choice == "random":
         testing.order = "random" 
     title = f"{testing.subject}_{netlist}_{algorithm}_{testing.order}"
+
     # test order
     if testing.subject == "order":
         
         # test random order
         if testing.order_choice == "random":
+
             average = True
             testing.testing_random_order(algorithm, n)
             testing.output(title, average)
