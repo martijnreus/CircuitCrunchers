@@ -167,17 +167,25 @@ class Testing():
         print(f"cost: {cost}")
         visualize(chip, title)
 
-    def output(title, average):
+    def output(self,title, average):
         if average:
             self.make_csv(title)
             self.make_histogram(title)
-            visualize(chip, title)
+            # visualize(chip, title)
         else:
             self.make_csv(title)
-            visualize(chip, title)
+            # visualize(chip, title)
+            
     # main test function
 def test(subject, algorithm, number_netlist, order_choice, n):
     order = "all"
+
+    if algorithm == "astar":
+        version = input("Version: ")
+        while version not in ["optimal", "avoid_center", "avoid_gates", "avoid_both", "normal"]:
+            print("choose from optimal, avoid_center, avoid_gates, avoid_both, normal")
+            version = input("Version: ")
+
     if algorithm in ["astar", "greedy", "hillclimber"] and subject == "algorithm":
         order = input("Sorting order: ")
         while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
@@ -212,6 +220,7 @@ def choose_test(testing, n, order):
         
         # test random order
         if testing.order_choice == "random":
+
             average = True
             testing.testing_random_order(algorithm, n)
             testing.output(title, average)
