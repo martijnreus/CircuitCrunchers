@@ -13,6 +13,63 @@ from location import *
 from wire import *
 from grid import *
 
+
+class Hillclimber:
+    def __init__(self, chip) -> None:
+        self.wire: object
+        self.chip = chip
+        
+        self.old_wire = []
+        self.old_cost = 0
+        self.new_cost = 0
+        self.possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
+    
+    def start_wire(self, connection):
+        # get gate a and gate b
+        gate_a = connection[0]
+        gate_b = connection[1]
+        # print(gate_a, gate_b)
+
+        # get the associated wire
+        self.wire = self.chip.wires[f"{gate_a}-{gate_b}"]
+
+        self.old_wire = self.wire.wireparts
+        self.old_cost = self.chip.calculate_cost()
+
+    def start_with_greedy(self):
+        greedy_algorithm(self.chip)
+    
+    def start_with_astar(self, version):
+        astar_algorithm(self.chip, version)
+    
+    def check_is_better(self):
+        if self.new_cost <= self.old_cost: 
+            self.old_wire = self.wire.wireparts
+            self.old_cost = self.new_cost
+            print("accept:", self.new_cost)
+        else:
+            self.wire.wireparts = self.old_wire
+    
+    def check_is_better_annealing(self, start_t, i):
+        difference = self.old_cost - self.new_cost
+        temperature = start_t*0.999999999**i
+        accept = (2 ** difference)/temperature
+        r = random.random()
+        if r < accept:
+            self.old_wire = self.wire.wireparts
+            self.old_cost = self.new_cost
+            print("accept:", self.new_cost)
+        else:
+            self.wire.wireparts = self.old_wire
+        
+    def make_new_wire(self):
+        self.new_cost = 0
+        self.wire.wireparts = []
+        # add random new wire and calculate new cost
+        random_add_wire(self.possibilities, self.wire, self.chip)
+        self.new_cost = self.chip.calculate_cost()
+
+
 def hillclimber_algorithm(chip:object):
     """
     Perform the hill climbing algorithm to optimize wire connections on a chip.
@@ -24,66 +81,59 @@ def hillclimber_algorithm(chip:object):
     Post-conditions:
         - The wire connections are optimized based on the hill climbing algorithm.
     """
-    # choose_algorithm(algorithm, chip, order)
-    greedy_algorithm(chip)
-    # initialize moving possibilities
-    possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
     # for every wire
     i = 0
-    start_t = 1000
-
+    hillclimber = Hillclimber(chip)
+    hillclimber.start_with_greedy()
     while True:
         random.shuffle(chip.wire_connections)
+        
         for connection in chip.wire_connections:
 
-            
-            # get gate a and gate b
-            gate_a = connection[0]
-            gate_b = connection[1]
-            # print(gate_a, gate_b)
-
-            # get the associated wire
-            wire = chip.wires[f"{gate_a}-{gate_b}"]
-
-            old_wire = wire.wireparts
-            old_cost = chip.calculate_cost()
+            hillclimber.start_wire(connection)
 
             j = 0
             # repeat
             while True:
-
-                new_cost = 0
-                wire.wireparts = []
-
-                # add random new wire and calculate new cost
-                random_add_wire(possibilities, wire, chip)
-                new_cost = chip.calculate_cost()
-
-                difference = old_cost - new_cost
-                temperature = start_t*0.999999999**i
-                accept = (2 ** difference)/temperature
-                r = random.random()
-                if r < accept:
-                # if good move: new wire is now the old wire
-                # if new_cost <= old_cost: 
-                    old_wire = wire.wireparts
-                    old_cost = new_cost
-                    print("accept:", new_cost)
-
-                # else if bad move, wire becomes old wire again
-                else:
-                    wire.wireparts = old_wire
-
+                
+                hillclimber.make_new_wire()
+                hillclimber.check_is_better()
                 j += 1
-
                 # repeat this ... times
                 if j == 20:
                     # print("connected")
                     break
-
         i += 1
         # repeat this ... times
         if i == 1000:
             print("done")
             break
 
+def simulated_annealing(chip:object):
+    i = 0
+    hillclimber = Hillclimber(chip)
+    hillclimber.start_with_greedy()
+    start_t = 1000
+    while True:
+        random.shuffle(chip.wire_connections)
+        
+        for connection in chip.wire_connections:
+
+            hillclimber.start_wire(connection)
+
+            j = 0
+            # repeat
+            while True:
+                
+                hillclimber.make_new_wire()
+                hillclimber.check_is_better_annealing(start_t, i)
+                j += 1
+                # repeat this ... times
+                if j == 20:
+                    # print("connected")
+                    break
+        i += 1
+        # repeat this ... times
+        if i == 1000:
+            print("done")
+            break

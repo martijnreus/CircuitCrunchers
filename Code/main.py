@@ -16,7 +16,6 @@ sys.path.append("algorithms")
 from greedy import *
 from randomize import *
 from randomize_twee_d import *
-# from hillclimber_per_unit import *
 from hillclimber import *
 from astar import *
 from order_sorting import *
@@ -50,6 +49,10 @@ def choose_algorithm(algorithm, chip, order_choice):
     # if algoritzhm is hillclimber, run the hillclimber algorithm
     elif algorithm == "hillclimber":
         hillclimber_algorithm(chip)
+    
+    # if algoritzhm is hillclimber, run the hillclimber algorithm
+    elif algorithm == "annealing":
+        simulated_annealing(chip)
 
 def get_number_chip(netlist_number):
     if netlist_number in ["1","2","3"]:
@@ -94,10 +97,9 @@ def main2():
 
         # check what algorithm we want to run and check for validity
         algorithm = input("Algorithm: ")
-
-        while algorithm not in ["greedy", "hillclimber", "astar", "random", "random2D"]:
-            algorithm = input(f"This algorithm is invalid, please specify one of the following \n - greedy, hillclimber, astar, random, random2D\n")
-
+        while algorithm not in ["greedy", "hillclimber", "annealing","astar", "random", "random2D"]:
+            algorithm = input(f"This algorithm is invalid, please specify one of the following \n - greedy, hillclimber, annealing, astar, random, random2D\n")
+        
     # unclear what the user wants, quit the program
     else:
         print("Usage: main.py test[optional] testingtype")
@@ -124,6 +126,13 @@ def main2():
 
     # run the normal process
     else:
+        if algorithm == "astar":
+            version = input("Version: ")
+            while version not in ["optimal", "avoid_center", "avoid_gates", "avoid_both", "normal"]:
+                print("choose from optimal, avoid_center, avoid_gates, avoid_both, normal")
+                version = input("Version: ")
+                astar_algorithm(chip, version)
+
         number_chip=get_number_chip(netlist_number)
         order = input("Sorting order: ")
         while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
