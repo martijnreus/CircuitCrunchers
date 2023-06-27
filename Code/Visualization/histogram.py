@@ -5,6 +5,7 @@ def histogram(cost_list, title):
     x = cost_list
     plt.title(title)
     plt.xlabel('cost')
+
     plt.axvline(mean(x), color='k', linestyle='dashed', linewidth=1)
 
     min_ylim, max_ylim = plt.ylim()
@@ -23,3 +24,4 @@ def mean(x):
         total += cost
         n += 1
     return total / n
+

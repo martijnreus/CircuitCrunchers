@@ -68,7 +68,7 @@ class Astar:
             # found a path
             if current_node == end_node:
                 path = self.calculate_path(current_node)
-                # print(f"Path found: {len(path)}")
+                print(f"Path found: {len(path)}")
                 return path
 
             # move the current node from the open list to the closed list
@@ -157,12 +157,12 @@ class Astar:
             node_list.append(PathNode(current_node, node_position))
 
         # down
-        if current_node.location.z > -3:
+        if current_node.location.z > 0:
             node_position = Location(current_node.location.x, current_node.location.y, current_node.location.z - 1)
             node_list.append(PathNode(current_node, node_position))
         
         # up
-        if current_node.location.z < 4:
+        if current_node.location.z < self.grid.layers:
             node_position = Location(current_node.location.x, current_node.location.y, current_node.location.z + 1)
             node_list.append(PathNode(current_node, node_position))
 
@@ -226,7 +226,12 @@ class Astar:
         self.version = version
         
 
-def astar_algorithm(wires, wire_connections, grid, gates, version):
+def astar_algorithm(chip, version):
+
+    wires = chip.wires
+    wire_connections = chip.wire_connections
+    grid = chip.grid
+    gates = chip.gates
 
     astar = Astar(wires, wire_connections, grid, gates, version)
 
