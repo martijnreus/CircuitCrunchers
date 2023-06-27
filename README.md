@@ -2,55 +2,75 @@
 
 ## Chips and Circuits
 
+A chips consists of several gates that should be connected with eachother with wires. The less wire that have to be 
+used for a chip the cheaper it is to make and the faster the chip is. You want to avoid that wires cross eachtoher 
+and with a lot of wires this can get messy very fast. In chips and circuits a good way of connecting all the gates 
+has to be found with the help of algoritms and heuristics. The chips consists of 8 layers where the wires can be put. 
+
+## Algorithms ##
+
+- **Greedy**: The greedy algorithm looks for each step what direction is the most favourable. The algorithm oes this by comparing the current position of the end of the wire with the position of the gateB. First the algoritm will go into the x direction if it differs from the x coordinate of gateB then the y direction and after that the z direction.
+
+
+- **Astar**: The a* algorithm uses nodes that all have an Fcost. The Fcost is the sum of the Gcost and the Hcost. The Gcost in this is the number of steps the node is away from the startNode. The Hcost is the heuristic value calculated by the distance from the node to the endNode that makes the algorithm find a solution faster. The algorithm calculates the Fcost for all adjacent nodes and chooses the node with the lowest Fcost to continue with. It does this until it finds the endNode and thus found a path. By further increasing the Fcost of certain nodes, you can control the algorithm because it will check these nodes later and will therefore possibly find another path sooner.
+
+- **Hillclimber**
+
 ## Experiments
 
 ## Use
 How to use the test function:
+ 
+**If you want to test the algorithm:**
+```shell
+python3 main.py test algorithm
+```
 
-**if you want to test the algorithm:**
-1. run "python3 main.py test order"
+**If you want to test the order:**
+```shell
+python3 main.py test order
+```
 
-**if you want to test the order:**
-1. run "python3 main.py test order"
-
-**both:**
-
-2. You will be asked to input different things: 
+**In both cases you will be asked to input different things:**
 
 **Netlist**: Here you have to choose a netlist, which is a number from 1 to 9 or all
 
 **Algorithm:** Here you can choose between all algorithms:
 
-random
-random2D
-hillclimber
-(simulated annealing)
-astar
+- random
+- random2D
+- hillclimber
+- (simulated annealing)
+- astar
 
-if you choose random/random2D or simulated annealing you have to choose how often you want it to run
+**For random/random2D or simulated annealing:** 
+- Choose how often you want the algorithm to run
 
-if you choose astar you have to choose a **version** of astar like:
+**For astar:** 
+- Choose a **version** of astar like normal or optimal
 
-normal 
-...
+**For algorithms**:
+- It should start to run now
 
-**for algorithms**:
-It should start to run now
+**For order**:
+- Choose all will test all orders once
+- Choose random will run random order n times 
 
-**for order**:
-after that you have to choose **all or random:** either you test all the orders, or just the random n times 
-
-then it should start to run
 
 ## Output
-If you have tested something that requires more than once to run (e.g. random)
-for the netlists that you entered you will get:
+**For tests that have to be runned more than once (e.g. random):**
 
-1. CSV output with the costs
-2. A histogram with the average 
+- CSV output with the costs
+- A histogram with the average 
 
-if you have run something that only needs to run one time you will get:
+**For tests that have to runned only once:**
 
-1. CSV output with the cost 
-2. Plot with the wires and the cost
+- CSV output with the cost 
+- Plot with the wires and the cost
+
+## Auteurs
+
+- Juri
+- Anna
+- Martijn
 
