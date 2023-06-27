@@ -32,7 +32,6 @@ def choose_algorithm(algorithm, chip, order_choice):
         order_choice (str): choice in order of connections made by algorithm.
     """
     chip.wire_connections = change_netlist_order(chip, order_choice)
-    n = 10
     # if greedy is selected, run the greedy algorithm
     if algorithm == "greedy":
         greedy_algorithm(chip)
@@ -52,68 +51,6 @@ def choose_algorithm(algorithm, chip, order_choice):
     elif algorithm == "hillclimber":
         hillclimber_algorithm(chip)
 
-def main():
-    """
-    main function, calling to 
-    """
-    # check for valid usage
-    if len(argv) not in [1, 2, 3, 4, 5]:
-        print("Usage: python main.py [number_chip] [number_netlist] [algorithm] [sorting_order]")
-        print("sorting order cosists of: \"basic\", \"random\", \"short\", \"long\", \"most-connections\", \"least-connections\"")
-        exit(1)
-
-    if len(argv) == 2:
-        if argv[1] == "ordertest":
-            test("order")
-        elif argv[1] == "average_random":
-            test("average_random")
-        elif argv[1] == "average_random2D":
-            test("average_random2D")
-        elif argv[1] == "average_hillclimber":
-            test("average_hillclimber")
-        else:
-            print("Usage: python main.py [number_chip] [number_netlist] [algorithm] [sorting_order]")
-
-    else:
-        # get all the necessary information.
-        number_chip = 0
-        number_netlist = 1
-        number_gates_file = 0
-        algorithm = "greedy"
-        order_choice = "basic"
-
-        # if we have a third argument, we should take that as our netlists.
-        if len(argv) in [3, 4, 5]:
-            number_chip = argv[1]
-            number_netlist = argv[2]
-            number_gates_file = argv[1]
-
-            # if we have a fourth argument, then it specifies our algorithm
-            if len(argv) in [4, 5]:
-                algorithm = argv[3]
-
-                # check for order argument
-                if len(argv) == 5:
-                    order_choice = argv[4]
-
-        netlist = f"netlist_{number_netlist}"
-        chip_id = f"{number_chip}"
-        gates_file = f"print_{number_gates_file}"
-
-        # make new chip
-        chip = Chip(chip_id, netlist, gates_file)
-
-        # load everything
-        chip.load_gates()
-        chip.load_netlist()
-
-        # run algorithm and output
-        choose_algorithm(algorithm, chip, order_choice)
-        print("final:", chip.calculate_cost())
-        visualize(chip.gate_list, chip.grid, chip.wires)
-
-        chip.output_to_csv()
-
 def get_number_chip(netlist_number):
     if netlist_number in ["1","2","3"]:
         number_chip = 0
@@ -127,7 +64,6 @@ def get_number_chip(netlist_number):
     return number_chip
 
 def main2():
-
     # check for second argument
     if len(argv) in [1,3]:
         n = 0
@@ -194,8 +130,8 @@ def main2():
         order = input("Sorting order: ")
         while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
             order = input("Please choose one of the following orders: \nbasic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted\n")
-        test("order", algorithm, netlist_number)
-            
+        
+        print(f"---chip: {number_chip} and netlist: {netlist_number}-------------------")    
         netlist = f"netlist_{netlist_number}"
         chip_id = f"{number_chip}"
         gates_file = f"print_{number_chip}"
