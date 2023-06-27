@@ -45,11 +45,7 @@ def choose_algorithm(algorithm, chip, order_choice):
     
     # if algoritm is astar, run the astar algorithm
     elif algorithm == "astar":
-        version = input("Version: ")
-        while version not in ["optimal", "avoid_center", "avoid_gates", "avoid_both", "normal"]:
-            print("choose from ")
-            version = input("Version: optimal, avoid_center, avoid_gates, avoid_both, normal ")
-        astar_algorithm(chip, version)
+        astar_algorithm(chip, "optimal")
     
     # if algoritzhm is hillclimber, run the hillclimber algorithm
     elif algorithm == "hillclimber":
@@ -109,7 +105,7 @@ def main2():
     
     # if test
     if testing:
-        
+
         if algorithm in ["hillclimber","random", "random2D"]:
             n = int(input("n: "))
         if testing_type == "order":
