@@ -52,6 +52,7 @@ class Hillclimber:
         else:
             self.wire.wireparts = self.old_wire
     
+    
     def check_is_better_annealing(self, start_t, i):
         difference = self.old_cost - self.new_cost
         temperature = start_t*0.999999999**i
@@ -61,6 +62,7 @@ class Hillclimber:
             self.old_wire = self.wire.wireparts
             self.old_cost = self.new_cost
             print("accept:", self.new_cost)
+            self.cost_list.append(self.old_cost)
         else:
             self.wire.wireparts = self.old_wire
         
@@ -109,10 +111,8 @@ def hillclimber_algorithm(chip:object, n):
         i += 1
         # repeat this ... times
         if i == n:
-            print("done")
-            print(hillclimber.cost_list)
             break
-
+    return hillclimber.cost_list
 
 def simulated_annealing(chip:object, n):
     i = 0
@@ -140,5 +140,5 @@ def simulated_annealing(chip:object, n):
         i += 1
         # repeat this ... times
         if i == n:
-            print("done")
             break
+    return hillclimber.cost_list

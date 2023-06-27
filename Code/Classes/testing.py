@@ -164,9 +164,10 @@ class Testing():
             # load everything
             chip.load_gates()
             chip.load_netlist()
-            hillclimber_algorithm(chip, n)
-            cost = chip.calculate_cost()
-            print("final cost: ", cost)
+            cost_list = hillclimber_algorithm(chip, n)
+            for cost in cost_list:
+                info = ["better", cost]
+                self.write_to_csv(f"hillclimber_costlist_{n}",info)
         
         # for the annealing
         elif algorithm == "annealing":
@@ -174,9 +175,10 @@ class Testing():
             # load everything
             chip.load_gates()
             chip.load_netlist()
-            simulated_annealing(chip, n)
-            cost = chip.calculate_cost()
-            print("final cost: ", cost)
+            cost_list= simulated_annealing(chip, n)
+            for cost in cost_list:
+                info = ["better", cost]
+                self.write_to_csv(f"simulated_annealing_costlist_{n}",info)
 
     # test the algorithms that always give the same answer
     def only_once(self,algorithm, order):
@@ -255,14 +257,15 @@ def choose_test(testing, n, order):
         # test all
         else:
             testing.testing_order(algorithm)
-    
+        print(f"\nFind output in output/{testing.subject}")
     # test algorithms
     else:
         # test the algorithms that dont give the same answer 
         if algorithm == "random2D":
             testing.average(n,"random2D")
+            filepath = testing.get_filepath(testing.title) + ".csv"
             make_histogram(filepath, algorithm, n, order)
-            
+
         elif algorithm == "random":
             testing.average(n,"random")
             print("here again")
@@ -281,3 +284,8 @@ def choose_test(testing, n, order):
 
         elif algorithm == "greedy":
             testing.only_once("greedy", order)
+
+        else:
+            print("function not available")
+
+        print(f"Find output in output/{testing.subject}/{algorithm}")

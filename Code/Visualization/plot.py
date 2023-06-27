@@ -65,7 +65,7 @@ def visualize(chip, title):
                     [wirepart.from_location.z, wirepart.to_location.z], 
                     linestyle='solid', linewidth=2,color = 'r')
             
-    
     # Show the plot
     plt.show()
     plt.savefig(f"./Visualization/plots/3D_plot_{title}")
+    print("Find Plot in Visualisation/plots")

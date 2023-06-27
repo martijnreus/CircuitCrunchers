@@ -30,6 +30,7 @@ def histogram(cost_list, title, algorithm):
     plt.hist(x, bins=30,color='c', alpha=0.65)
     plt.savefig(filepath)
     plt.show() 
+    print(f"Find Histogram in Visualisation/histogram/{algorithm}")
 
 def mean(x):
     total = 0

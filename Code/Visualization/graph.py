@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 
+
+
+
+
 def graph(cost_list):
         
-    
     x = []
     y = []
     for index in range(len(cost_list)): 
@@ -16,3 +19,4 @@ def graph(cost_list):
     plt.ylabel('cost')
     plt.savefig("./Visualization/graph")
     plt.show()
+    
