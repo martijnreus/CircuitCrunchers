@@ -188,15 +188,9 @@ class Testing():
             # visualize(chip, title)
         else:
             self.make_csv(title)
-<<<<<<< HEAD
             # visualize(chip, title)
             
     # main test function
-=======
-            visualize(chip, title)
-
-# main test function
->>>>>>> f6f16d8 (idk)
 def test(subject, algorithm, number_netlist, order_choice, n):
     order = "all"
             

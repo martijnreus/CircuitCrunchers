@@ -183,7 +183,6 @@ class Chip():
         n = sum(self.wires[connection].get_wire_length() for connection in self.wires)
         
         cost = n + k * 300
-        print(cost)
         return cost
     
     def calculate_collision_amount(self):

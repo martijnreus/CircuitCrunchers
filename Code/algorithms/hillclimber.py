@@ -24,13 +24,6 @@ def hillclimber_algorithm(chip:object):
     Post-conditions:
         - The wire connections are optimized based on the hill climbing algorithm.
     """
-    # algorithm = input("basis for hillclimber: ")
-    # while algorithm not in ["greedy", "astar", "random", "random2D"]:
-    #         algorithm = input(f"This algorithm is invalid, please specify one of the following \n - greedy, astar, random, random2D\n")
-    # order = input("Sorting order: ")
-    # while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
-    #     order = input("Please choose one of the following orders: \nbasic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted\n")
-        
     # choose_algorithm(algorithm, chip, order)
     greedy_algorithm(chip)
     # initialize moving possibilities

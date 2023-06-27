@@ -101,8 +101,7 @@ def main2():
 
         while algorithm not in ["greedy", "hillclimber", "astar", "random", "random2D"]:
             algorithm = input(f"This algorithm is invalid, please specify one of the following \n - greedy, hillclimber, astar, random, random2D\n")
-        if algorithm in ["hillclimber","random", "random2D"]:
-            n = int(input("n: "))
+
     # unclear what the user wants, quit the program
     else:
         print("Usage: main.py test[optional] testingtype")
@@ -110,7 +109,9 @@ def main2():
     
     # if test
     if testing:
-
+        
+        if algorithm in ["hillclimber","random", "random2D"]:
+            n = int(input("n: "))
         if testing_type == "order":
             # ask if later we want to test the specified orders or the random ordering sort.
             order_choice = input("Test all orders or random order? ")
