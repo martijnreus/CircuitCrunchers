@@ -47,8 +47,7 @@ class Testing():
 
     # output to csv
     def make_csv(self, title):
-        time = self.get_time()
-        filepath = f'output/{title}_{time}.csv'
+        filepath = f'output/{title}.csv'
 
         if not os.path.exists(filepath):
             # Create the file if it doesn't exist
@@ -189,9 +188,15 @@ class Testing():
             # visualize(chip, title)
         else:
             self.make_csv(title)
+<<<<<<< HEAD
             # visualize(chip, title)
             
     # main test function
+=======
+            visualize(chip, title)
+
+# main test function
+>>>>>>> f6f16d8 (idk)
 def test(subject, algorithm, number_netlist, order_choice, n):
     order = "all"
             
@@ -220,11 +225,13 @@ def test(subject, algorithm, number_netlist, order_choice, n):
         
 # function to choose the test
 def choose_test(testing, n, order):
+    
     algorithm = testing.algorithm
     netlist = testing.netlist
     if testing.order_choice == "random":
         testing.order = "random" 
     title = f"{testing.subject}_{netlist}_{algorithm}_{testing.order}"
+
     # test order
     if testing.subject == "order":
         
