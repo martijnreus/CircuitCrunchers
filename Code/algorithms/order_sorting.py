@@ -1,11 +1,8 @@
-from functools import total_ordering
 import random
-from math import sqrt
-
 
 def change_netlist_order(chip, order_choice):
     """
-    Function changing the order of the connections that have to be made by the algorithm.
+    Function calling the sorting functions chosen by the user.
 
     Returns:
         wire_connections : the sorted connections between the gates for this chip.
@@ -25,10 +22,12 @@ def change_netlist_order(chip, order_choice):
         wire_connections = change_order_distance(chip, reverse=reverse)
 
     elif order_choice in ["least-connections", "most-connections"]:
-        wire_connections = change_order_number_of_connections(chip, reverse=reverse)
+        sum = False
+        wire_connections = change_order_number_of_connections(chip, reverse=reverse, sum=sum)
 
     elif order_choice in ["sum-lowest", "sum-highest"]:
-        wire_connections = change_order_sum(chip, reverse=reverse)
+        sum = True
+        wire_connections = change_order_number_of_connections(chip, reverse=reverse, sum=sum)
 
     elif order_choice in ["middle", "outside"]:
         wire_connections = change_order_middle_to_outside(chip, reverse=reverse)
@@ -57,7 +56,7 @@ def change_netlist_order(chip, order_choice):
 
 def change_order_random(chip):
     """
-    Function that sorts the wire connections randomly
+    Function that sorts the wire connections randomly.
 
     Args:
         chip (chip): the current chip that we are working on
@@ -108,7 +107,7 @@ def change_order_distance(chip, reverse):
 
 def calculate_distance(connection, chip):
     """
-    function to calculate the distance between the two given gates for the wire connection
+    Function to calculate the distance between the two given gates for the connection.
 
     Args:
         connection (wire_connection): the connection between the two gates
@@ -128,12 +127,13 @@ def calculate_distance(connection, chip):
     gate_b = chip.gates[gate_b_id]
     b_location = gate_b.location
 
+    # calculate the distance between the two gates
     distance = calculate_distance_between_points(a_location.x, a_location.y, b_location.x, b_location.y)
 
     return distance
 
 
-def change_order_number_of_connections(chip, reverse):
+def change_order_number_of_connections(chip, reverse, sum):
     """
     Function that sorts the wire connections based on the amount of connections one of the two (highest) gates has with other gates.
     In case reverse == False, it will sort from most to least connections, if reverse == True, the reverse is true.
@@ -159,40 +159,15 @@ def change_order_number_of_connections(chip, reverse):
         # Count connections for gate B
         connection_count[gate_b_id] = connection_count.get(gate_b_id, 0) + 1
 
-    # Sort wire_connections based on the number of connections for the gates
-    wire_connections.sort(key=lambda connection: max(connection_count[connection[0]], connection_count[connection[1]]), reverse=reverse)
+    if sum == False:
 
-    return wire_connections
+        # Sort wire_connections based on the number of connections for the gate with the most connections
+        wire_connections.sort(key=lambda connection: max(connection_count[connection[0]], connection_count[connection[1]]), reverse=reverse)
 
+    else:
 
-def change_order_sum(chip, reverse):
-    """
-    Function that sorts the wire connections based on the amount of connections both of the gates have combined.
-    Reverse True means it should sort from highest to lowest and False means lowest to highest.
-
-    Args:
-        chip (chip): the current chip that we are working on
-
-    Returns:
-        wire_connections: the sorted wire connections between the gates on this chip
-    """
-    wire_connections = chip.wire_connections
-
-    # Create a dictionary to store the connection count for each gate
-    connection_count = {}
-
-    # Count the connections for each gate
-    for connection in wire_connections:
-        gate_a_id, gate_b_id = connection
-
-        # Count connections for gate A
-        connection_count[gate_a_id] = connection_count.get(gate_a_id, 0) + 1
-
-        # Count connections for gate B
-        connection_count[gate_b_id] = connection_count.get(gate_b_id, 0) + 1
-
-    # Sort wire_connections based on the sum of connection counts for both gates in reverse order
-    wire_connections.sort(key=lambda connection: connection_count[connection[0]] + connection_count[connection[1]], reverse=reverse)
+        # Sort wire_connections based on the sum of connection counts for both gates in reverse order
+        wire_connections.sort(key=lambda connection: connection_count[connection[0]] + connection_count[connection[1]], reverse=reverse)
 
     return wire_connections
 
@@ -208,6 +183,7 @@ def change_order_middle_to_outside(chip, reverse):
     Returns:
         wire_connections: the sorted wire connections between the gates on this chip
     """
+    # get the connections
     wire_connections = chip.wire_connections
 
     # Calculate the coordinates of the middle of the chip
@@ -222,16 +198,16 @@ def change_order_middle_to_outside(chip, reverse):
 
 def calculate_distance_to_specific_point(connection, chip, point_x, point_y):
     """
-    Function to calculate the distance between the middle of the chip and the gates involved in the wire connection.
+    Function to calculate the distance between a specific point of the chip and the gates involved in the wire connection.
 
     Args:
         connection (wire_connection): the connection between two gates
         chip (chip): the current chip that we are working on
-        middle_x (float): the x-coordinate of the middle point
-        middle_y (float): the y-coordinate of the middle point
+        point_x (float): the x-coordinate of the point
+        point_x (float): the y-coordinate of the point
 
     Returns:
-        float: the distance from the middle of the chip to the gates involved in the connection
+        float: the distance from the point of the chip to the gates involved in the connection
     """
     gate_a_id, gate_b_id = connection
 
@@ -257,6 +233,7 @@ def calculate_distance_between_points(x1, y1, x2, y2):
     Returns:
         float: the distance between the two points
     """
+
     return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
 
 
@@ -368,9 +345,14 @@ def calculate_manhattan_distance(chip, connection):
     Returns:
         manhattan_distance: the manhattan distance
     """
+    # get the gate id's
     gate_a_id, gate_b_id = connection
+
+    # get the gate objects
     gate_a = chip.gates[gate_a_id]
     gate_b = chip.gates[gate_b_id]
+
+    # calculate the distances
     x_distance = abs(gate_a.location.x - gate_b.location.x)
     y_distance = abs(gate_a.location.y - gate_b.location.y)
 
@@ -402,6 +384,7 @@ def change_order_xy(chip, xy, reverse):
 def change_order_weighted_average(chip, reverse):
     """
     Function to sort the wire connections based on their proximity to the weighted average coordinates.
+    The weighted average in this case being a number as an average of all the gates on the chip, weighted by the connections for that gate.
 
     Args:
         chip (Chip): The current chip that we are working on.
@@ -410,7 +393,7 @@ def change_order_weighted_average(chip, reverse):
     Returns:
         wire_connections (list): The sorted wire connections based on proximity to the weighted average coordinates.
     """
-
+    # get the weighted average gate point
     weighted_x, weighted_y = calculate_weighted_point(chip, reverse)
 
     wire_connections = chip.wire_connections
@@ -437,6 +420,7 @@ def calculate_weighted_point(chip, reverse):
 
     wire_connections = chip.wire_connections
 
+    # set the variables to 0
     weighted_x = 0
     weighted_y = 0
 
@@ -445,12 +429,13 @@ def calculate_weighted_point(chip, reverse):
     # go over all the gates on our chip
     for gate in chip.gates.values():
 
+        # get the gate's x and y
         gate_x = gate.location.x
         gate_y = gate.location.y
 
         connections_per_gate = 0
 
-        # go over all the connections and add a connnection count if we it is for our current gate
+        # go over all the connections and add a connnection count if it is for our current gate
         for connection in wire_connections:
 
             if connection[0] == gate.id_num or connection[1] == gate.id_num:
@@ -468,6 +453,3 @@ def calculate_weighted_point(chip, reverse):
     true_y = weighted_y / total_connections
 
     return true_x, true_y
-
-        
-
