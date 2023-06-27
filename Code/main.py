@@ -47,8 +47,8 @@ def choose_algorithm(algorithm, chip, order_choice):
     elif algorithm == "astar":
         version = input("Version: ")
         while version not in ["optimal", "avoid_center", "avoid_gates", "avoid_both", "normal"]:
-            print("choose from ")
-            version = input("Version: optimal, avoid_center, avoid_gates, avoid_both, normal ")
+            print("choose from optimal, avoid_center, avoid_gates, avoid_both, normal")
+            version = input("Version: ")
         astar_algorithm(chip, version)
     
     # if algoritzhm is hillclimber, run the hillclimber algorithm
