@@ -68,7 +68,7 @@ class Astar:
             # found a path
             if current_node == end_node:
                 path = self.calculate_path(current_node)
-                print(f"Path found: {len(path)}")
+                # print(f"Path found: {len(path)}")
                 return path
 
             # move the current node from the open list to the closed list
