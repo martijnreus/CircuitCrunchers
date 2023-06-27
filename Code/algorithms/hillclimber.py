@@ -29,9 +29,8 @@ def hillclimber_algorithm(chip:object):
     possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
     # for every wire
     i = 0
-    start_t = 100
+    start_t = 1000
     while True:
-
         random.shuffle(chip.wire_connections)
         for connection in chip.wire_connections:
 

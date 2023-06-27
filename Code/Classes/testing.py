@@ -23,12 +23,13 @@ from plot import *
 class Testing():
 
     # make empty lists and libraries
-    def __init__(self, subject, algorithm, number_netlist, order_choice) -> None:
+    def __init__(self, subject, algorithm, number_netlist, order_choice, order) -> None:
         
         self.subject = subject
         self.algorithm = algorithm
         self.netlist = f"netlist_{int(number_netlist)}"
         self.order_choice = order_choice
+        self.order = order
         self.chip_id = f"{get_number_chip(number_netlist)}"
         self.gates_file = f"print_{get_number_chip(number_netlist)}"
 
@@ -169,7 +170,7 @@ class Testing():
         
 # main test function
 def test(subject, algorithm, number_netlist, order_choice, n):
-    
+    order = "all"
     if algorithm in ["astar", "greedy", "hillclimber"] and subject == "algorithm":
         order = input("Sorting order: ")
         while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
@@ -181,14 +182,14 @@ def test(subject, algorithm, number_netlist, order_choice, n):
 
         for number_netlist in netlists:
             # make new test object
-            testing = Testing(subject, algorithm, number_netlist, order_choice)
+            testing = Testing(subject, algorithm, number_netlist, order_choice, order)
             print(f"---chip: {testing.chip_id} and netlist: {number_netlist}-------------------")
             choose_test(testing, n, order)
     
     # just one
     else:
         # make new test object
-        testing = Testing(subject, algorithm, number_netlist, order_choice)
+        testing = Testing(subject, algorithm, number_netlist, order_choice, order)
         print(f"---chip: {testing.chip_id} and netlist: {number_netlist}-------------------")
         choose_test(testing, n, order)
         
@@ -196,44 +197,46 @@ def test(subject, algorithm, number_netlist, order_choice, n):
 def choose_test(testing, n, order):
     algorithm = testing.algorithm
     netlist = testing.netlist
+    if testing.order_choice == "random":
+        testing.order = "random" 
+    title = f"{testing.subject}_{netlist}_{algorithm}_{testing.order}"
     # test order
     if testing.subject == "order":
         
         # test random order
         if testing.order_choice == "random":
             testing.testing_random_order(algorithm, n)
-            testing.make_csv(f"random_ordertest_{netlist}_{algorithm}")
-            testing.make_histogram(f"random_ordertest_{netlist}_n_{n}")
+            testing.make_csv(title)
+            testing.make_histogram(title)
 
         # test all
         else:
             testing.testing_order(algorithm)
-            testing.make_csv(f"ordertest_{netlist}_{algorithm}")
+            testing.make_csv(title)
     
     # test algorithms
     else:
         # test the algorithms that dont give the same answer 
         if algorithm == "random2D":
             testing.average(n,"random2D")
-            testing.make_csv(f"average_{algorithm}_{netlist}_n_{n}")
-            testing.make_histogram(f"random2D_algorithmtest_{netlist}_n_{n}")
+            testing.make_csv(title)
+            testing.make_histogram(title)
 
         elif algorithm == "random":
             testing.average(n,"random")
-            testing.make_csv(f"average_{algorithm}_{netlist}_n_{n}")
-            testing.make_histogram(f"random_algorithmtest_{netlist}_n_{n}")
+            testing.make_csv(title)
+            testing.make_histogram(title)
 
         elif algorithm == "hillclimber":
             testing.average(n,"hillclimber")
-            testing.make_csv(f"average_{algorithm}_{netlist}_n_{n}")
-            testing.make_histogram(f"hillclimber_algorithmtest_{netlist}_n_{n}")
-
+            testing.make_csv(title)
+            testing.make_histogram(title)
 
         # test the algorithms that do give the same answer
         elif algorithm == "astar":
             testing.only_once("astar", order)
-            testing.make_csv(f"{algorithm}_{netlist}")
+            testing.make_csv(title)
 
         elif algorithm == "greedy":
             testing.only_once("greedy", order)
-            testing.make_csv(f"{algorithm}_{netlist}")
+            testing.make_csv(title)
