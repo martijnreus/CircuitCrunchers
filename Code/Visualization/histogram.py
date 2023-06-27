@@ -1,7 +1,23 @@
 import matplotlib.pyplot as plt
+import csv
 import numpy as np
 
-def histogram(cost_list, title):
+
+
+def make_histogram(filepath, algorithm, n, order):
+    cost_list = get_info(filepath)
+    title = f"{algorithm}_{n}times"
+    histogram(cost_list, title, algorithm)
+
+def get_info(filepath):    
+    cost_list = []
+    with open(filepath, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            cost_list.append(int(row["cost"].strip()))
+    return cost_list
+
+def histogram(cost_list, title, algorithm):
     x = cost_list
     plt.title(title)
     plt.xlabel('cost')
@@ -10,11 +26,9 @@ def histogram(cost_list, title):
 
     min_ylim, max_ylim = plt.ylim()
     plt.text(mean(x)*1.1, max_ylim*0.9, 'Mean: {:.2f}'.format(mean(x)))
-    
-    
-
+    filepath = f"./Visualization/histogram/{algorithm}/{title}"
     plt.hist(x, bins=30,color='c', alpha=0.65)
-    plt.savefig(f"./Visualization/histogram_{title}")
+    plt.savefig(filepath)
     plt.show() 
 
 def mean(x):

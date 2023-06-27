@@ -48,11 +48,13 @@ def choose_algorithm(algorithm, chip, order_choice):
     
     # if algoritzhm is hillclimber, run the hillclimber algorithm
     elif algorithm == "hillclimber":
-        hillclimber_algorithm(chip)
+        n = input("n: ")
+        hillclimber_algorithm(chip, n)
     
     # if algoritzhm is hillclimber, run the hillclimber algorithm
     elif algorithm == "annealing":
-        simulated_annealing(chip)
+        n = input("n: ")
+        simulated_annealing(chip, n)
 
 def get_number_chip(netlist_number):
     if netlist_number in ["1","2","3"]:
@@ -108,7 +110,7 @@ def main2():
     # if test
     if testing:
 
-        if algorithm in ["hillclimber","random", "random2D"]:
+        if algorithm in ["hillclimber","random", "random2D", "annealing"]:
             n = int(input("n: "))
         if testing_type == "order":
             # ask if later we want to test the specified orders or the random ordering sort.
@@ -157,7 +159,7 @@ def main2():
         visualize(chip, title)
 
         chip.output_to_csv()
-
+        
 
 if __name__ == "__main__":
     main2()
