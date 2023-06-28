@@ -403,7 +403,7 @@ def change_order_weighted_average(chip, reverse):
         wire_connections (list): The sorted wire connections based on proximity to the weighted average coordinates.
     """
     # get the weighted average gate point
-    weighted_x, weighted_y = calculate_weighted_point(chip, reverse)
+    weighted_x, weighted_y = calculate_weighted_point(chip)
 
     wire_connections = chip.wire_connections
 
@@ -415,13 +415,12 @@ def change_order_weighted_average(chip, reverse):
     return wire_connections
 
 
-def calculate_weighted_point(chip, reverse):
+def calculate_weighted_point(chip):
     """
     Function to calculate the weighted average coordinates.
 
     Args:
         chip (Chip): The current chip that we are working on.
-        reverse (bool): If True, sort the connections in reverse order (farthest to nearest).
 
     Returns:
         x, y: the coordinate of the weighted average of all the gates.
