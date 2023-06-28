@@ -1,3 +1,7 @@
+###################################################
+# initializes grid class 
+###################################################
+
 # create a grid, with a width, heigth and an amount of layers
 class Grid:
     """

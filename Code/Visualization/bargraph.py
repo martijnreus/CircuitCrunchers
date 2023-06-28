@@ -1,17 +1,20 @@
+###################################################
+# make a bar graph from data
+###################################################
 import matplotlib.pyplot as plt
 
-
-
+# make bar graph
 def bargraph(cost_library, variables):
+    # for all netlists
     for netlist in cost_library:
         cost = []
-        # print(netlist)
+        
+        # label
         plt.xlabel("x")
         plt.ylabel("cost")
         plt.title('Cost')
 
+        # make plot
         cost = cost_library[netlist]
-        # print(cost)
         plt.bar(variables,cost)
         plt.savefig(f"./Visualization/bargraph_{netlist}")
-        # plt.show()

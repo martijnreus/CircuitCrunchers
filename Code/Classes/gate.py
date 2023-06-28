@@ -1,3 +1,7 @@
+###################################################
+# initializes gate class 
+###################################################
+
 # create a gate, identified by id number. and location
 class Gate:
     """

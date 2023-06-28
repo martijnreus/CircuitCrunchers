@@ -32,18 +32,6 @@ class Hillclimber:
     def __init__(self, chip, subject, n) -> None:
         """
         Initialize the Hillclimber object.
-
-        with Variables:
-            subject (str): The subject of the Hillclimber.
-            wire (Wire): The Wire object representing the wire being optimized.
-            chip (Chip): The Chip object representing the chip.
-            n (int): The number associated with the Hillclimber.
-            old_wire (list): The wire parts of the wire before optimization.
-            old_cost (int): The cost of the chip before optimization.
-            new_cost (int): The cost of the chip after optimization.
-            possibilities (list): The possible movement directions for optimization.
-            cost_list (list): The list of costs during optimization.
-            title (str): The title of the Hillclimber for file output.
         """
 
         # get the hilclimber info

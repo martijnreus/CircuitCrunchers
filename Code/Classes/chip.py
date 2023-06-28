@@ -1,4 +1,10 @@
+###################################################
+# initializes chip class 
+###################################################
+# import from libraries
 import csv
+
+# import from classes
 from location import *
 from gate import *
 from wire import *

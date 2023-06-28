@@ -1,23 +1,31 @@
+###################################################
+# make a 3D plot to show wires and gates on chip
+###################################################
+# import from libraries
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
-import time
- 
 import sys
+
+# import classes
 sys.path.append("../Classes")
 from gate import *
 from location import *
 
+# visualize the wires and gates
 def visualize(chip, title):
+    """
+    Visualize the wires and gates of a chip in a 3D plot.
 
+    Args:
+        chip (object): The chip object containing gate and wire information.
+        title (str): The title for the plot.
+    """
     # GENERAL PLOT
     # Create a 3D plot
     fig = plt.figure(figsize=(10, 10))
-    # ax = plt.axes(projection='3d')
-    
     ax = fig.add_subplot(111, projection='3d')
     ax.text2D(0.45, 0.95, f"cost: {chip.calculate_cost()}", transform=ax.transAxes)
-
 
     # Set labels and title
     ax.set_xlabel('X')
@@ -27,7 +35,6 @@ def visualize(chip, title):
 
     # GATES
     # Create gate points from the CSV file
-
     gate_points = chip.gate_list
 
     # Extract x, y, and z coordinates from gate points

@@ -9,7 +9,6 @@
 # algorithms that are based on randomness will be 
 # tested n times
 ###################################################
-
 # import from libraries
 import sys
 import csv
@@ -17,17 +16,25 @@ import os
 from csv import writer
 from datetime import datetime
 from location import *
+
+# import classes
 from gate import *
 from wire import *
 from grid import *
 from chip import *
+
+# import main
 sys.path.append("..")
 from main import *
+
+# import algorithms
 sys.path.append("../algorithms")
 from greedy import *
 from randomize import *
 from randomize_twee_d import *
 from astar import *
+
+# import visualization
 sys.path.append("../Visualization")
 from bargraph import *
 from histogram import *
@@ -43,13 +50,6 @@ class Testing():
     def __init__(self, subject, algorithm, number_netlist, order_choice, order) -> None:
         """
         Initialize the Testing object.
-
-        Args:
-            subject (str): The subject of the testing (either "order" or "algorithm").
-            algorithm (str): The algorithm to be tested.
-            number_netlist (str): The number of the netlist to be tested.
-            order_choice (str): The choice of sorting order for testing algorithms.
-            order (str): The specific sorting order to be used (valid for algorithm testing).
 
         Preconditions:
             - subject must be either "order" or "algorithm".
@@ -351,13 +351,6 @@ def test(subject, algorithm, number_netlist, order_choice, n):
     """
     Perform the main test based on the subject, algorithm, and options chosen.
 
-    Args:
-        subject (str): The subject of the test.
-        algorithm (str): The algorithm to be tested.
-        number_netlist (str): The number of the netlist to be tested.
-        order_choice (str): The choice of sorting order.
-        n (int): The number of times the test should be run.
-
     Preconditions:
         - subject must be a valid subject name.
         - algorithm must be a valid algorithm name.
@@ -409,11 +402,6 @@ def test(subject, algorithm, number_netlist, order_choice, n):
 def choose_test(testing, n, order):
     """
     Choose the appropriate test based on the algorithm and subject.
-
-    Args:
-        testing (Testing): The Testing object.
-        n (int): The number of times the test should be run.
-        order (str): The sorting order to be used.
 
     Preconditions:
         - testing must be a valid Testing object.
