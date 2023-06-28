@@ -68,18 +68,24 @@ def get_number_chip(netlist_number):
     
     return number_chip
 
-def main2():
+def main():
+
     # check for second argument
     if len(argv) in [1,3]:
         n = 0
         testing = False
-        # we want to do testing
+
+        # in case we want to do testing
         if len(argv) == 3 and argv[1] == "test":
            
             testing = True
+
+            # check if a valid test option was given
             if argv[2] not in ["order", "algorithm"]:
                 print("Usage: main.py test[optional] testingtype[required in case of test]")
                 sys.exit()
+
+            # set the testing type
             else:
                 testing_type = argv[2]
 
@@ -104,14 +110,17 @@ def main2():
         
     # unclear what the user wants, quit the program
     else:
-        print("Usage: main.py test[optional] testingtype")
-        sys.exit()
+        print("Usage: main.py test[optional] testingtype[required in case of test]")
+            sys.exit()
     
-    # if test
+    # if testing we should run the following code
     if testing:
 
+        # if we are testing algorithms with randomness, we should ask how many times we should run it (n)
         if algorithm in ["hillclimber","random", "random2D", "annealing"]:
             n = int(input("n: "))
+
+        # 
         if testing_type == "order":
             # ask if later we want to test the specified orders or the random ordering sort.
             order_choice = input("Test all orders or random order? ")
@@ -126,7 +135,7 @@ def main2():
             # check what order we want to run / test
             test("algorithm", algorithm, netlist_number, order_choice, n)
 
-    # run the normal process
+    # run the normal process (not testing)
     else:
         if algorithm == "astar":
             version = input("Version: ")
@@ -154,12 +163,14 @@ def main2():
 
         # run algorithm and output
         choose_algorithm(algorithm, chip, order)
+
         # print("final:", chip.calculate_cost())
+
         title = f"{algorithm}_{netlist}"
         visualize(chip, title)
 
         chip.output_to_csv()
-        
+
 
 if __name__ == "__main__":
-    main2()
+    main()

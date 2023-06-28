@@ -257,7 +257,7 @@ def change_order_quadrant(chip, reverse):
     # Sort wire connections by quadrant first, and then by distance within each quadrant
     wire_connections.sort(key=lambda connection: (
         is_same_quadrant(connection, chip, center_x, center_y),
-        -calculate_distance(connection, chip)  # negate the distance to sort in reverse order within the quadrant
+        calculate_distance(connection, chip)
     ), reverse=reverse)
 
     return wire_connections
