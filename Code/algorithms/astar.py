@@ -6,6 +6,9 @@ from wire import *
 from grid import *
 
 class PathNode:
+    """
+    Represents a node in the pathfinding algorithm.
+    """
     
     def __init__(self, parent: object, location: object):
 
@@ -20,7 +23,8 @@ class PathNode:
 
         self.extra_cost = 0
 
-    def calculate_f_cost(self):
+    # calculates the f_cost of the node based on g_cost, h_cost, and extra_cost.
+    def calculate_f_cost(self):      
         self.f_cost = self.g_cost + self.h_cost + self.extra_cost
         self.add_wire_cost()
         return self.f_cost
@@ -38,6 +42,9 @@ class PathNode:
         return self.location == other.location
 
 class Astar:
+    """
+    A* search algorithm implementation.
+    """
 
     def __init__(self, wires, wire_connections, grid, gates, version):
         self.wires = wires
@@ -46,8 +53,8 @@ class Astar:
         self.gates = gates
         self.version = version
 
+    # find a path and return a list of pathNodes if it has been found
     def find_path(self, wire):
-        # zorg ervoor dat alle path nodes met een kabel een cost van 300 extra krijgen 
         start_node = PathNode(None, wire.gateA.location)
         end_node = PathNode(None, wire.gateB.location)
 
@@ -68,7 +75,6 @@ class Astar:
             # found a path
             if current_node == end_node:
                 path = self.calculate_path(current_node)
-                # print(f"Path found: {len(path)}")
                 return path
 
             # move the current node from the open list to the closed list
@@ -97,11 +103,11 @@ class Astar:
                             if self.check_is_on_wire(neighbour):
                                 neighbour.has_wire = True
 
-                            # this neighbour would create a collision
+                            # this neighbour would create a collision so add a high amount of cost 
                             if self.check_has_collision(current_node, neighbour):
                                 neighbour.add_additional_f_cost(99999)
 
-                            # Add extra cost depending on the mode the algoritm is in
+                            # Add extra cost depending on the mode the algorithm is in
                             if (self.version != "normal"):
                                 self.pick_node_cost_version(neighbour, wire)
 
