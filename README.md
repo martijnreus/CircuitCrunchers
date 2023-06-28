@@ -23,13 +23,20 @@ has to be found with the help of algoritms and heuristics. The chips consists of
 - **Random**: Random sorting order sorts the netlist in a random way, every time it is run will give a different order of the netlist.
 - **Short**: This sorting order sorts the netlists by the distance between the two gates that it is refering to. In this case starting with the shortest distances going to the longest.
 - **Long**: This order is the complete reverse of the "Short" sorting order, ordering from longest to shortest distance between the two gates.
-- **Least-connections**: Least connections orders the netlist based on how many connections one of the two gates has. So for example if we are talking about connection 1 from gate A to B. Where A has 3 different connections to other gates and gate B has 4 connections, this connection will be sorted based on the number "4" compared to other connections.
-- **Most-connections**:
-- **Sum-lowest**:
-- **Sum-highest**:
-- **Basic**:
-- **Basic**:
-- **Basic**:
+- **Least-connections**: Least connections orders the netlist based on how many connections one of the two gates has. So for example if we are talking about connection 1 from gate A to B. Where A has 3 different connections to other gates and gate B has 4 connections, this connection will be sorted based on the number "4" compared to other connections. They are sorted from least to most connections.
+- **Most-connections**: This sorting order is the complete opposite of "least-connections", ordering the connections from most to least connections.
+- **Sum-lowest**: Similar to the least- and most-connections, however in this sorting method it sorts based on the sum of both gates' connection count. In the case of the example given in "Least-connections" this would result in 4 + 3 = 7 connections. The connections will be sorted from lowest to highest sum. 
+- **Sum-highest**: This sorting order is the complete opposite of the "Sum-lowest" sorting order, in this case ordering the connections from highest to lowest sum.
+- **Middle**: Sorts the connections based on their proximity to the middle of the chip. This is calculated by checking what the middle of the chip is and then for every connection, takes the closest gate of the two and calculates it's distance to the middle. Based on this distance , the connections will be sorted from shortest distance to longest.
+- **Inter-quadrant**: Inter quadrant sorting method sorts on two factors. Before it can sort ,it divides the chip into 4 equal quadrants (dividing from the middle point). Then it sorts on the first factor, the position of the two gates. It divides all the connections based on whether the two gates are in the same quadrant or whether they are in different quadrants. These are then also sorted on their distance from shortest to longest.
+- **Intra-quadrant**: Intra quadrant is the complete opposite of the "Inter-quadrant" sorting method, so starting with the longest connections between gates in different quadrants all the way to the shortest connections between gates in the same quadrant.
+- **Manhattan**: Manhattan is mainly used in grid like objects, it calculates the distance slightly different than normally. It does this by taking the absolute distance between the x coordinate of both gates and the y coordinate for both gates and adding them together. The connections with t
+- **X**:
+- **Y**:
+- **X-rev**:
+- **Y-rev**:
+- **Weighted**:
+- **Weighted-rev**:
 
 
 # Experiments
