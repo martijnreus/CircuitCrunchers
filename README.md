@@ -42,6 +42,14 @@ has to be found with the help of algoritms and heuristics. The chips consists of
 # Experiments
 
 ## Use
+How to run a algorithm:
+
+**If you want to run a single algorithm on a single netlist:**
+
+```shell
+python3 main.py
+```
+
 How to use the test function:
  
 **If you want to test the algorithm:**
@@ -54,7 +62,7 @@ python3 main.py test algorithm
 python3 main.py test order
 ```
 
-**In both cases you will be asked to input different things:**
+**In all cases you will be asked to input different things:**
 
 **Netlist**: Here you have to choose a netlist, which is a number from 1 to 9 or all
 
