@@ -1,22 +1,14 @@
 import matplotlib.pyplot as plt
+from histogram import get_info
+import numpy as np
 
-
-
-
-
-def graph(cost_list):
+def graph(x,cost_list, title):
         
-    x = []
-    y = []
-    for index in range(len(cost_list)): 
-        fig = plt.figure(figsize=(10, 10))
-        for number in range(len(cost_list[index])):
-            x.append(number)
-            y.append(cost_list[index])
-
-        plt.plot(x, y)
+    x = list(range(x))
+    y = cost_list
+    plt.plot(x,y)
 
     plt.ylabel('cost')
-    plt.savefig("./Visualization/graph")
+    plt.savefig(f"./Visualization/{title}")
     plt.show()
-    
+

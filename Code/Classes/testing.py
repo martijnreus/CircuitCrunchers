@@ -164,10 +164,10 @@ class Testing():
             # load everything
             chip.load_gates()
             chip.load_netlist()
-            cost_list = hillclimber_algorithm(chip, n)
-            for cost in cost_list:
-                info = ["better", cost]
-                self.write_to_csv(f"hillclimber_costlist_{n}",info)
+            hillclimber_algorithm(chip, n)
+            # for cost in cost_list:
+            #     info = ["better", cost]
+            #     self.write_to_csv(f"{self.title}",info)
         
         # for the annealing
         elif algorithm == "annealing":
@@ -175,10 +175,10 @@ class Testing():
             # load everything
             chip.load_gates()
             chip.load_netlist()
-            cost_list= simulated_annealing(chip, n)
-            for cost in cost_list:
-                info = ["better", cost]
-                self.write_to_csv(f"simulated_annealing_costlist_{n}",info)
+            simulated_annealing(chip, n)
+            # for cost in cost_list:
+            #     info = ["better", cost]
+            #     self.write_to_csv(f"{self.title}",info)
 
     # test the algorithms that always give the same answer
     def only_once(self,algorithm, order):
@@ -212,7 +212,7 @@ class Testing():
 
 
             
-    # main test function
+# main test function
 def test(subject, algorithm, number_netlist, order_choice, n):
     order = "all"
     if algorithm in ["astar", "greedy", "hillclimber"] and subject == "algorithm":

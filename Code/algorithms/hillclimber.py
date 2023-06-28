@@ -4,27 +4,34 @@
 import sys
 import math
 import random
+import os
+import csv
 from randomize import random_add_wire
 from greedy import greedy_algorithm
 from astar import *
+from csv import writer
 sys.path.append("../Classes")
 from gate import *
 from location import *
 from wire import *
 from grid import *
-
-
+sys.path.append("../Visualization")
+from graph import *
+from histogram import *
 class Hillclimber:
-    def __init__(self, chip) -> None:
+    def __init__(self, chip, subject, n) -> None:
+        self.subject = subject
         self.wire: object
         self.chip = chip
+        self.n = n
         
         self.old_wire = []
         self.old_cost = 0
         self.new_cost = 0
         self.possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
         self.cost_list = []
-    
+        self.title = f"{chip.netlist}_{self.subject}_{n}"
+
     def start_wire(self, connection):
         # get gate a and gate b
         gate_a = connection[0]
@@ -43,16 +50,45 @@ class Hillclimber:
     def start_with_astar(self, version):
         astar_algorithm(self.chip, version)
     
-    def check_is_better(self):
+    def check_is_better(self, i):
         if self.new_cost <= self.old_cost: 
             self.old_wire = self.wire.wireparts
             self.old_cost = self.new_cost
             print("accept:", self.new_cost)
             self.cost_list.append(self.old_cost)
+            self.write_to_csv()
+            
         else:
             self.wire.wireparts = self.old_wire
-    
-    
+    def make_graph(self):
+        cost_list = get_info(self.filepath)
+        x = list(range(len(cost_list)))
+        graph(x,cost_list, self.title)
+    # output to csv
+    def make_csv(self, filepath):
+        
+        with open(filepath, 'w', newline='') as newfile:
+            writer = csv.writer(newfile, dialect='excel')
+            writer.writerow(["test", "cost"])
+
+    def write_to_csv(self):
+        filepath = f"output/algorithm/{self.subject}/{self.title}.csv"
+        
+        if not os.path.exists(filepath):
+            self.make_csv(filepath)
+
+        with open(filepath, 'a') as f_object:
+            # Pass this file object to csv.writer()
+            # and get a writer object
+            writer_object = writer(f_object)
+        
+            # Pass the list as an argument into
+            # the writerow()
+            writer_object.writerow(["new_cost: ",self.old_cost])
+        
+            # Close the file object
+            f_object.close()
+
     def check_is_better_annealing(self, start_t, i):
         difference = self.old_cost - self.new_cost
         temperature = start_t*0.999999999**i
@@ -63,6 +99,7 @@ class Hillclimber:
             self.old_cost = self.new_cost
             print("accept:", self.new_cost)
             self.cost_list.append(self.old_cost)
+            make_graph(i, self.old_cost, self.title + "annealing")
         else:
             self.wire.wireparts = self.old_wire
         
@@ -87,7 +124,7 @@ def hillclimber_algorithm(chip:object, n):
     """
     # for every wire
     i = 0
-    hillclimber = Hillclimber(chip)
+    hillclimber = Hillclimber(chip, "hillclimber", n)
     hillclimber.start_with_greedy()
 
     while True:
@@ -102,7 +139,7 @@ def hillclimber_algorithm(chip:object, n):
             while True:
                 
                 hillclimber.make_new_wire()
-                hillclimber.check_is_better()
+                hillclimber.check_is_better(i)
                 j += 1
                 # repeat this ... times
                 if j == 20:
@@ -112,11 +149,11 @@ def hillclimber_algorithm(chip:object, n):
         # repeat this ... times
         if i == n:
             break
-    return hillclimber.cost_list
+    
 
 def simulated_annealing(chip:object, n):
     i = 0
-    hillclimber = Hillclimber(chip)
+    hillclimber = Hillclimber(chip, "annealing", n)
     hillclimber.start_with_greedy()
     start_t = 1000
     while True:
