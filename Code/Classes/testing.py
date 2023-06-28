@@ -32,10 +32,10 @@ from greedy import *
 from randomize import *
 from randomize_twee_d import *
 from astar import *
+from order_sorting import change_netlist_order
 
 # import visualization
 sys.path.append("../Visualization")
-from bargraph import *
 from histogram import *
 from plot import *
 
@@ -46,7 +46,7 @@ class Testing():
     """
 
     # make empty lists and libraries
-    def __init__(self, subject, algorithm, number_netlist, order_choice, order) -> None:
+    def __init__(self, subject, algorithm, number_netlist, order_choice, order, n) -> None:
         """
         Initialize the Testing object.
 
@@ -64,6 +64,7 @@ class Testing():
         self.algorithm = algorithm
         self.order_choice = order_choice
         self.order = order
+        self.n = n
 
         # get the info for the chip
         self.netlist = f"netlist_{int(number_netlist)}"
@@ -184,7 +185,7 @@ class Testing():
             chip.load_gates()
             chip.load_netlist()
 
-            choose_algorithm(algorithm, chip, order_choice)
+            choose_algorithm(algorithm, chip, order_choice, self.n)
             cost = chip.calculate_cost()
             print(f"sort: {order_choice} || final score", cost)
             info = [f"sort_{order_choice}_{algorithm}", cost]
@@ -206,7 +207,7 @@ class Testing():
         """
         # loop to run the test n amount of times
         for number in range(n):
-
+            print("run: ", number)
             # make new chip
             chip = Chip(self.chip_id, self.netlist, self.gates_file)
 
@@ -215,7 +216,7 @@ class Testing():
             chip.load_netlist()
 
             # run the random algorithm and calculate the cost
-            choose_algorithm(algorithm, chip, "random")
+            choose_algorithm(algorithm, chip, "random", self.n)
             cost = chip.calculate_cost()
             info = [f"random_try_{number}", cost]
             self.write_to_csv(self.title, info)
@@ -239,6 +240,7 @@ class Testing():
         # for the random algorithm
         if algorithm == "random":
             for number in range(n):
+                print("run: ", number)
                 chip = Chip(self.chip_id, self.netlist, self.gates_file)
                 # load everything
                 chip.load_gates()
@@ -251,6 +253,7 @@ class Testing():
         # for the 2D random algorithm
         elif algorithm == "random2D":
             for number in range(n):
+                print("run: ", number)
                 chip = Chip(self.chip_id, self.netlist, self.gates_file)
                 # load everything
                 chip.load_gates()
@@ -261,7 +264,7 @@ class Testing():
                 self.write_to_csv(self.title, info)
 
     # test the hillclimber algorithms
-    def hillclimber(self,n,algorithm):
+    def hillclimber(self,n,algorithm, order):
         """
         Perform automated testing for hillclimber algorithm.
 
@@ -281,7 +284,8 @@ class Testing():
             # load everything
             chip.load_gates()
             chip.load_netlist()
-            hillclimber_algorithm(chip, n)
+            chip.wire_connections = change_netlist_order(chip, order)
+            hillclimber_algorithm(chip, n, order)
         
         # for the annealing
         elif algorithm == "annealing":
@@ -290,7 +294,8 @@ class Testing():
             # load everything
             chip.load_gates()
             chip.load_netlist()
-            simulated_annealing(chip, n)
+            chip.wire_connections = change_netlist_order(chip, order)
+            simulated_annealing(chip, n, order)
 
     # test the algorithms that always give the same answer
     def only_once(self,algorithm, order):
@@ -336,7 +341,7 @@ class Testing():
             chip.load_netlist()
 
             # run algorithm and calulate cost
-            choose_algorithm(algorithm, chip, order)
+            choose_algorithm(algorithm, chip, order, self.n)
             cost = chip.calculate_cost()
 
             # print, visualize and produce output
@@ -361,7 +366,7 @@ def test(subject, algorithm, number_netlist, order_choice, n):
     order = "all"
 
     # input sorting order
-    if algorithm in ["astar", "greedy", "hillclimber"] and subject == "algorithm":
+    if algorithm in ["astar", "greedy", "hillclimber", "annealing"] and subject == "algorithm":
         order = input("Sorting order: ")
 
         while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
@@ -376,7 +381,7 @@ def test(subject, algorithm, number_netlist, order_choice, n):
         for number_netlist in netlists:
 
             # make new test object
-            testing = Testing(subject, algorithm, number_netlist, order_choice, order)
+            testing = Testing(subject, algorithm, number_netlist, order_choice, order, n)
             
             # delete old csv
             testing.delete_csv()
@@ -388,7 +393,7 @@ def test(subject, algorithm, number_netlist, order_choice, n):
     # just one
     else:
         # make new test object
-        testing = Testing(subject, algorithm, number_netlist, order_choice, order)
+        testing = Testing(subject, algorithm, number_netlist, order_choice, order, n)
         
         # delete old csv
         testing.delete_csv()
@@ -451,11 +456,11 @@ def choose_test(testing, n, order):
         
         # hillclimber
         elif algorithm == "hillclimber":
-            testing.hillclimber(n,"hillclimber")
+            testing.hillclimber(n,"hillclimber", order)
 
         # annealing
         elif algorithm == "annealing":
-            testing.hillclimber(n,"annealing")
+            testing.hillclimber(n,"annealing", order)
 
         # test the algorithms that do give the same answer
         # astar

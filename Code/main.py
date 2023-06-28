@@ -14,7 +14,6 @@ from testing import *
 # import visualization
 sys.path.append("Visualization")
 from plot import *
-from graph import *
 
 # import algorithms
 sys.path.append("algorithms")
@@ -26,7 +25,7 @@ from astar import *
 from order_sorting import *
 
 # choose the algorithm
-def choose_algorithm(algorithm, chip, order_choice):
+def choose_algorithm(algorithm, chip, order_choice, n):
     """
     Function that selects the algorithm to use for our simulation.
 
@@ -53,13 +52,11 @@ def choose_algorithm(algorithm, chip, order_choice):
     
     # if algoritzhm is hillclimber, run the hillclimber algorithm
     elif algorithm == "hillclimber":
-        n = input("n: ")
-        hillclimber_algorithm(chip, n)
+        hillclimber_algorithm(chip, n, order_choice)
     
     # if algoritzhm is hillclimber, run the hillclimber algorithm
     elif algorithm == "annealing":
-        n = input("n: ")
-        simulated_annealing(chip, n)
+        simulated_annealing(chip, n, order_choice)
 
 # get number of chip associated with netlist
 def get_number_chip(netlist_number):
@@ -137,7 +134,7 @@ def main():
             test("order", algorithm, netlist_number, order_choice, n)
             
         elif testing_type == "algorithm":
-            order_choice = None
+            order_choice =None
             # check what order we want to run / test
             test("algorithm", algorithm, netlist_number, order_choice, n)
 
@@ -162,7 +159,8 @@ def main():
                 print("choose from optimal, avoid_center, avoid_gates, avoid_both, normal")
                 version = input("Version: ")
                 astar_algorithm(chip, version)
-
+        if algorithm in ["annealing", "hillclimber"]:
+            n = int(input("n: "))
         # get sorting order
         order = input("Sorting order: ")
         while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
@@ -170,7 +168,7 @@ def main():
         
         # run algorithm and output
         print(f"---chip: {number_chip} and netlist: {netlist_number}-------------------")    
-        choose_algorithm(algorithm, chip, order)
+        choose_algorithm(algorithm, chip, order, n)
 
         # visualize and output
         title = f"{algorithm}_{netlist}"

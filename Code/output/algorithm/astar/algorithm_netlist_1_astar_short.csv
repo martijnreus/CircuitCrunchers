@@ -4,3 +4,8 @@ astar_algorithm_avoid_center_short,20
 astar_algorithm_avoid_gates_short,20
 astar_algorithm_avoid_both_short,22
 astar_algorithm_normal_short,20
+astar_algorithm_optimal_short,20
+astar_algorithm_avoid_center_short,20
+astar_algorithm_avoid_gates_short,20
+astar_algorithm_avoid_both_short,22
+astar_algorithm_normal_short,20

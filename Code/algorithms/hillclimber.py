@@ -4,9 +4,9 @@
 ###################################################
 # import from libraries
 import sys
-import math
 import random
 import os
+import math
 import csv
 
 # import algorithms
@@ -24,28 +24,27 @@ from grid import *
 
 # import visualization
 sys.path.append("../Visualization")
-from graph import *
 from histogram import *
 
 # class hillclimber
 class Hillclimber:
-    def __init__(self, chip, subject, n) -> None:
+    def __init__(self, chip, subject, n, order) -> None:
         """
         Initialize the Hillclimber object.
         """
-
         # get the hilclimber info
         self.subject = subject
         self.wire: object
         self.chip = chip
         self.n = n
+        self.order = order
         
         # initialize empty class variables
         self.old_wire = []
         self.old_cost = 0
         self.new_cost = 0
         self.cost_list = []
-        self.title = f"{chip.netlist}_{self.subject}_{n}"
+        self.title = f"{chip.netlist}_{self.subject}_{n}_{self.order}"
 
         # initialize possibilities
         self.possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
@@ -108,7 +107,7 @@ class Hillclimber:
             self.wire.wireparts = self.old_wire
 
     # check for simulated annealing
-    def check_is_better_annealing(self, start_t, i):
+    def check_is_better_annealing(self, start_t, i, n):
         """
         Check if the new cost is better than the old cost based on the acceptance probability in simulated annealing.
 
@@ -118,8 +117,9 @@ class Hillclimber:
         """
         # calculate the accepting chance
         difference = self.old_cost - self.new_cost
-        temperature = start_t*0.999999999**i
-        accept = (2 ** difference)/temperature
+        # temperature = start_t-(start_t/n)*i
+        temperature = start_t*0.99999**i
+        accept = 2**(difference / temperature)
         r = random.random()
 
         # if accepting, make change
@@ -189,7 +189,7 @@ class Hillclimber:
             f_object.close()
 
 # main hillclimber algorithm
-def hillclimber_algorithm(chip:object, n):
+def hillclimber_algorithm(chip:object, n, order):
     """
     Perform the hill climbing algorithm to optimize wire connections on a chip.
 
@@ -202,14 +202,13 @@ def hillclimber_algorithm(chip:object, n):
     """
 
     # make hillclimber object
-    i = 0
-    hillclimber = Hillclimber(chip, "hillclimber", n)
+    hillclimber = Hillclimber(chip, "hillclimber", n, order)
 
     # start with greedy algorithm
     hillclimber.start_with_greedy()
 
     # randomly get a wire and change it via the random algorithm
-    while True:
+    for number in range(n):
         # shuffle connections
         random.shuffle(chip.wire_connections)
         
@@ -219,25 +218,16 @@ def hillclimber_algorithm(chip:object, n):
             # make new wire
             hillclimber.start_wire(connection)
 
-            j = 0
             # continue to make new wires and check if the cost is better
-            while True:
+            for i in range(2):
                 
                 # make and check
                 hillclimber.make_new_wire()
                 hillclimber.check_is_better(i)
-                j += 1
 
-                # repeat this 2 times
-                if j == 2:
-                    break
-        i += 1
-        # repeat this n times
-        if i == n:
-            break
     
 # simulated annealing add-on
-def simulated_annealing(chip:object, n):
+def simulated_annealing(chip:object, n, order):
     """
     Perform the simulated annealing algorithm for optimizing wire connections in a chip.
 
@@ -247,36 +237,28 @@ def simulated_annealing(chip:object, n):
     """
     # make hillclimber object
     i = 0
-    hillclimber = Hillclimber(chip, "annealing", n)
+    hillclimber = Hillclimber(chip, "annealing", n, order)
     hillclimber.start_with_greedy()
 
     # define start
-    start_t = 1000
+    start_t = 5
 
-    #randomly get a wire and change it via the random algorithm
-    while True:
+    # randomly get a wire and change it via the random algorithm
+    for number in range(n):
         # shuffle connections
         random.shuffle(chip.wire_connections)
-        # go through shuffled list
+        
         # go through shuffled list
         for connection in chip.wire_connections:
             
             # make new wire
             hillclimber.start_wire(connection)
 
-            j = 0
-            # continue to make new wires and check if the cost is accepted
-            while True:
+            # continue to make new wires and check if the cost is better
+            for i in range(2):
                 
                 # make and check
                 hillclimber.make_new_wire()
-                hillclimber.check_is_better_annealing(start_t, i)
-                j += 1
+                hillclimber.check_is_better_annealing( start_t, number, n)
 
-                # repeat this 2 times
-                if j == 2:
-                    break
-        i += 1
-        # repeat this n times
-        if i == n:
-            break
+    
