@@ -18,15 +18,15 @@ has to be found with the help of algoritms and heuristics. The chips consists of
 - **Hillclimber**: The hillclimber algotithm uses the greedy or astar algorithm as a basis and randomly takes one wire of that solution. This wire will then randomly be laid differently and if the cost is better, it will keep the change. The add-on of simulated annealing will keep a bit of randomness in the decision.
 
 ## Sorting Orders ##
-- **Basic**:
-- **Basic**:
-- **Basic**:
-- **Basic**:
-- **Basic**:
-- **Basic**:
-- **Basic**:
-- **Basic**:
-- **Basic**:
+- **Basic**: This sorting order just takes the unchanged netlist connections from top to bottom.
+- **Reverse**: Reverse sorting order takes the basic order in the netlists and merely reverses it (essentially starting at the bottom)
+- **Random**: Random sorting order sorts the netlist in a random way, every time it is run will give a different order of the netlist.
+- **Short**: This sorting order sorts the netlists by the distance between the two gates that it is refering to. In this case starting with the shortest distances going to the longest.
+- **Long**: This order is the complete reverse of the "Short" sorting order, ordering from longest to shortest distance between the two gates.
+- **Least-connections**: Least connections orders the netlist based on how many connections one of the two gates has. So for example if we are talking about connection 1 from gate A to B. Where A has 3 different connections to other gates and gate B has 4 connections, this connection will be sorted based on the number "4" compared to other connections.
+- **Most-connections**:
+- **Sum-lowest**:
+- **Sum-highest**:
 - **Basic**:
 - **Basic**:
 - **Basic**:
