@@ -10,7 +10,7 @@ class Wire:
 
     def add_wire_part(self, direction: object)-> None:
         self.wireparts.append(WireUnit(self.get_wire_part_start(),self.get_wire_part_end(direction)))
-        
+
     def get_wire_part_start(self):
         # Add wire to gateA if there is no wire yet
         if (self.get_wire_length() == 0):
@@ -18,7 +18,7 @@ class Wire:
         # add wire to the last wire part if there is not
         else:
             return self.wireparts[self.get_wire_length() - 1].to_location
-        
+
     def get_wire_part_end(self, direction):
 
         # add the direction to the begin_position
@@ -31,7 +31,7 @@ class Wire:
 
     def remove_wire_part(self)-> int:
         return self.wireparts.pop()
-    
+
     def check_is_connected(self)-> bool:
         # checks if the location of the last wire matches the location of gateB
         if self.wireparts[len(self.wireparts) -1].to_location.x == self.gateB.location.x:
@@ -39,10 +39,10 @@ class Wire:
                 if self.wireparts[len(self.wireparts)- 1].to_location.z == self.gateB.location.z:
                     return True
         return False
-    
+
     def get_wire_length(self)-> list[int]:
         return len(self.wireparts)
-    
+
     def clear_wire(self):
         self.wireparts = []
 
