@@ -20,6 +20,7 @@ class Chip():
     def __init__(self, chip_id: str, netlist: str, gates: str)-> None:
         """
         Initialize a Chip object with the given chip ID, netlist, and gates.
+
         Post-conditions:
             - Initializes a Chip object with the provided attributes:
             chip_id (str): The ID of the chip.
@@ -49,8 +50,10 @@ class Chip():
     def load_netlist(self):
         """
         Load the connections from the netlist file.
+
         Pre-conditions:
             - Assumes the netlist file exists and is in the correct format.
+
         Post-conditions:
             - Adds the wire connections to the `wire_connections` list.
             - Creates wire objects and adds them to the `wires` dictionary.
@@ -61,8 +64,8 @@ class Chip():
             reader = csv.DictReader(file)
 
             for row in reader:
-                # get info from file
 
+                # get info from file
                 gate_a_id = int(row["chip_a"])
                 gate_b_id = int(row["chip_b"])
                 gate_a = self.gates[gate_a_id]
@@ -78,11 +81,12 @@ class Chip():
 
     # load gates
     def load_gates(self)-> None:
-
         """
         Load the gates from the gates file.
+
         Pre-conditions:
             - Assumes the gates file exists and is in the correct format.
+
         Post-conditions:
             - Adds the gates to the `gates` dictionary.
             - Updates the `gate_list` attribute.
@@ -99,7 +103,7 @@ class Chip():
 
             for row in reader:
 
-                # get info from file 
+                # get info from file
                 gate_id = int(row["chip"])
                 x = int(row["x"])
                 y = int(row["y"])
@@ -112,7 +116,7 @@ class Chip():
                 # make new location
                 new_location = Location(x, y, z)
 
-                # make new gate and add to gates 
+                # make new gate and add to gates
                 new_gate = Gate(gate_id, new_location)
                 self.gates[gate_id] = new_gate
                 self.gate_list.append(new_gate)
@@ -125,7 +129,7 @@ class Chip():
             self.grid = Grid(max_x +1, max_y +1, 7)
 
     # output
-    def output_to_csv(self)-> None:
+    def output_to_csv(self) -> None:
         """
         Output the chip information to a CSV file.
 
@@ -133,42 +137,53 @@ class Chip():
             - Assumes the chip has been initialized and loaded with netlist and gates.
 
         Post-conditions:
-            - Writes the chip information to a CSV file, including wire connections and their wireparts.
+            - Writes the chip information to a CSV file, including wire connections and their wire parts.
             - Calculates the total cost of the chip and includes it in the CSV file.
         """
-        # open csv
+        # Open CSV file
         with open('output/output.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, dialect='excel')
 
-            # write the first line
-            writer.writerow(["net","wires"])
+            # Write the header
+            writer.writerow(["net", "wires"])
+
             for connection in self.wire_connections:
-                # gate a and b
+                # Gate a and b
                 gate_ab = f"({int(connection[0])},{int(connection[1])})"
                 gate_ab = gate_ab.strip()
 
-                # list of wireparts
+                # List of wire parts
                 list_of_wireparts = self.wires[f"{connection[0]}-{connection[1]}"].wireparts
                 output_wireparts = []
                 for wirepart in list_of_wireparts:
                     output_wireparts.append((int(wirepart.from_location.x),
                                             int(wirepart.from_location.y),
                                             int(wirepart.from_location.z)))
-                # write to csv
-                writer.writerow((gate_ab,(output_wireparts)))
 
-            # test total cost
+                # Add end location coordinates of the last wirepart
+                if list_of_wireparts:
+                    last_wirepart = list_of_wireparts[-1]
+                    output_wireparts.append((int(last_wirepart.to_location.x),
+                                            int(last_wirepart.to_location.y),
+                                            int(last_wirepart.to_location.z)))
+
+                # Write to CSV
+                wireparts_str = ",".join([f"({x},{y},{z})" for x, y, z in output_wireparts])
+                writer.writerow((gate_ab, "[" + wireparts_str + "]"))
+
+            # Calculate total cost
             total_cost = self.calculate_cost()
 
-            # write the last line
+            # Write the last line
             netlist_number = self.netlist.split("_")
             netlist_number = netlist_number[1]
             writer.writerow([f"chip_{int(self.chip_id)}_net_{int(netlist_number)}", f"{int(total_cost)}"])
-    
+
     # calculate cost
     def calculate_cost(self):
         """
         Calculate the cost of the chip.
+
         Pre-conditions:
             - Assumes the chip has been initialized and loaded with netlist, gates, and wire connections.
 
@@ -181,10 +196,10 @@ class Chip():
         n = 0
         k = self.calculate_collision_amount()
         n = sum(self.wires[connection].get_wire_length() for connection in self.wires)
-        
+
         cost = n + k * 300
         return cost
-    
+
     def calculate_collision_amount(self):
 
         k = 0
@@ -211,6 +226,5 @@ class Chip():
                     if collisions > 1:
                         k += collisions - 1
 
-        # print(f"collision: {k}")
         return k
 

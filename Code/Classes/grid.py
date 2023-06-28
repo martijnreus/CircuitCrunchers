@@ -1,4 +1,4 @@
-# create a grid, with a width, heigth and a amount of layers
+# create a grid, with a width, heigth and an amount of layers
 class Grid:
     """
     Represents a grid on a chip.
@@ -31,4 +31,5 @@ class Grid:
         max_y = self.height
         max_z = self.layers
         xyz = [max_x, max_y, max_z]
+
         return xyz

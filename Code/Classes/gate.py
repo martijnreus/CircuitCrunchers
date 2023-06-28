@@ -3,6 +3,7 @@ class Gate:
     """
     Represents a gate on a chip.
     """
+
     def __init__(self, id_num: int, location: object):
         """
         Initialize a Gate object with the given ID number and location.

@@ -1,5 +1,4 @@
 import random
- 
 import sys
 sys.path.append("../Classes")
 from gate import *
@@ -20,7 +19,7 @@ def random_algorithm(chip):
 
     # possibilities for moving
     possibilities = [[0, 0, 1], [0, 1, 0], [1, 0, 0], [-1, 0, 0], [0, -1, 0], [0, 0, -1]]
-    
+
     # get wire
     for connection in chip.wire_connections:
 
@@ -28,13 +27,14 @@ def random_algorithm(chip):
         gate_a = connection[0]
         gate_b = connection[1]
         # print(gate_a, gate_b)
-    
+
         # get wire
         wire = chip.wires[f"{gate_a}-{gate_b}"]
 
         # add wire
         random_add_wire(possibilities, wire, chip)
-            
+
+
 # add wire function
 def random_add_wire(possibilities: list[(int,int,int)], wire: object, chip: object):
     """
@@ -58,6 +58,7 @@ def random_add_wire(possibilities: list[(int,int,int)], wire: object, chip: obje
         if wire.wireparts and wire.check_is_connected() == True:
             break
 
+
 # function to check if valid
 def check_if_valid(wire:object, chip:object, direction):
     """
@@ -67,33 +68,32 @@ def check_if_valid(wire:object, chip:object, direction):
         - Returns True if adding the wire part at the given direction is valid.
         - Returns False otherwise.
     """
-
     # check if there are any wireparts
     if wire.wireparts != []:
         current_wirepart = wire.wireparts[-1].to_location + direction
+
     else:
         current_wirepart = wire.gateA.location + direction
-        
+
     # check if wire direction goes out of grid
     if current_wirepart.x < 0 or current_wirepart.y < 0 or current_wirepart.z < 0:
-        # print("negative")
         return False
+
     elif current_wirepart.x > chip.grid.width or current_wirepart.y > chip.grid.height or current_wirepart.z > chip.grid.layers:
-        # print("too high")
         return False
-    
+
     # check if wire goes through gate that is not gate b
     for gate in chip.gates:
+
         if chip.gates[gate] == wire.gateB:
             break
+
         if chip.gates[gate].location == current_wirepart:
-            # print("a gate in the way")
             return False
-    
+
     # check if wire goes right back, repeating the move
     if wire.wireparts:
         if current_wirepart == wire.wireparts[-1].from_location:
-            # print("going back")
             return False
     return True
 
