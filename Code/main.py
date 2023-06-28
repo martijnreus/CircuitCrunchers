@@ -111,7 +111,7 @@ def main():
     # unclear what the user wants, quit the program
     else:
         print("Usage: main.py test[optional] testingtype[required in case of test]")
-            sys.exit()
+        sys.exit()
     
     # if testing we should run the following code
     if testing:

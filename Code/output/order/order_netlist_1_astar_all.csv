@@ -104,3 +104,5 @@ sort_x-rev_astar,24
 "sort_y,rev_astar",20
 sort_weighted_astar,22
 sort_weighted-rev_astar,22
+sort_inter-quadrant_astar,22
+sort_inter-quadrant_astar,22

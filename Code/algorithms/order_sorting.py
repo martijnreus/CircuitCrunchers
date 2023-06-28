@@ -254,13 +254,22 @@ def change_order_quadrant(chip, reverse):
     center_x = chip.grid.width / 2
     center_y = chip.grid.height / 2
 
-    # Sort wire connections by quadrant first, and then by distance within each quadrant
-    wire_connections.sort(key=lambda connection: (
-        is_same_quadrant(connection, chip, center_x, center_y),
-        calculate_distance(connection, chip)
-    ), reverse=reverse)
+    same_quadrant_connections = []
+    different_quadrant_connections = []
 
-    return wire_connections
+    for connection in wire_connections:
+        if is_same_quadrant(connection, chip, center_x, center_y):
+            same_quadrant_connections.append(connection)
+        else:
+            different_quadrant_connections.append(connection)
+
+    # Sort wire connections within the same quadrant by distance from shortest to longest
+    same_quadrant_connections.sort(key=lambda connection: calculate_distance(connection, chip))
+
+    # Sort wire connections between different quadrants by distance from shortest to longest
+    different_quadrant_connections.sort(key=lambda connection: calculate_distance(connection, chip))
+
+    return same_quadrant_connections + different_quadrant_connections
 
 
 def is_same_quadrant(connection, chip, center_x, center_y):
