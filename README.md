@@ -117,7 +117,7 @@ python3 main.py test order
 - CSV output with the cost 
 - Plot with the wires and the cost
 
-## Auteurs
+## Authors
 
 - Juri
 - Anna
