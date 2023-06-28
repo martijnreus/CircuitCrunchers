@@ -88,6 +88,10 @@ class Testing():
         """
 
         sorting_orders = ["basic","reverse", "short", "long","least-connections", "most-connections", "sum-lowest", "sum-highest", "middle", "outside", "intra-quadrant", "inter-quadrant", "manhattan","x","y","x-rev","y,rev", "weighted", "weighted-rev"]
+        
+        # remove this after testing inter quad
+        sorting_orders = ["inter-quadrant"]
+
         self.variables = sorting_orders
         
         # go through all the orders
