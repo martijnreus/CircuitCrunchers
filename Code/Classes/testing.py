@@ -14,7 +14,6 @@ import sys
 import csv
 import os
 from csv import writer
-from datetime import datetime
 from location import *
 
 # import classes

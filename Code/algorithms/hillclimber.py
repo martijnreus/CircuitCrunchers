@@ -128,7 +128,8 @@ class Hillclimber:
             self.old_cost = self.new_cost
             print("accept:", self.new_cost)
             self.cost_list.append(self.old_cost)
-            make_graph(i, self.old_cost, self.title + "annealing")
+            self.write_to_csv()
+
         # else don't make the change
         else:
             self.wire.wireparts = self.old_wire

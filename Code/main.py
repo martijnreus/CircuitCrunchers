@@ -2,16 +2,21 @@
 # calls functions and methods from the other files
 ################################################################
 
-# import
+# import from libraries
 import sys
 from sys import argv
+
+# import classes
 sys.path.append("Classes")
 from chip import *
 from testing import *
+
+# import visualization
 sys.path.append("Visualization")
 from plot import *
 from graph import *
-from bargraph import bargraph
+
+# import algorithms
 sys.path.append("algorithms")
 from greedy import *
 from randomize import *
@@ -20,7 +25,7 @@ from hillclimber import *
 from astar import *
 from order_sorting import *
 
-
+# choose the algorithm
 def choose_algorithm(algorithm, chip, order_choice):
     """
     Function that selects the algorithm to use for our simulation.
@@ -40,7 +45,7 @@ def choose_algorithm(algorithm, chip, order_choice):
         random_algorithm(chip)
     
     elif algorithm == "random2D":
-        random_2D(chip)
+        random2D(chip)
     
     # if algoritm is astar, run the astar algorithm
     elif algorithm == "astar":
@@ -56,6 +61,7 @@ def choose_algorithm(algorithm, chip, order_choice):
         n = input("n: ")
         simulated_annealing(chip, n)
 
+# get number of chip associated with netlist
 def get_number_chip(netlist_number):
     if netlist_number in ["1","2","3"]:
         number_chip = 0
@@ -68,8 +74,8 @@ def get_number_chip(netlist_number):
     
     return number_chip
 
+# main
 def main():
-
     # check for second argument
     if len(argv) in [1,3]:
         n = 0
@@ -137,19 +143,7 @@ def main():
 
     # run the normal process (not testing)
     else:
-        if algorithm == "astar":
-            version = input("Version: ")
-            while version not in ["optimal", "avoid_center", "avoid_gates", "avoid_both", "normal"]:
-                print("choose from optimal, avoid_center, avoid_gates, avoid_both, normal")
-                version = input("Version: ")
-                astar_algorithm(chip, version)
-
         number_chip=get_number_chip(netlist_number)
-        order = input("Sorting order: ")
-        while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
-            order = input("Please choose one of the following orders: \nbasic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted\n")
-        
-        print(f"---chip: {number_chip} and netlist: {netlist_number}-------------------")    
         netlist = f"netlist_{netlist_number}"
         chip_id = f"{number_chip}"
         gates_file = f"print_{number_chip}"
@@ -160,17 +154,30 @@ def main():
         # load everything
         chip.load_gates()
         chip.load_netlist()
+        
+        # choose version for astar
+        if algorithm == "astar":
+            version = input("Version: ")
+            while version not in ["optimal", "avoid_center", "avoid_gates", "avoid_both", "normal"]:
+                print("choose from optimal, avoid_center, avoid_gates, avoid_both, normal")
+                version = input("Version: ")
+                astar_algorithm(chip, version)
 
+        # get sorting order
+        order = input("Sorting order: ")
+        while order not in ["basic", "random", "reverse","long","least-connections","most-connections","sum-lowest","sum-highest","outside","intra-quadrant","manhattan", "short", "middle", "inter-quadrant","x","y","x-rev","y,rev", "weighted"]:
+            order = input("Please choose one of the following orders: \nbasic, random, reverse, long, least-connections, most-connections, sum-lowest, sum-highest, outside, intra-quadrant, manhattan, short, middle, inter-quadrant, x, y, x-rev, y, rev, weighted\n")
+        
         # run algorithm and output
+        print(f"---chip: {number_chip} and netlist: {netlist_number}-------------------")    
         choose_algorithm(algorithm, chip, order)
 
-        # print("final:", chip.calculate_cost())
-
+        # visualize and output
         title = f"{algorithm}_{netlist}"
         visualize(chip, title)
-
         chip.output_to_csv()
+        print("final cost: ", chip.calculate_cost())
 
-
+# main
 if __name__ == "__main__":
     main()
